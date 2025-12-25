@@ -8,6 +8,29 @@ export async function fetchRSS(url: string): Promise<string> {
     return await response.text();
 }
 
+function cleanHTML(html: string): string {
+    const parser = new DOMParser();
+    const doc = parser.parseFromString(html, 'text/html');
+
+    // Remove unwanted elements
+    const unwanted = doc.querySelectorAll('script, style, iframe, object, embed, video, audio');
+    unwanted.forEach(el => el.remove());
+
+    // Clean attributes from remaining elements
+    const all = doc.querySelectorAll('*');
+    all.forEach(el => {
+        // Keep only essential attributes
+        const attributes = Array.from(el.attributes);
+        attributes.forEach(attr => {
+            if (!['src', 'href', 'alt', 'title'].includes(attr.name)) {
+                el.removeAttribute(attr.name);
+            }
+        });
+    });
+
+    return doc.body.innerHTML;
+}
+
 export function parseRSS(xml: string, sourceName: string): Article[] {
     const parser = new DOMParser();
     const doc = parser.parseFromString(xml, 'text/xml');
@@ -37,7 +60,7 @@ export function parseRSS(xml: string, sourceName: string): Article[] {
             id: link || Math.random().toString(36).substring(7),
             title,
             link,
-            content,
+            content: cleanHTML(content),
             pubDate,
             source: sourceName,
             author,

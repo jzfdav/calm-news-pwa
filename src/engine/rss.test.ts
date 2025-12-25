@@ -24,26 +24,44 @@ const MOCK_RSS = `
 `.trim();
 
 describe('RSS Ingestion', () => {
-    it('should parse simple RSS feed correctly', () => {
-        const articles = parseRSS(MOCK_RSS, 'Mock Source');
+  it('should parse simple RSS feed correctly', () => {
+    const articles = parseRSS(MOCK_RSS, 'Mock Source');
 
-        expect(articles).toHaveLength(2);
+    expect(articles).toHaveLength(2);
 
-        expect(articles[0].title).toBe('Article 1');
-        expect(articles[0].link).toBe('https://example.com/1');
-        expect(articles[0].source).toBe('Mock Source');
-        expect(articles[0].author).toBe('Author 1');
+    expect(articles[0].title).toBe('Article 1');
+    expect(articles[0].link).toBe('https://example.com/1');
+    expect(articles[0].source).toBe('Mock Source');
+    expect(articles[0].author).toBe('Author 1');
 
-        expect(articles[1].title).toBe('Article 2');
-        expect(articles[1].content).toBe('Full content 2');
-    });
+    expect(articles[1].title).toBe('Article 2');
+    expect(articles[1].content).toBe('Full content 2');
+  });
 
-    it('should handle missing fields gracefully', () => {
-        const emptyRss = '<rss><channel><item></item></channel></rss>';
-        const articles = parseRSS(emptyRss, 'Empty');
+  it('should handle missing fields gracefully', () => {
+    const emptyRss = '<rss><channel><item></item></channel></rss>';
+    const articles = parseRSS(emptyRss, 'Empty');
 
-        expect(articles).toHaveLength(1);
-        expect(articles[0].title).toBe('No Title');
-        expect(articles[0].source).toBe('Empty');
-    });
+    expect(articles).toHaveLength(1);
+    expect(articles[0].title).toBe('No Title');
+    expect(articles[0].source).toBe('Empty');
+  });
+
+  it('should sanitize HTML in content', () => {
+    const dirtyRSS = `
+<rss version="2.0">
+  <channel>
+    <item>
+      <title>Dirty</title>
+      <description><![CDATA[<script>alert("xss")</script><p style="color:red">Hello</p><iframe src="malicious.com"></iframe>]]></description>
+    </item>
+  </channel>
+</rss>
+    `.trim();
+    const articles = parseRSS(dirtyRSS, 'Dirty Feed');
+    expect(articles[0].content).not.toContain('<script>');
+    expect(articles[0].content).not.toContain('<iframe>');
+    expect(articles[0].content).not.toContain('style="color:red"');
+    expect(articles[0].content).toContain('<p>Hello</p>');
+  });
 });

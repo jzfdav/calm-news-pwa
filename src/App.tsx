@@ -1,20 +1,12 @@
 import { useState, useEffect } from 'react'
 import './styles/App.css'
-import type { Section, DailyDigest } from './engine/types'
+import type { Section, DailyDigest, Article } from './engine/types'
 import { refreshSections, createDailyDigest } from './engine/digest'
 import { loadSections, clearStorage, loadCustomFeeds, saveCustomFeeds, type CustomFeed } from './engine/storage'
 
 const DEFAULT_FEEDS: CustomFeed[] = [
-  {
-    id: 'hn',
-    name: 'Tech & Ideas',
-    url: 'https://news.ycombinator.com/rss'
-  },
-  {
-    id: 'bbc',
-    name: 'World News',
-    url: 'https://feeds.bbci.co.uk/news/world/rss.xml'
-  }
+  { id: 'hn', name: 'Tech & Ideas', url: 'https://news.ycombinator.com/rss' },
+  { id: 'bbc', name: 'World News', url: 'https://feeds.bbci.co.uk/news/world/rss.xml' }
 ];
 
 const proxyUrl = (url: string) => `https://api.allorigins.win/raw?url=${encodeURIComponent(url)}`;
@@ -26,7 +18,12 @@ function App() {
   const [error, setError] = useState<string | null>(null);
   const [customFeeds, setCustomFeeds] = useState<CustomFeed[]>([]);
   const [newFeed, setNewFeed] = useState({ name: '', url: '' });
-  const [selectedArticle, setSelectedArticle] = useState<Section['articles'][0] | null>(null);
+  const [selectedArticle, setSelectedArticle] = useState<Article | null>(null);
+
+  // Reader Settings
+  const [theme, setTheme] = useState<'light' | 'sepia' | 'dark'>('light');
+  const [fontSize, setFontSize] = useState<'s' | 'm' | 'l'>('m');
+  const [readArticles, setReadArticles] = useState<Set<string>>(new Set());
 
   useEffect(() => {
     let feeds = loadCustomFeeds();
@@ -42,11 +39,15 @@ function App() {
     } else {
       handleRefresh(feeds);
     }
+
+    const savedRead = localStorage.getItem('calm_news_read_articles');
+    if (savedRead) setReadArticles(new Set(JSON.parse(savedRead)));
   }, []);
 
   const handleReset = () => {
     if (confirm('Clear all saved data and refresh?')) {
       clearStorage();
+      localStorage.removeItem('calm_news_read_articles');
       window.location.reload();
     }
   };
@@ -82,10 +83,17 @@ function App() {
     }
   };
 
+  const toggleRead = (id: string) => {
+    const updated = new Set(readArticles);
+    if (updated.has(id)) updated.delete(id);
+    else updated.add(id);
+    setReadArticles(updated);
+    localStorage.setItem('calm_news_read_articles', JSON.stringify(Array.from(updated)));
+  };
+
   const addFeed = (e: React.FormEvent) => {
     e.preventDefault();
     if (!newFeed.name || !newFeed.url) return;
-
     const updated = [...customFeeds, { ...newFeed, id: Math.random().toString(36).substring(7) }];
     setCustomFeeds(updated);
     saveCustomFeeds(updated);
@@ -98,34 +106,25 @@ function App() {
     saveCustomFeeds(updated);
   };
 
+  const getReadingTime = (text: string) => {
+    const words = text.split(/\s+/).length;
+    const minutes = Math.ceil(words / 200);
+    return `${minutes} min read`;
+  };
+
   return (
-    <div className="container">
+    <div className={`container ${selectedArticle ? `theme-${theme}` : ''}`}>
       <header>
         <h1>Calm News</h1>
         <p className="subtitle">Your daily understanding, once a day.</p>
 
         <nav className="nav-bar">
           <div>
-            <button
-              className={`nav-link ${view === 'digest' ? 'active' : ''}`}
-              onClick={() => setView('digest')}
-            >
-              Digest
-            </button>
-            <button
-              style={{ marginLeft: '1.5rem' }}
-              className={`nav-link ${view === 'settings' ? 'active' : ''}`}
-              onClick={() => setView('settings')}
-            >
-              Settings
-            </button>
+            <button className={`nav-link ${view === 'digest' ? 'active' : ''}`} onClick={() => setView('digest')}>Digest</button>
+            <button style={{ marginLeft: '1.5rem' }} className={`nav-link ${view === 'settings' ? 'active' : ''}`} onClick={() => setView('settings')}>Settings</button>
           </div>
           {view === 'digest' && (
-            <button
-              className="refresh"
-              onClick={() => handleRefresh()}
-              disabled={loading}
-            >
+            <button className="refresh" onClick={() => handleRefresh()} disabled={loading}>
               {loading ? 'Fetching...' : 'Refresh Digest'}
             </button>
           )}
@@ -143,9 +142,9 @@ function App() {
               {digest.sections.map((section) => (
                 <section key={section.id}>
                   <h2>{section.name}</h2>
-                  {section.articles.length === 0 && <p className="meta">No articles found in this section.</p>}
+                  {section.articles.length === 0 && <p className="meta">No articles found.</p>}
                   {section.articles.map((article) => (
-                    <article key={article.id}>
+                    <article key={article.id} className={readArticles.has(article.id) ? 'article-read' : ''}>
                       <h3>
                         <button
                           className="nav-link"
@@ -157,18 +156,18 @@ function App() {
                       </h3>
                       <div className="meta">
                         {article.author ? `${article.author} • ` : ''}
-                        <a href={article.link} target="_blank" rel="noopener noreferrer" style={{ color: 'inherit', textDecoration: 'none' }}>
-                          {section.name} (Source)
+                        {getReadingTime(article.content)} •
+                        <a href={article.link} target="_blank" rel="noopener noreferrer" style={{ color: 'inherit', textDecoration: 'none', marginLeft: '4px' }}>
+                          Source
                         </a>
+                        <button
+                          className="nav-link"
+                          style={{ marginLeft: '1rem', textDecoration: 'underline' }}
+                          onClick={() => toggleRead(article.id)}
+                        >
+                          {readArticles.has(article.id) ? 'Mark unread' : 'Done'}
+                        </button>
                       </div>
-                      {article.content && (
-                        <div
-                          className="excerpt"
-                          dangerouslySetInnerHTML={{
-                            __html: article.content.substring(0, 200) + (article.content.length > 200 ? '...' : '')
-                          }}
-                        />
-                      )}
                     </article>
                   ))}
                 </section>
@@ -196,21 +195,11 @@ function App() {
               <h3>Add New Feed</h3>
               <div className="form-group">
                 <label>Feed Name</label>
-                <input
-                  type="text"
-                  value={newFeed.name}
-                  onChange={e => setNewFeed({ ...newFeed, name: e.target.value })}
-                  placeholder="e.g. My Favorite Blog"
-                />
+                <input type="text" value={newFeed.name} onChange={e => setNewFeed({ ...newFeed, name: e.target.value })} placeholder="e.g. My Favorite Blog" />
               </div>
               <div className="form-group">
                 <label>RSS URL</label>
-                <input
-                  type="url"
-                  value={newFeed.url}
-                  onChange={e => setNewFeed({ ...newFeed, url: e.target.value })}
-                  placeholder="https://example.com/rss"
-                />
+                <input type="url" value={newFeed.url} onChange={e => setNewFeed({ ...newFeed, url: e.target.value })} placeholder="https://example.com/rss" />
               </div>
               <button type="submit" className="button-primary">Add Feed</button>
             </form>
@@ -224,20 +213,40 @@ function App() {
       )}
 
       {selectedArticle && (
-        <div className="reader-overlay">
+        <div className={`reader-overlay theme-${theme}`}>
+          <div className="reader-controls">
+            <button className="control-btn" onClick={() => setTheme('light')}>Light</button>
+            <button className="control-btn" onClick={() => setTheme('sepia')}>Sepia</button>
+            <button className="control-btn" onClick={() => setTheme('dark')}>Dark</button>
+            <span style={{ margin: '0 0.5rem', color: 'var(--secondary-text)' }}>|</span>
+            <button className="control-btn" onClick={() => setFontSize('s')}>A-</button>
+            <button className="control-btn" onClick={() => setFontSize('m')}>A</button>
+            <button className="control-btn" onClick={() => setFontSize('l')}>A+</button>
+          </div>
+
           <button className="close-reader" onClick={() => setSelectedArticle(null)}>Close</button>
+
           <div className="reader-content">
             <div className="reader-header">
               <h1>{selectedArticle.title}</h1>
               <div className="meta">
                 {selectedArticle.author ? `${selectedArticle.author} • ` : ''}
-                <a href={selectedArticle.link} target="_blank" rel="noopener noreferrer">Original Source</a>
+                {getReadingTime(selectedArticle.content)} •
+                <a href={selectedArticle.link} target="_blank" rel="noopener noreferrer">Source</a>
               </div>
             </div>
             <div
-              className="full-content"
+              className={`full-content font-size-${fontSize}`}
               dangerouslySetInnerHTML={{ __html: selectedArticle.content }}
             />
+            <div style={{ textAlign: 'center', marginTop: '4rem', paddingBottom: '4rem' }}>
+              <button
+                className="button-primary"
+                onClick={() => { toggleRead(selectedArticle.id); setSelectedArticle(null); }}
+              >
+                Mark as Done & Close
+              </button>
+            </div>
           </div>
         </div>
       )}
