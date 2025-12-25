@@ -2,6 +2,7 @@ import type { Article, Section } from './types';
 
 const ARTICLES_KEY = 'calm_news_articles';
 const SECTIONS_KEY = 'calm_news_sections';
+const CUSTOM_FEEDS_KEY = 'calm_news_custom_feeds';
 
 export function saveArticles(articles: Article[]): void {
     try {
@@ -42,7 +43,32 @@ export function loadSections(): Section[] {
     }
 }
 
+export interface CustomFeed {
+    id: string;
+    name: string;
+    url: string;
+}
+
+export function saveCustomFeeds(feeds: CustomFeed[]): void {
+    try {
+        localStorage.setItem(CUSTOM_FEEDS_KEY, JSON.stringify(feeds));
+    } catch (e) {
+        console.error('Failed to save custom feeds to localStorage', e);
+    }
+}
+
+export function loadCustomFeeds(): CustomFeed[] {
+    try {
+        const data = localStorage.getItem(CUSTOM_FEEDS_KEY);
+        return data ? JSON.parse(data) : [];
+    } catch (e) {
+        console.error('Failed to load custom feeds from localStorage', e);
+        return [];
+    }
+}
+
 export function clearStorage(): void {
     localStorage.removeItem(ARTICLES_KEY);
     localStorage.removeItem(SECTIONS_KEY);
+    localStorage.removeItem(CUSTOM_FEEDS_KEY);
 }
