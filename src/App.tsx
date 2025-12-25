@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react'
 import './styles/App.css'
 import type { Section, DailyDigest } from './engine/types'
 import { refreshSections, createDailyDigest } from './engine/digest'
-import { loadSections } from './engine/storage'
+import { loadSections, clearStorage } from './engine/storage'
 
 const INITIAL_SECTIONS: Section[] = [
   {
@@ -25,18 +25,27 @@ const proxyUrl = (url: string) => `https://api.allorigins.win/raw?url=${encodeUR
 function App() {
   const [digest, setDigest] = useState<DailyDigest | null>(null);
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     const saved = loadSections();
-    if (saved.length > 0) {
+    if (saved.length > 0 && saved.some(s => s.articles.length > 0)) {
       setDigest(createDailyDigest(saved));
     } else {
       handleRefresh();
     }
   }, []);
 
+  const handleReset = () => {
+    if (confirm('Clear all saved data and refresh?')) {
+      clearStorage();
+      window.location.reload();
+    }
+  };
+
   const handleRefresh = async () => {
     setLoading(true);
+    setError(null);
     try {
       const proxiedSections = INITIAL_SECTIONS.map(s => ({
         ...s,
@@ -48,8 +57,14 @@ function App() {
       // Restore original URLs before creating digest/saving if needed, 
       // but here we just want to show the content.
       setDigest(createDailyDigest(updated));
+
+      const failedCount = updated.filter(s => s.articles.length === 0).length;
+      if (failedCount > 0) {
+        setError(`Failed to fetch ${failedCount} section(s). Check your connection.`);
+      }
     } catch (e) {
       console.error('Refresh failed', e);
+      setError('A critical error occurred while refreshing the feed.');
     } finally {
       setLoading(false);
     }
@@ -67,7 +82,16 @@ function App() {
         >
           {loading ? 'Fetching...' : 'Refresh Digest'}
         </button>
+        <button
+          className="refresh"
+          onClick={handleReset}
+          style={{ marginLeft: '1rem', borderColor: '#fee', color: '#a66' }}
+        >
+          Reset
+        </button>
       </header>
+
+      {error && <div className="meta" style={{ color: '#c33', textAlign: 'center', marginBottom: '2rem' }}>{error}</div>}
 
       {loading && !digest && <div className="loading">Gathering stories for you...</div>}
 

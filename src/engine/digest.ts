@@ -10,6 +10,7 @@ export async function refreshSections(sections: Section[]): Promise<Section[]> {
                 const articles = parseRSS(xml, section.name);
 
                 saveArticles(articles);
+                console.log(`Successfully fetched ${articles.length} articles for ${section.name}`);
 
                 return {
                     ...section,
@@ -17,7 +18,7 @@ export async function refreshSections(sections: Section[]): Promise<Section[]> {
                     lastUpdated: new Date().toISOString()
                 };
             } catch (e) {
-                console.error(`Failed to refresh section ${section.name}`, e);
+                console.error(`Failed to refresh section ${section.name} with URL ${section.rssUrl}:`, e);
                 return section;
             }
         })
