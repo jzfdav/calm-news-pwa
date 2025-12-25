@@ -7,14 +7,23 @@ export async function refreshSections(sections: Section[]): Promise<Section[]> {
         sections.map(async (section) => {
             try {
                 const xml = await fetchRSS(section.rssUrl);
-                const articles = parseRSS(xml, section.name);
+                const parsed = parseRSS(xml, section.name);
 
-                saveArticles(articles);
-                console.log(`Successfully fetched ${articles.length} articles for ${section.name}`);
+                // Prune old articles (older than 3 days)
+                const threeDaysAgo = new Date();
+                threeDaysAgo.setDate(threeDaysAgo.getDate() - 3);
+
+                const fresh = parsed.filter(a => new Date(a.pubDate) > threeDaysAgo);
+
+                // Limit articles per section for calm experience
+                const articlesToSave = fresh.slice(0, 5);
+
+                saveArticles(articlesToSave);
+                console.log(`Successfully fetched ${articlesToSave.length} articles for ${section.name}`);
 
                 return {
                     ...section,
-                    articles,
+                    articles: articlesToSave,
                     lastUpdated: new Date().toISOString()
                 };
             } catch (e) {

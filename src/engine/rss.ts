@@ -8,6 +8,8 @@ export async function fetchRSS(url: string): Promise<string> {
     return await response.text();
 }
 
+import { decodeHTMLEntities } from './utils'
+
 function cleanHTML(html: string): string {
     const parser = new DOMParser();
     const doc = parser.parseFromString(html, 'text/html');
@@ -49,7 +51,7 @@ export function parseRSS(xml: string, sourceName: string): Article[] {
             return null;
         };
 
-        const title = getTagContent('title') || 'No Title';
+        const title = decodeHTMLEntities(getTagContent('title') || 'No Title');
         const link = getTagContent('link') || '';
         const description = getTagContent('description') || '';
         const content = getTagContent('content:encoded') || description;

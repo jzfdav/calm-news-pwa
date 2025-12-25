@@ -397,3 +397,24 @@ button.refresh:hover {
 .button-primary:hover {
   opacity: 0.9;
 }
+
+.article-exit {
+  animation: fadeOutExit 0.6s forwards;
+}
+
+@keyframes fadeOutExit {
+  from {
+    opacity: 0.4;
+    transform: scale(1);
+  }
+
+  to {
+    opacity: 0;
+    transform: scale(0.95);
+    margin-top: -100px;
+    padding-top: 0;
+    padding-bottom: 0;
+    margin-bottom: 0;
+    visibility: hidden;
+  }
+}
