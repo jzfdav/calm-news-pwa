@@ -38,7 +38,7 @@ export function DigestView({ sections, loading, onSelectArticle, onToggleRead }:
     }
 
     return (
-        <main className="container digest-container">
+        <main className="digest-view">
             {sections.map((section) => (
                 <section key={section.id}>
                     <h2 className="section-title">{section.name}</h2>
