@@ -322,6 +322,12 @@ section {
   width: 100%;
 }
 
+.meta-info-left {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
 .meta-time {
   text-align: left;
 }

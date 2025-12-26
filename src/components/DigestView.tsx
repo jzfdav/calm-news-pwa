@@ -78,12 +78,14 @@ function DigestSection({
                                 </div>
                             </h3>
                             <div className="article-card-meta">
-                                <span className="meta-time">{getReadingTime(article.content)}</span>
-                                {isReadable(article.content) ? (
-                                    <span className="read-badge badge-full">FULL ARTICLE</span>
-                                ) : (
-                                    <span className="read-badge badge-snippet">SNIPPET</span>
-                                )}
+                                <div className="meta-info-left">
+                                    <span className="meta-time">{getReadingTime(article.content)}</span>
+                                    {isReadable(article.content) ? (
+                                        <span className="read-badge badge-full">FULL ARTICLE</span>
+                                    ) : (
+                                        <span className="read-badge badge-snippet">SNIPPET</span>
+                                    )}
+                                </div>
                                 <a
                                     href={article.link}
                                     target="_blank"
