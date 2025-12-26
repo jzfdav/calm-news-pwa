@@ -2,7 +2,7 @@ import { useState, useEffect, useMemo, useCallback } from 'react'
 import './styles/App.css'
 import type { Section, DailyDigest, Article } from './engine/types'
 import { refreshSections, createDailyDigest } from './engine/digest'
-import { loadSections, clearStorage, loadCustomFeeds, saveCustomFeeds, type CustomFeed } from './engine/storage'
+import { loadSections, clearStorage, loadCustomFeeds, saveCustomFeeds, type CustomFeed, loadPersonalization, savePersonalization } from './engine/storage'
 
 // Components
 import { Header } from './components/Header'
@@ -10,7 +10,7 @@ import { DigestView } from './components/DigestView'
 import { SettingsView } from './components/SettingsView'
 import { ReaderOverlay } from './components/ReaderOverlay'
 
-import { DEFAULT_FEEDS, PROXY_URL } from './engine/config'
+import { DEFAULT_FEEDS, PROXY_URL, GOOGLE_NEWS_SEARCH } from './engine/config'
 
 function App() {
   const [view, setView] = useState<'digest' | 'settings'>('digest');
@@ -25,6 +25,10 @@ function App() {
   const [theme, setTheme] = useState<'light' | 'sepia' | 'dark'>('light');
   const [fontSize, setFontSize] = useState<'s' | 'm' | 'l'>('m');
   const [readArticles, setReadArticles] = useState<Set<string>>(new Set());
+
+  // Personalization
+  const [locationQuery, setLocationQuery] = useState(loadPersonalization('location'));
+  const [companyQuery, setCompanyQuery] = useState(loadPersonalization('company'));
 
   useEffect(() => {
     const handleOnline = () => setIsOffline(false);
@@ -75,6 +79,25 @@ function App() {
         articles: []
       }));
 
+      // Add Personalized Virtual Sections
+      if (locationQuery) {
+        sectionsToFetch.unshift({
+          id: 'personal-location',
+          name: `Around ${locationQuery}`,
+          rssUrl: PROXY_URL(GOOGLE_NEWS_SEARCH(locationQuery, 'IN')),
+          articles: []
+        });
+      }
+
+      if (companyQuery) {
+        sectionsToFetch.unshift({
+          id: 'personal-company',
+          name: companyQuery.toUpperCase(),
+          rssUrl: PROXY_URL(GOOGLE_NEWS_SEARCH(companyQuery, 'US')),
+          articles: []
+        });
+      }
+
       const updated = await refreshSections(sectionsToFetch);
       setDigest(createDailyDigest(updated));
 
@@ -111,6 +134,12 @@ function App() {
     setCustomFeeds(updated);
     saveCustomFeeds(updated);
   }, [customFeeds]);
+
+  const handleUpdatePersonalization = useCallback((key: 'location' | 'company', val: string) => {
+    if (key === 'location') setLocationQuery(val);
+    else setCompanyQuery(val);
+    savePersonalization(key, val);
+  }, []);
 
   const handleReset = useCallback(() => {
     if (confirm('Clear all saved data and refresh?')) {
@@ -150,6 +179,9 @@ function App() {
       ) : (
         <SettingsView
           customFeeds={customFeeds}
+          locationQuery={locationQuery}
+          companyQuery={companyQuery}
+          onUpdatePersonalization={handleUpdatePersonalization}
           onAddFeed={handleAddFeed}
           onRemoveFeed={handleRemoveFeed}
           onReset={handleReset}

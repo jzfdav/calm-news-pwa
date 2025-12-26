@@ -3,6 +3,8 @@ import type { Article, Section } from './types';
 const ARTICLES_KEY = 'calm_news_articles';
 const SECTIONS_KEY = 'calm_news_sections';
 const CUSTOM_FEEDS_KEY = 'calm_news_custom_feeds';
+const LOCATION_KEY = 'calm_news_location_tracking';
+const COMPANY_KEY = 'calm_news_company_tracking';
 
 export function saveArticles(articles: Article[]): void {
     try {
@@ -89,4 +91,23 @@ export function clearStorage(): void {
     localStorage.removeItem(ARTICLES_KEY);
     localStorage.removeItem(SECTIONS_KEY);
     localStorage.removeItem(CUSTOM_FEEDS_KEY);
+    localStorage.removeItem(LOCATION_KEY);
+    localStorage.removeItem(COMPANY_KEY);
+}
+
+export function savePersonalization(key: 'location' | 'company', query: string): void {
+    try {
+        localStorage.setItem(key === 'location' ? LOCATION_KEY : COMPANY_KEY, query);
+    } catch (e) {
+        console.error(`Failed to save ${key} personalization`, e);
+    }
+}
+
+export function loadPersonalization(key: 'location' | 'company'): string {
+    try {
+        return localStorage.getItem(key === 'location' ? LOCATION_KEY : COMPANY_KEY) || '';
+    } catch (e) {
+        console.error(`Failed to load ${key} personalization`, e);
+        return '';
+    }
 }

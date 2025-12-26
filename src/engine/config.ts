@@ -11,6 +11,13 @@ export const DEFAULT_FEEDS: CustomFeed[] = [
 
 export const PROXY_URL = (url: string) => `https://api.allorigins.win/raw?url=${encodeURIComponent(url)}`;
 
+export const GOOGLE_NEWS_SEARCH = (query: string, region: 'IN' | 'US' = 'IN') => {
+    const params = region === 'IN'
+        ? 'hl=en-IN&gl=IN&ceid=IN:en'
+        : 'hl=en-US&gl=US&ceid=US:en';
+    return `https://news.google.com/rss/search?q=${encodeURIComponent(query)}&${params}`;
+};
+
 export const APP_CONFIG = {
     maxArticlesPerSection: 30,
     maxTotalArticles: 200,

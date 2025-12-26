@@ -3,12 +3,23 @@ import type { CustomFeed } from '../engine/storage'
 
 interface SettingsViewProps {
     customFeeds: CustomFeed[];
+    locationQuery: string;
+    companyQuery: string;
+    onUpdatePersonalization: (key: 'location' | 'company', val: string) => void;
     onAddFeed: (name: string, url: string) => void;
     onRemoveFeed: (id: string) => void;
     onReset: () => void;
 }
 
-export function SettingsView({ customFeeds, onAddFeed, onRemoveFeed, onReset }: SettingsViewProps) {
+export function SettingsView({
+    customFeeds,
+    locationQuery,
+    companyQuery,
+    onUpdatePersonalization,
+    onAddFeed,
+    onRemoveFeed,
+    onReset
+}: SettingsViewProps) {
     const [newFeed, setNewFeed] = useState({ name: '', url: '' });
 
     const handleSubmit = (e: React.FormEvent) => {
@@ -75,6 +86,39 @@ export function SettingsView({ customFeeds, onAddFeed, onRemoveFeed, onReset }: 
                         <button type="submit" className="button-primary">Add to Library</button>
                     </div>
                 </form>
+            </section>
+
+            <section className="settings-section">
+                <div className="section-header">
+                    <h2>Personalized Insights</h2>
+                    <p className="meta">Track specific locations or companies</p>
+                </div>
+                <div className="add-feed-card">
+                    <div className="form-grid">
+                        <div className="form-group">
+                            <label htmlFor="track-location">Track Location</label>
+                            <input
+                                id="track-location"
+                                type="text"
+                                value={locationQuery}
+                                onChange={e => onUpdatePersonalization('location', e.target.value)}
+                                placeholder="e.g. Devanahalli"
+                            />
+                            <p className="input-hint">Dynamically tracks news from this area.</p>
+                        </div>
+                        <div className="form-group">
+                            <label htmlFor="track-company">Track Company</label>
+                            <input
+                                id="track-company"
+                                type="text"
+                                value={companyQuery}
+                                onChange={e => onUpdatePersonalization('company', e.target.value)}
+                                placeholder="e.g. IBM"
+                            />
+                            <p className="input-hint">Monitors news for this specific firm.</p>
+                        </div>
+                    </div>
+                </div>
             </section>
 
             <section className="settings-section danger-section" style={{ marginTop: '6rem' }}>
