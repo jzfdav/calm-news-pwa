@@ -10,6 +10,9 @@ export const DEFAULT_FEEDS: CustomFeed[] = [
     { id: 'reuters-sports', name: 'Reuters Sports', url: 'https://news.google.com/rss/search?q=Reuters+Sports&hl=en-US&gl=US&ceid=US:en' },
     { id: 'reuters-tech', name: 'Reuters Tech', url: 'https://news.google.com/rss/search?q=Reuters+Technology&hl=en-US&gl=US&ceid=US:en' },
 
+    { id: 'ie-explained', name: 'IE Explained', url: 'https://indianexpress.com/section/explained/feed/' },
+    { id: 'ie-india', name: 'IE India', url: 'https://indianexpress.com/section/india/feed/' },
+
     { id: 'the-conversation', name: 'The Conversation', url: 'https://theconversation.com/global/articles.atom' },
     { id: 'dw-news', name: 'DW News', url: 'https://rss.dw.com/xml/rss-en-all' },
 
