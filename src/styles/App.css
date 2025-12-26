@@ -256,8 +256,9 @@ button.refresh:hover {
   top: 0;
   display: flex;
   justify-content: space-between;
-  align-items: center;
-  gap: 1rem;
+  align-items: flex-start;
+  /* Better for multi-line wrapping */
+  gap: 0.8rem;
   padding: 0.5rem 0;
   background: var(--current-bg);
   z-index: 1001;
@@ -269,21 +270,33 @@ button.refresh:hover {
   display: flex;
   gap: 0.4rem;
   flex-wrap: wrap;
+  align-items: center;
+}
+
+.control-group {
+  display: flex;
+  gap: 0.3rem;
+  align-items: center;
+}
+
+.toolbar-divider {
+  color: var(--secondary-text);
+  opacity: 0.3;
+  margin: 0 0.1rem;
 }
 
 .control-btn {
   background: var(--bg-color);
   border: 1px solid var(--border-color);
   color: var(--secondary-text);
-  padding: 0.3rem 0.6rem;
+  padding: 0.3rem 0.5rem;
+  /* Slightly more compact */
   border-radius: 4px;
   cursor: pointer;
   font-size: 0.7rem;
-}
-
-.control-btn:hover {
-  border-color: var(--accent-color);
-  color: var(--text-color);
+  min-width: 2.2rem;
+  /* Consistency */
+  text-align: center;
 }
 
 .close-reader {
