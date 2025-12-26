@@ -10,8 +10,6 @@ export function Header({ view, setView, isOffline, loading, onRefresh }: HeaderP
     return (
         <header className="app-header">
             {isOffline && <div className="offline-badge">Library Mode</div>}
-            <h1 className="app-title">Calm News</h1>
-            <p className="subtitle">Your daily understanding, once a day.</p>
 
             <nav className="action-pill">
                 <button
