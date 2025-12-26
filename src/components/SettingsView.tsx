@@ -20,50 +20,72 @@ export function SettingsView({ customFeeds, onAddFeed, onRemoveFeed, onReset }: 
     };
 
     return (
-        <main>
-            <section>
-                <h2>My Feeds</h2>
-                <ul className="settings-list">
-                    {customFeeds.map(feed => (
-                        <li key={feed.id} className="settings-item">
-                            <div className="settings-item-info">
-                                <span className="settings-item-name">{feed.name}</span>
-                                <span className="settings-item-url">{feed.url}</span>
-                            </div>
-                            <button className="button-danger" onClick={() => onRemoveFeed(feed.id)}>Remove</button>
-                        </li>
-                    ))}
-                </ul>
+        <main className="settings-container">
+            <section className="settings-section">
+                <div className="section-header">
+                    <h2>My Library</h2>
+                    <p className="meta">{customFeeds.length} source{customFeeds.length !== 1 ? 's' : ''} currently active</p>
+                </div>
 
-                <form className="add-feed-form" onSubmit={handleSubmit}>
-                    <h3>Add New Feed</h3>
-                    <div className="form-group">
-                        <label>Feed Name</label>
-                        <input
-                            type="text"
-                            value={newFeed.name}
-                            onChange={e => setNewFeed({ ...newFeed, name: e.target.value })}
-                            placeholder="e.g. My Favorite Blog"
-                            required
-                        />
+                <div className="feeds-grid">
+                    {customFeeds.map(feed => (
+                        <div key={feed.id} className="feed-card">
+                            <div className="feed-card-main">
+                                <span className="feed-name">{feed.name}</span>
+                                <span className="feed-url" title={feed.url}>{feed.url}</span>
+                            </div>
+                            <button
+                                className="button-text-danger"
+                                onClick={() => onRemoveFeed(feed.id)}
+                                aria-label={`Remove ${feed.name}`}
+                            >
+                                Remove
+                            </button>
+                        </div>
+                    ))}
+                </div>
+
+                <form className="add-feed-card" onSubmit={handleSubmit}>
+                    <h3>Add a new source</h3>
+                    <div className="form-grid">
+                        <div className="form-group">
+                            <label htmlFor="feed-name">Name</label>
+                            <input
+                                id="feed-name"
+                                type="text"
+                                value={newFeed.name}
+                                onChange={e => setNewFeed({ ...newFeed, name: e.target.value })}
+                                placeholder="e.g. Science Daily"
+                                required
+                            />
+                        </div>
+                        <div className="form-group">
+                            <label htmlFor="feed-url">RSS URL</label>
+                            <input
+                                id="feed-url"
+                                type="url"
+                                value={newFeed.url}
+                                onChange={e => setNewFeed({ ...newFeed, url: e.target.value })}
+                                placeholder="https://example.com/rss"
+                                required
+                            />
+                        </div>
                     </div>
-                    <div className="form-group">
-                        <label>RSS URL</label>
-                        <input
-                            type="url"
-                            value={newFeed.url}
-                            onChange={e => setNewFeed({ ...newFeed, url: e.target.value })}
-                            placeholder="https://example.com/rss"
-                            required
-                        />
+                    <div style={{ marginTop: '1.5rem', textAlign: 'right' }}>
+                        <button type="submit" className="button-primary">Add to Library</button>
                     </div>
-                    <button type="submit" className="button-primary">Add Feed</button>
                 </form>
             </section>
 
-            <section style={{ marginTop: '4rem', textAlign: 'center' }}>
-                <h2>System</h2>
-                <button className="button-danger" onClick={onReset}>Reset All Data (Danger Zone)</button>
+            <section className="settings-section danger-section" style={{ marginTop: '6rem' }}>
+                <div className="section-header">
+                    <h2>Advanced</h2>
+                    <p className="meta">Manage your local storage and cache</p>
+                </div>
+                <div className="danger-zone">
+                    <p>Resetting will clear all your custom feeds and cached articles.</p>
+                    <button className="button-danger" onClick={onReset}>Clear All Library Data</button>
+                </div>
             </section>
         </main>
     );
