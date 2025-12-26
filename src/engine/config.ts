@@ -1,13 +1,12 @@
 import type { CustomFeed } from './storage'
 
 export const DEFAULT_FEEDS: CustomFeed[] = [
-    { id: 'hn', name: 'Tech & Ideas', url: 'https://news.ycombinator.com/rss' },
-    { id: 'bbc', name: 'BBC World', url: 'https://feeds.bbci.co.uk/news/world/rss.xml' },
-    { id: 'reuters-intl', name: 'Reuters World', url: 'https://feeds.reuters.com/reuters/worldNews' },
-    { id: 'reuters-in', name: 'Reuters India', url: 'https://feeds.reuters.com/reuters/INtopNews' },
-    { id: 'hindu-in', name: 'The Hindu India', url: 'https://www.thehindu.com/news/national/feeder/default.rss' },
-    { id: 'express-in', name: 'Indian Express', url: 'https://indianexpress.com/section/india/feed/' },
-    { id: 'hindu-all', name: 'The Hindu All', url: 'https://www.thehindu.com/feeder/default.rss' }
+    { id: 'guardian-world', name: 'The Guardian', url: 'https://www.theguardian.com/world/rss' },
+    { id: 'ars-technica', name: 'Ars Technica', url: 'https://feeds.arstechnica.com/arstechnica/index' },
+    { id: 'npr-news', name: 'NPR News', url: 'https://feeds.npr.org/1001/rss.xml' },
+    { id: 'nyt-world', name: 'NYT World', url: 'https://rss.nytimes.com/services/xml/rss/nyt/World.xml' },
+    { id: 'hn', name: 'Hacker News', url: 'https://news.ycombinator.com/rss' },
+    { id: 'reuters-intl', name: 'Reuters World', url: 'https://feeds.reuters.com/reuters/worldNews' }
 ];
 
 export const PROXY_URL = (url: string) => `https://api.allorigins.win/raw?url=${encodeURIComponent(url)}`;

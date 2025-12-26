@@ -7,11 +7,9 @@ interface DigestViewProps {
     loading: boolean;
     onSelectArticle: (article: Article) => void;
     onToggleRead: (id: string) => void;
-    onRefresh: () => void;
-    isOffline: boolean;
 }
 
-export function DigestView({ sections, loading, onSelectArticle, onToggleRead, onRefresh, isOffline }: DigestViewProps) {
+export function DigestView({ sections, loading, onSelectArticle, onToggleRead }: DigestViewProps) {
     const [exitingIds, setExitingIds] = useState<Set<string>>(new Set());
 
     const handleDone = (id: string) => {
@@ -34,10 +32,7 @@ export function DigestView({ sections, loading, onSelectArticle, onToggleRead, o
         return (
             <div className="empty-state">
                 <h2>You are all caught up.</h2>
-                <p>"The best time to plant a tree was 20 years ago. The second best time is now."</p>
-                <button className="refresh" style={{ marginTop: '2rem' }} onClick={onRefresh} disabled={isOffline}>
-                    Check for new stories
-                </button>
+                <p>Stay calm. Your next update is just a refresh away.</p>
             </div>
         );
     }

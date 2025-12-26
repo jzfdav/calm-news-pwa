@@ -146,8 +146,6 @@ function App() {
           loading={loading}
           onSelectArticle={setSelectedArticle}
           onToggleRead={handleToggleRead}
-          onRefresh={() => handleRefreshAction()}
-          isOffline={isOffline}
         />
       ) : (
         <SettingsView
