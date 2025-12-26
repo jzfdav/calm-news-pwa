@@ -10,79 +10,66 @@ const READ_ARTICLES_KEY = 'calm_news_read_articles';
 const THEME_KEY = 'calm_news_theme';
 const FONT_SIZE_KEY = 'calm_news_font_size';
 
-export function saveReadArticles(ids: string[]): void {
+// Helpers
+const lsGet = (key: string) => {
     try {
-        localStorage.setItem(READ_ARTICLES_KEY, JSON.stringify(ids));
-    } catch (e) {
-        console.error('Failed to save read articles', e);
+        const data = localStorage.getItem(key);
+        return data ? JSON.parse(data) : null;
+    } catch {
+        return null;
     }
+};
+
+const lsSet = (key: string, value: any) => {
+    try {
+        localStorage.setItem(key, JSON.stringify(value));
+    } catch (e) {
+        console.error(`Storage error for ${key}:`, e);
+    }
+};
+
+export function saveReadArticles(ids: string[]): void {
+    lsSet(READ_ARTICLES_KEY, ids);
 }
 
 export function loadReadArticles(): string[] {
-    try {
-        const data = localStorage.getItem(READ_ARTICLES_KEY);
-        return data ? JSON.parse(data) : [];
-    } catch (e) {
-        console.error('Failed to load read articles', e);
-        return [];
-    }
+    return lsGet(READ_ARTICLES_KEY) || [];
 }
 
 export function saveArticles(articles: Article[]): void {
-    try {
-        const existing = loadArticles();
-        const map = new Map(existing.map(a => [a.id, a]));
-        articles.forEach(a => map.set(a.id, a));
+    const existing = loadArticles();
+    const map = new Map(existing.map(a => [a.id, a]));
+    articles.forEach(a => map.set(a.id, a));
 
-        // Prune articles older than 7 days (giving some buffer beyond the 3-day view limit)
-        const expiryDate = new Date();
-        expiryDate.setDate(expiryDate.getDate() - 7);
+    // Prune articles older than 7 days
+    const expiryDate = new Date();
+    expiryDate.setDate(expiryDate.getDate() - 7);
 
-        const freshArticles = Array.from(map.values()).filter(a => {
-            try {
-                return new Date(a.pubDate) > expiryDate;
-            } catch {
-                return false; // Remove if date is invalid
-            }
-        });
+    const freshArticles = Array.from(map.values()).filter(a => {
+        try {
+            return new Date(a.pubDate) > expiryDate;
+        } catch {
+            return false;
+        }
+    });
 
-        // Keep only the most recent 100 articles total for performance
-        const sorted = freshArticles.sort((a, b) =>
-            new Date(b.pubDate).getTime() - new Date(a.pubDate).getTime()
-        ).slice(0, 100);
+    const sorted = freshArticles.sort((a, b) =>
+        new Date(b.pubDate).getTime() - new Date(a.pubDate).getTime()
+    ).slice(0, 100);
 
-        localStorage.setItem(ARTICLES_KEY, JSON.stringify(sorted));
-    } catch (e) {
-        console.error('Failed to save articles to localStorage', e);
-    }
+    lsSet(ARTICLES_KEY, sorted);
 }
 
 export function loadArticles(): Article[] {
-    try {
-        const data = localStorage.getItem(ARTICLES_KEY);
-        return data ? JSON.parse(data) : [];
-    } catch (e) {
-        console.error('Failed to load articles from localStorage', e);
-        return [];
-    }
+    return lsGet(ARTICLES_KEY) || [];
 }
 
 export function saveSections(sections: Section[]): void {
-    try {
-        localStorage.setItem(SECTIONS_KEY, JSON.stringify(sections));
-    } catch (e) {
-        console.error('Failed to save sections to localStorage', e);
-    }
+    lsSet(SECTIONS_KEY, sections);
 }
 
 export function loadSections(): Section[] {
-    try {
-        const data = localStorage.getItem(SECTIONS_KEY);
-        return data ? JSON.parse(data) : [];
-    } catch (e) {
-        console.error('Failed to load sections from localStorage', e);
-        return [];
-    }
+    return lsGet(SECTIONS_KEY) || [];
 }
 
 export interface CustomFeed {
@@ -92,21 +79,11 @@ export interface CustomFeed {
 }
 
 export function saveCustomFeeds(feeds: CustomFeed[]): void {
-    try {
-        localStorage.setItem(CUSTOM_FEEDS_KEY, JSON.stringify(feeds));
-    } catch (e) {
-        console.error('Failed to save custom feeds to localStorage', e);
-    }
+    lsSet(CUSTOM_FEEDS_KEY, feeds);
 }
 
 export function loadCustomFeeds(): CustomFeed[] {
-    try {
-        const data = localStorage.getItem(CUSTOM_FEEDS_KEY);
-        return data ? JSON.parse(data) : [];
-    } catch (e) {
-        console.error('Failed to load custom feeds from localStorage', e);
-        return [];
-    }
+    return lsGet(CUSTOM_FEEDS_KEY) || [];
 }
 
 export function clearStorage(): void {
@@ -123,11 +100,7 @@ export function clearStorage(): void {
 
 // Topics System (v12.0)
 export function saveTopics(topics: string[]): void {
-    try {
-        localStorage.setItem(TOPICS_KEY, JSON.stringify(topics));
-    } catch (e) {
-        console.error('Failed to save topics', e);
-    }
+    lsSet(TOPICS_KEY, topics);
 }
 
 export function loadTopics(): string[] {

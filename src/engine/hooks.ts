@@ -6,8 +6,6 @@ import type { Section } from './types';
 import type { CustomFeed } from './storage';
 
 // Helper to reconstruct the full list of sections including personalized ones
-// Helper to reconstruct the full list of sections including personalized ones
-// Helper to reconstruct the full list of sections including personalized ones
 const buildSectionsToFetch = (feeds: CustomFeed[], topics: string[]): Section[] => {
     const sections: Section[] = feeds.map(f => ({
         id: f.id,

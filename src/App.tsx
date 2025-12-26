@@ -39,7 +39,7 @@ function App() {
       const timer = setTimeout(() => setShowUndo(false), 6000);
       return () => clearTimeout(timer);
     }
-  }, [showUndo]);
+  }, [showUndo, lastReadId]);
 
   useEffect(() => {
     const handleOnline = () => setIsOffline(false);

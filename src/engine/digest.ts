@@ -1,8 +1,9 @@
-import type { Section, DailyDigest } from './types';
+import type { Article, Section, DailyDigest } from './types';
 import { fetchRSS, parseRSS } from './rss';
 import { saveArticles, saveSections } from './storage';
 
 export async function refreshSections(sections: Section[]): Promise<Section[]> {
+    const allArticlesToSave: Article[] = [];
     const updatedSections = await Promise.all(
         sections.map(async (section) => {
             try {
@@ -17,8 +18,7 @@ export async function refreshSections(sections: Section[]): Promise<Section[]> {
 
                 // Limit articles per section for calm experience
                 const articlesToSave = fresh.slice(0, 5);
-
-                saveArticles(articlesToSave);
+                allArticlesToSave.push(...articlesToSave);
 
                 return {
                     ...section,
@@ -32,6 +32,7 @@ export async function refreshSections(sections: Section[]): Promise<Section[]> {
         })
     );
 
+    saveArticles(allArticlesToSave);
     saveSections(updatedSections);
     return updatedSections;
 }
