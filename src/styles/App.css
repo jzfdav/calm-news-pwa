@@ -59,11 +59,11 @@
 }
 
 .theme-dark {
-  --bg-color: #1a1a1a;
+  --bg-color: #000000;
   --text-color: #d1d1d1;
   --secondary-text: #999;
   --accent-color: #ccc;
-  --border-color: #333;
+  --border-color: #1a1a1a;
 }
 
 html,
@@ -378,10 +378,10 @@ section {
   grid-template-columns: 1fr 1fr 1fr;
   align-items: center;
   justify-items: center;
-  background: var(--bg-color);
+  background: rgba(4, 4, 4, 0.8);
   padding: 0.75rem 0 calc(1rem + env(safe-area-inset-bottom)) 0;
   border-radius: 0;
-  border-top: 1px solid var(--border-color);
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
   border-bottom: none;
   border-left: none;
   border-right: none;
@@ -422,11 +422,15 @@ section {
 
 .action-pill .nav-link.active {
   background: var(--accent-color);
-  color: var(--bg-color);
+  color: #000;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
 }
 
-.nav-divider {
-  display: none;
+.theme-dark .action-pill {
+  background: rgba(0, 0, 0, 0.75);
+  backdrop-filter: blur(25px);
+  -webkit-backdrop-filter: blur(25px);
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
 }
 
 .spin {
@@ -495,12 +499,14 @@ section {
   border: 1px solid var(--border-color);
   border-radius: 16px;
   background: rgba(125, 125, 125, 0.03);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.02);
 }
 
 .theme-dark .add-feed-card,
 .theme-dark .danger-zone {
-  background: rgba(255, 255, 255, 0.04);
-  border-color: #222;
+  background: #080808;
+  border-color: #1a1a1a;
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.04);
 }
 
 .form-group label {
@@ -610,15 +616,21 @@ section {
   bottom: 0;
   left: 0;
   right: 0;
-  background: var(--bg-color);
+  background: rgba(10, 10, 10, 0.85);
   padding: 0.75rem 1.25rem calc(1rem + env(safe-area-inset-bottom)) 1.25rem;
-  border-top: 1px solid var(--border-color);
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
   align-items: center;
   justify-items: center;
-  backdrop-filter: blur(15px);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
   z-index: 1002;
+}
+
+.theme-dark .reader-toolbar {
+  background: rgba(0, 0, 0, 0.8);
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
 }
 
 .toolbar-btn {
