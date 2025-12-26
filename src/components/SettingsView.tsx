@@ -3,9 +3,10 @@ import type { CustomFeed } from '../engine/storage'
 
 interface SettingsViewProps {
     customFeeds: CustomFeed[];
-    locationQuery: string;
-    companyQuery: string;
-    onUpdatePersonalization: (key: 'location' | 'company', val: string) => void;
+    locations: string[];
+    companies: string[];
+    onAddPersonalization: (type: 'location' | 'company', val: string) => void;
+    onRemovePersonalization: (type: 'location' | 'company', val: string) => void;
     onAddFeed: (name: string, url: string) => void;
     onRemoveFeed: (id: string) => void;
     onReset: () => void;
@@ -13,16 +14,17 @@ interface SettingsViewProps {
 
 export function SettingsView({
     customFeeds,
-    locationQuery,
-    companyQuery,
-    onUpdatePersonalization,
+    locations,
+    companies,
+    onAddPersonalization,
+    onRemovePersonalization,
     onAddFeed,
     onRemoveFeed,
     onReset
 }: SettingsViewProps) {
     const [newFeed, setNewFeed] = useState({ name: '', url: '' });
-    const [locInput, setLocInput] = useState(locationQuery);
-    const [compInput, setCompInput] = useState(companyQuery);
+    const [locInput, setLocInput] = useState('');
+    const [compInput, setCompInput] = useState('');
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
@@ -32,10 +34,18 @@ export function SettingsView({
         }
     };
 
-    const handleTrack = (key: 'location' | 'company') => {
-        if (key === 'location') onUpdatePersonalization('location', locInput);
-        else onUpdatePersonalization('company', compInput);
-        // Visual feedback could be added here, but the props update will reflect it
+    const handleAddLoc = () => {
+        if (locInput.trim()) {
+            onAddPersonalization('location', locInput);
+            setLocInput('');
+        }
+    };
+
+    const handleAddComp = () => {
+        if (compInput.trim()) {
+            onAddPersonalization('company', compInput);
+            setCompInput('');
+        }
     };
 
     return (
@@ -101,6 +111,40 @@ export function SettingsView({
                     <h2>Personalized Insights</h2>
                     <p className="meta">Track specific locations or companies</p>
                 </div>
+
+                <div className="feeds-grid">
+                    {locations.map(loc => (
+                        <div key={loc} className="feed-card">
+                            <div className="feed-card-main">
+                                <span className="feed-name">Around {loc}</span>
+                                <span className="feed-url">Local News</span>
+                            </div>
+                            <button
+                                className="button-text-danger"
+                                onClick={() => onRemovePersonalization('location', loc)}
+                                aria-label={`Remove ${loc}`}
+                            >
+                                Remove
+                            </button>
+                        </div>
+                    ))}
+                    {companies.map(comp => (
+                        <div key={comp} className="feed-card">
+                            <div className="feed-card-main">
+                                <span className="feed-name">{comp}</span>
+                                <span className="feed-url">Company News</span>
+                            </div>
+                            <button
+                                className="button-text-danger"
+                                onClick={() => onRemovePersonalization('company', comp)}
+                                aria-label={`Remove ${comp}`}
+                            >
+                                Remove
+                            </button>
+                        </div>
+                    ))}
+                </div>
+
                 <div className="add-feed-card">
                     <div className="form-grid">
                         <div className="form-group">
@@ -114,8 +158,8 @@ export function SettingsView({
                                     placeholder="e.g. Devanahalli"
                                     aria-label="Location to track for news"
                                 />
-                                <button className="button-primary" onClick={() => handleTrack('location')} style={{ padding: '0.8rem 1.2rem' }}>
-                                    Track
+                                <button className="button-primary" onClick={handleAddLoc} style={{ padding: '0.8rem 1.2rem' }}>
+                                    Add
                                 </button>
                             </div>
                             <p className="input-hint">Dynamically tracks news from this area.</p>
@@ -131,8 +175,8 @@ export function SettingsView({
                                     placeholder="e.g. IBM"
                                     aria-label="Company to track for news"
                                 />
-                                <button className="button-primary" onClick={() => handleTrack('company')} style={{ padding: '0.8rem 1.2rem' }}>
-                                    Track
+                                <button className="button-primary" onClick={handleAddComp} style={{ padding: '0.8rem 1.2rem' }}>
+                                    Add
                                 </button>
                             </div>
                             <p className="input-hint">Monitors news for this specific firm.</p>

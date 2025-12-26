@@ -115,19 +115,28 @@ export function clearStorage(): void {
     localStorage.removeItem(READ_ARTICLES_KEY);
 }
 
-export function savePersonalization(key: 'location' | 'company', query: string): void {
+export function savePersonalization(key: 'location' | 'company', queries: string[]): void {
     try {
-        localStorage.setItem(key === 'location' ? LOCATION_KEY : COMPANY_KEY, query);
+        localStorage.setItem(key === 'location' ? LOCATION_KEY : COMPANY_KEY, JSON.stringify(queries));
     } catch (e) {
         console.error(`Failed to save ${key} personalization`, e);
     }
 }
 
-export function loadPersonalization(key: 'location' | 'company'): string {
+export function loadPersonalization(key: 'location' | 'company'): string[] {
     try {
-        return localStorage.getItem(key === 'location' ? LOCATION_KEY : COMPANY_KEY) || '';
+        const item = localStorage.getItem(key === 'location' ? LOCATION_KEY : COMPANY_KEY);
+        if (!item) return [];
+
+        // Handle migration from old string format
+        if (item.startsWith('[')) {
+            return JSON.parse(item);
+        } else {
+            // It's a legacy string, convert to array
+            return [item];
+        }
     } catch (e) {
         console.error(`Failed to load ${key} personalization`, e);
-        return '';
+        return [];
     }
 }

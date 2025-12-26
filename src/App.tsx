@@ -31,10 +31,11 @@ function App() {
   }, [theme]);
 
   // Personalization
-  const [locationQuery, setLocationQuery] = useState(loadPersonalization('location'));
-  const [companyQuery, setCompanyQuery] = useState(loadPersonalization('company'));
+  // Personalization
+  const [locations, setLocations] = useState<string[]>([]);
+  const [companies, setCompanies] = useState<string[]>([]);
 
-  const { data: digest, isLoading, error: queryError, refetch } = useNewsFeed(customFeeds, locationQuery, companyQuery, !isOffline);
+  const { data: digest, isLoading, error: queryError, refetch } = useNewsFeed(customFeeds, locations, companies, !isOffline);
 
   useEffect(() => {
     const handleOnline = () => setIsOffline(false);
@@ -48,6 +49,9 @@ function App() {
       saveCustomFeeds(feeds);
     }
     setCustomFeeds(feeds);
+
+    setLocations(loadPersonalization('location'));
+    setCompanies(loadPersonalization('company'));
 
     return () => {
       window.removeEventListener('online', handleOnline);
@@ -73,11 +77,30 @@ function App() {
     saveCustomFeeds(updated);
   }, [customFeeds]);
 
-  const handleUpdatePersonalization = useCallback((key: 'location' | 'company', val: string) => {
-    if (key === 'location') setLocationQuery(val);
-    else setCompanyQuery(val);
-    savePersonalization(key, val);
-  }, []);
+  const handleAddPersonalization = useCallback((type: 'location' | 'company', value: string) => {
+    if (!value.trim()) return;
+    if (type === 'location') {
+      const updated = [...locations, value.trim()];
+      setLocations(updated);
+      savePersonalization('location', updated);
+    } else {
+      const updated = [...companies, value.trim()];
+      setCompanies(updated);
+      savePersonalization('company', updated);
+    }
+  }, [locations, companies]);
+
+  const handleRemovePersonalization = useCallback((type: 'location' | 'company', value: string) => {
+    if (type === 'location') {
+      const updated = locations.filter(l => l !== value);
+      setLocations(updated);
+      savePersonalization('location', updated);
+    } else {
+      const updated = companies.filter(c => c !== value);
+      setCompanies(updated);
+      savePersonalization('company', updated);
+    }
+  }, [locations, companies]);
 
   const handleReset = useCallback(() => {
     if (confirm('Clear all saved data and refresh?')) {
@@ -115,9 +138,10 @@ function App() {
       ) : (
         <SettingsView
           customFeeds={customFeeds}
-          locationQuery={locationQuery}
-          companyQuery={companyQuery}
-          onUpdatePersonalization={handleUpdatePersonalization}
+          locations={locations}
+          companies={companies}
+          onAddPersonalization={handleAddPersonalization}
+          onRemovePersonalization={handleRemovePersonalization}
           onAddFeed={handleAddFeed}
           onRemoveFeed={handleRemoveFeed}
           onReset={handleReset}

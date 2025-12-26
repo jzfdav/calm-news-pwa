@@ -6,7 +6,8 @@ import type { Section } from './types';
 import type { CustomFeed } from './storage';
 
 // Helper to reconstruct the full list of sections including personalized ones
-const buildSectionsToFetch = (feeds: CustomFeed[], location: string, company: string): Section[] => {
+// Helper to reconstruct the full list of sections including personalized ones
+const buildSectionsToFetch = (feeds: CustomFeed[], locations: string[], companies: string[]): Section[] => {
     const sections: Section[] = feeds.map(f => ({
         id: f.id,
         name: f.name,
@@ -14,32 +15,36 @@ const buildSectionsToFetch = (feeds: CustomFeed[], location: string, company: st
         articles: []
     }));
 
-    if (location) {
-        sections.unshift({
-            id: 'personal-location',
-            name: `Around ${location}`,
-            rssUrl: PROXY_URL(GOOGLE_NEWS_SEARCH(location, 'IN')),
-            articles: []
-        });
-    }
+    locations.forEach(loc => {
+        if (loc) {
+            sections.unshift({
+                id: `personal-loc-${loc}`,
+                name: `Around ${loc}`,
+                rssUrl: PROXY_URL(GOOGLE_NEWS_SEARCH(loc, 'IN')),
+                articles: []
+            });
+        }
+    });
 
-    if (company) {
-        sections.unshift({
-            id: 'personal-company',
-            name: company.toUpperCase(),
-            rssUrl: PROXY_URL(GOOGLE_NEWS_SEARCH(company, 'US')),
-            articles: []
-        });
-    }
+    companies.forEach(comp => {
+        if (comp) {
+            sections.unshift({
+                id: `personal-comp-${comp}`,
+                name: comp.toUpperCase(),
+                rssUrl: PROXY_URL(GOOGLE_NEWS_SEARCH(comp, 'US')),
+                articles: []
+            });
+        }
+    });
 
     return sections;
 };
 
-export function useNewsFeed(customFeeds: CustomFeed[], locationQuery: string, companyQuery: string, isOnline: boolean) {
+export function useNewsFeed(customFeeds: CustomFeed[], locations: string[], companies: string[], isOnline: boolean) {
     return useQuery({
-        queryKey: ['digest', customFeeds, locationQuery, companyQuery],
+        queryKey: ['digest', customFeeds, locations, companies],
         queryFn: async () => {
-            const sections = buildSectionsToFetch(customFeeds, locationQuery, companyQuery);
+            const sections = buildSectionsToFetch(customFeeds, locations, companies);
             const updated = await refreshSections(sections);
             return createDailyDigest(updated);
         },
