@@ -280,7 +280,7 @@ button.refresh:hover {
 
 .form-grid {
   display: grid;
-  gap: 1rem;
+  gap: 1.5rem;
   grid-template-columns: 1fr;
 }
 
@@ -298,6 +298,37 @@ button.refresh:hover {
   margin-bottom: 0.5rem;
   text-transform: uppercase;
   letter-spacing: 0.05rem;
+}
+
+.button-danger {
+  color: #c33;
+  background: none;
+  border: 1px solid #c33;
+  padding: 0.6rem 1.2rem;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.85rem;
+  font-weight: 500;
+  transition: all 0.2s;
+}
+
+.button-danger:hover {
+  background: #fffafa;
+  box-shadow: 0 2px 8px rgba(200, 0, 0, 0.05);
+}
+
+.danger-zone {
+  text-align: center;
+  padding: 2.5rem;
+  border: 1px dashed #fcc;
+  border-radius: 12px;
+  background: #fffcfc;
+}
+
+.danger-zone p {
+  color: var(--secondary-text);
+  font-size: 0.85rem;
+  margin-bottom: 1.5rem;
 }
 
 /* Reader Mode Overlay */
