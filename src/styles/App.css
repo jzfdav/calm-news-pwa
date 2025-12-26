@@ -148,6 +148,18 @@ h2 {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+  flex: 1;
+  /* Allow meta info to grow and shrink */
+  min-width: 0;
+  /* Critical for flexbox truncation */
+}
+
+.article-done-link {
+  flex-shrink: 0;
+  /* Never allow the action button to shrink or vanish */
+  color: var(--accent-color);
+  text-decoration: underline;
+  font-weight: 500;
 }
 
 .article-author {
