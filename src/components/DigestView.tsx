@@ -17,6 +17,51 @@ interface DigestViewProps {
     onSelectArticle: (article: Article) => void;
 }
 
+const ArticleCard = memo(({
+    article,
+    onSelectArticle
+}: {
+    article: Article;
+    onSelectArticle: (article: Article) => void;
+}) => (
+    <article className="article-card">
+        <h3 className="article-card-title">
+            <div
+                role="button"
+                tabIndex={0}
+                className="article-title-btn"
+                onClick={() => onSelectArticle(article)}
+                onKeyDown={(e) => {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                        e.preventDefault();
+                        onSelectArticle(article);
+                    }
+                }}
+            >
+                {decodeHTMLEntities(article.title)}
+            </div>
+        </h3>
+        <div className="article-card-meta">
+            <div className="meta-info-left">
+                <span className="meta-time">{getReadingTime(article.content)}</span>
+                {isReadable(article.content) ? (
+                    <span className="read-badge badge-full">FULL ARTICLE</span>
+                ) : (
+                    <span className="read-badge badge-snippet">SNIPPET</span>
+                )}
+            </div>
+            <a
+                href={article.link}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="meta-source"
+            >
+                {getSourceName(article)}
+            </a>
+        </div>
+    </article>
+));
+
 function DigestSection({
     section,
     onSelectArticle,
@@ -64,46 +109,11 @@ function DigestSection({
             {isOpen && (
                 <div className="section-content">
                     {section.articles.map((article) => (
-                        <article
+                        <ArticleCard
                             key={article.id}
-                            className="article-card"
-                        >
-                            <h3 className="article-card-title">
-                                <div
-                                    role="button"
-                                    tabIndex={0}
-                                    className="article-title-btn"
-                                    onClick={() => onSelectArticle(article)}
-                                    onKeyDown={(e) => {
-                                        if (e.key === 'Enter' || e.key === ' ') {
-                                            e.preventDefault();
-                                            onSelectArticle(article);
-                                        }
-                                    }}
-                                >
-                                    {decodeHTMLEntities(article.title)}
-                                </div>
-                            </h3>
-                            <div className="article-card-meta">
-                                <div className="meta-info-left">
-                                    <span className="meta-time">{getReadingTime(article.content)}</span>
-                                    {isReadable(article.content) ? (
-                                        <span className="read-badge badge-full">FULL ARTICLE</span>
-                                    ) : (
-                                        <span className="read-badge badge-snippet">SNIPPET</span>
-                                    )}
-                                </div>
-                                <a
-                                    href={article.link}
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    className="meta-source"
-                                >
-                                    {getSourceName(article)}
-                                </a>
-                                {/* Done button removed to prevent accidental clicks */}
-                            </div>
-                        </article>
+                            article={article}
+                            onSelectArticle={onSelectArticle}
+                        />
                     ))}
                 </div>
             )}
@@ -114,16 +124,21 @@ function DigestSection({
 const MemoizedDigestSection = memo(DigestSection);
 
 export function DigestView({ sections, loading, onSelectArticle }: DigestViewProps) {
-    // State for which sections are open. Default all to true.
     const [openSections, setOpenSections] = useState<Record<string, boolean>>({});
 
-    // Initialize state when sections load
+    // Sync open state when new sections are added (e.g. newly added feed)
     useEffect(() => {
-        if (sections.length > 0 && Object.keys(openSections).length === 0) {
-            const initial: Record<string, boolean> = {};
-            sections.forEach(s => initial[s.id] = true);
-            setOpenSections(initial);
-        }
+        setOpenSections(prev => {
+            const next = { ...prev };
+            let changed = false;
+            sections.forEach(s => {
+                if (!(s.id in next)) {
+                    next[s.id] = true; // Default new sections to open
+                    changed = true;
+                }
+            });
+            return changed ? next : prev;
+        });
     }, [sections]);
 
     const toggleSection = (id: string) => {
