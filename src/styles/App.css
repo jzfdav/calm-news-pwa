@@ -85,16 +85,18 @@ body {
   /* More immersive top */
 }
 
-header {
+.app-header {
   margin: 2rem 0 3rem 0;
   text-align: center;
+  width: 100%;
 }
 
-h1 {
+.app-title {
   font-family: var(--font-serif);
   font-weight: 400;
   font-size: 2.2rem;
   margin-bottom: 0.2rem;
+  text-align: center;
 }
 
 .subtitle {
@@ -198,7 +200,7 @@ article {
 }
 
 /* Single Action Pill @ Bottom */
-.nav-bar {
+.action-pill {
   position: fixed;
   bottom: calc(1.5rem + env(safe-area-inset-bottom));
   left: 50%;
@@ -210,14 +212,15 @@ article {
   border-radius: 40px;
   border: 1px solid var(--border-color);
   width: auto;
-  min-width: 280px;
+  min-width: 220px;
+  /* Slimmer for icons */
   z-index: 1000;
   box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
   gap: 0.2rem;
   backdrop-filter: blur(10px);
 }
 
-.nav-link {
+.action-pill .nav-link {
   color: var(--secondary-text);
   text-decoration: none;
   font-size: 0.8rem;
@@ -225,19 +228,26 @@ article {
   cursor: pointer;
   background: none;
   border: none;
-  padding: 0.6rem 1.2rem;
-  border-radius: 30px;
+  padding: 0.6rem;
+  /* Icon-optimized padding */
+  border-radius: 50%;
+  /* Circle for icons */
   transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
   font-family: var(--font-sans);
   flex: 1;
-  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
 }
 
-.nav-link:hover {
+.action-pill .nav-link:hover {
   color: var(--text-color);
+  background: var(--border-color);
 }
 
-.nav-link.active {
+.action-pill .nav-link.active {
   background: var(--accent-color);
   color: var(--bg-color);
 }
@@ -249,18 +259,18 @@ article {
   margin: 0 0.4rem;
 }
 
-.btn-refresh-pill {
-  background: none;
-  border: none;
-  color: var(--secondary-text);
-  padding: 0.6rem 1.2rem;
-  cursor: pointer;
-  border-radius: 30px;
-  font-size: 0.8rem;
-  font-weight: 600;
-  transition: all 0.2s;
-  flex: 1;
-  white-space: nowrap;
+.spin {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 .btn-refresh-pill:hover:not(:disabled) {
