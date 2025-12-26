@@ -44,10 +44,19 @@ export function ReaderOverlay({
                         <a href={article.link} target="_blank" rel="noopener noreferrer">Source</a>
                     </div>
                 </div>
-                <div
-                    className={`full-content font-size-${fontSize}`}
-                    dangerouslySetInnerHTML={{ __html: article.content }}
-                />
+                {article.content ? (
+                    <div
+                        className={`full-content font-size-${fontSize}`}
+                        dangerouslySetInnerHTML={{ __html: article.content }}
+                    />
+                ) : (
+                    <div className="empty-state" style={{ padding: '2rem 1rem' }}>
+                        <p>This article's content isn't available in the feed.</p>
+                        <a href={article.link} target="_blank" rel="noopener noreferrer" className="button-primary" style={{ display: 'inline-block', marginTop: '1rem', textDecoration: 'none' }}>
+                            Read Full Article at Source
+                        </a>
+                    </div>
+                )}
                 <div style={{ textAlign: 'center', marginTop: '4rem', paddingBottom: '4rem' }}>
                     <button
                         className="button-primary"
