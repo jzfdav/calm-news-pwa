@@ -25,6 +25,11 @@ function App() {
   // Reader State
   const { theme, setTheme, fontSize, setFontSize, readArticles, toggleRead } = useReader();
 
+  // Apply theme globally
+  useEffect(() => {
+    document.body.className = `theme-${theme}`;
+  }, [theme]);
+
   // Personalization
   const [locationQuery, setLocationQuery] = useState(loadPersonalization('location'));
   const [companyQuery, setCompanyQuery] = useState(loadPersonalization('company'));
@@ -90,7 +95,7 @@ function App() {
   }, [digest, readArticles]);
 
   return (
-    <div className={`container ${selectedArticle ? `theme-${theme}` : ''}`}>
+    <div className={`container`}>
       <Header
         view={view}
         setView={setView}

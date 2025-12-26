@@ -43,18 +43,27 @@
 }
 
 .theme-light {
-  --current-bg: var(--reader-light-bg);
-  --current-text: var(--reader-light-text);
+  --bg-color: #fcfcfc;
+  --text-color: #1a1a1a;
+  --secondary-text: #666;
+  --accent-color: #333;
+  --border-color: #eee;
 }
 
 .theme-sepia {
-  --current-bg: var(--reader-sepia-bg);
-  --current-text: var(--reader-sepia-text);
+  --bg-color: #f4ecd8;
+  --text-color: #5b4636;
+  --secondary-text: #82705a;
+  --accent-color: #463020;
+  --border-color: #e4dcc8;
 }
 
 .theme-dark {
-  --current-bg: var(--reader-dark-bg);
-  --current-text: var(--reader-dark-text);
+  --bg-color: #1a1a1a;
+  --text-color: #d1d1d1;
+  --secondary-text: #999;
+  --accent-color: #ccc;
+  --border-color: #333;
 }
 
 html,
@@ -503,8 +512,8 @@ section {
   /* Dynamic full height */
   bottom: auto;
   /* Override bottom:0 to rely on height */
-  background: var(--current-bg);
-  color: var(--current-text);
+  background: var(--bg-color);
+  color: var(--text-color);
   z-index: 1000;
   overflow-y: auto;
   padding: calc(3rem + env(safe-area-inset-top)) 1.25rem calc(10rem + env(safe-area-inset-bottom)) 1.25rem;
