@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import type { Section, Article } from '../engine/types'
-import { getReadingTime, isReadable } from '../engine/utils'
+import { getReadingTime, isReadable, decodeHTMLEntities } from '../engine/utils'
 
 interface DigestViewProps {
     sections: Section[];
@@ -52,13 +52,13 @@ export function DigestView({ sections, loading, onSelectArticle, onToggleRead }:
                                     className="nav-link"
                                     onClick={() => onSelectArticle(article)}
                                 >
-                                    {article.title}
+                                    {decodeHTMLEntities(article.title)}
                                 </button>
                             </h3>
                             <div className="article-card-meta">
                                 <div className="article-meta-info">
-                                    {isReadable(article.content) && <span className="readability-badge">Full Article</span>}
-                                    {article.author && <span>{article.author} • </span>}
+                                    {isReadable(article.content) && <span className="readability-badge" title="Can be read in-app">Reader</span>}
+                                    {article.author && <span className="article-author">{article.author} • </span>}
                                     <span>{getReadingTime(article.content)} • </span>
                                     <a href={article.link} target="_blank" rel="noopener noreferrer">
                                         Source

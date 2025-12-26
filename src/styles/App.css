@@ -150,6 +150,14 @@ h2 {
   white-space: nowrap;
 }
 
+.article-author {
+  max-width: 120px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  flex-shrink: 1;
+}
+
 .article-done-link {
   color: var(--accent-color);
   text-decoration: underline;

@@ -103,6 +103,7 @@ export function SettingsView({
                                 value={locationQuery}
                                 onChange={e => onUpdatePersonalization('location', e.target.value)}
                                 placeholder="e.g. Devanahalli"
+                                aria-label="Location to track for news"
                             />
                             <p className="input-hint">Dynamically tracks news from this area.</p>
                         </div>
@@ -114,6 +115,7 @@ export function SettingsView({
                                 value={companyQuery}
                                 onChange={e => onUpdatePersonalization('company', e.target.value)}
                                 placeholder="e.g. IBM"
+                                aria-label="Company to track for news"
                             />
                             <p className="input-hint">Monitors news for this specific firm.</p>
                         </div>

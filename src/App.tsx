@@ -111,7 +111,7 @@ function App() {
     } finally {
       setLoading(false);
     }
-  }, [customFeeds, isOffline]);
+  }, [customFeeds, isOffline, locationQuery, companyQuery]);
 
   const handleToggleRead = useCallback((id: string) => {
     setReadArticles(prev => {

@@ -13,7 +13,15 @@ export function decodeHTMLEntities(text: string): string {
 
 export function isReadable(content: string): boolean {
     if (!content) return false;
-    // Basic heuristic: if it's more than 600 characters, it's likely a full article
-    // rather than just a 1-2 sentence preview.
-    return content.length > 600;
+    const lower = content.toLowerCase();
+
+    // If it contains common "Read more" patterns or snippets
+    if (lower.includes('read more') || lower.includes('...')) {
+        // Only mark as readable if there's actually a substantial amount of text before the jump
+        if (content.length < 1200) return false;
+    }
+
+    // Heuristic: if it's more than 800 characters or contains multiple paragraph tags
+    const paragraphs = (content.match(/<p>/g) || []).length;
+    return content.length > 800 || paragraphs >= 2;
 }

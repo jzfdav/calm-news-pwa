@@ -1,5 +1,5 @@
 import type { Article } from '../engine/types'
-import { getReadingTime } from '../engine/utils'
+import { getReadingTime, decodeHTMLEntities } from '../engine/utils'
 
 interface ReaderOverlayProps {
     article: Article;
@@ -25,7 +25,7 @@ export function ReaderOverlay({
         <div className={`reader-overlay theme-${theme}`}>
             <div className="reader-content">
                 <header className="reader-header">
-                    <h1>{article.title}</h1>
+                    <h1 className="reader-title">{decodeHTMLEntities(article.title)}</h1>
                     <div className="reader-meta">
                         {article.author && <span>{article.author} • </span>}
                         <span>{getReadingTime(article.content)} • </span>
