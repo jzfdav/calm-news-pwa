@@ -99,15 +99,16 @@ export function SettingsView({
                         <div key={feed.id} className="feed-card">
                             <div className="feed-card-main">
                                 <span className="feed-name">{feed.name}</span>
-                                <span className="feed-url" title={feed.url}>{feed.url}</span>
+                                <span className="feed-url">{feed.url}</span>
                             </div>
-                            <button
-                                className="button-icon-danger"
-                                onClick={() => onRemoveFeed(feed.id)}
-                                aria-label={`Remove ${feed.name}`}
-                            >
-                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path><line x1="10" y1="11" x2="10" y2="17"></line><line x1="14" y1="11" x2="14" y2="17"></line></svg>
-                            </button>
+                            <div className="feed-action-bar">
+                                <button
+                                    className="button-text-danger"
+                                    onClick={() => onRemoveFeed(feed.id)}
+                                >
+                                    Remove Source
+                                </button>
+                            </div>
                         </div>
                     ))}
                 </div>
@@ -157,13 +158,14 @@ export function SettingsView({
                                 <span className="feed-name">{topic}</span>
                                 <span className="feed-url">Topic</span>
                             </div>
-                            <button
-                                className="button-icon-danger"
-                                onClick={() => onRemoveTopic(topic)}
-                                aria-label={`Remove ${topic}`}
-                            >
-                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path><line x1="10" y1="11" x2="10" y2="17"></line><line x1="14" y1="11" x2="14" y2="17"></line></svg>
-                            </button>
+                            <div className="feed-action-bar">
+                                <button
+                                    className="button-text-danger"
+                                    onClick={() => onRemoveTopic(topic)}
+                                >
+                                    Remove Topic
+                                </button>
+                            </div>
                         </div>
                     ))}
                 </div>
