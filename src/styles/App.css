@@ -67,13 +67,17 @@ body {
   padding: 0;
   overflow-x: hidden;
   width: 100%;
-  max-width: 100vw;
+  max-width: 100dvw;
+  /* Dynamic width */
+  min-height: 100dvh;
+  /* Dynamic height */
   -webkit-text-size-adjust: 100%;
 }
 
 #root {
   width: 100%;
-  max-width: 100vw;
+  max-width: 100dvw;
+  min-height: 100dvh;
   overflow-x: hidden;
 }
 
@@ -414,7 +418,10 @@ section {
   top: 0;
   left: 0;
   right: 0;
-  bottom: 0;
+  height: 100dvh;
+  /* Dynamic full height */
+  bottom: auto;
+  /* Override bottom:0 to rely on height */
   background: var(--current-bg);
   color: var(--current-text);
   z-index: 1000;
