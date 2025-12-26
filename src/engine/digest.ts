@@ -19,7 +19,6 @@ export async function refreshSections(sections: Section[]): Promise<Section[]> {
                 const articlesToSave = fresh.slice(0, 5);
 
                 saveArticles(articlesToSave);
-                console.log(`Successfully fetched ${articlesToSave.length} articles for ${section.name}`);
 
                 return {
                     ...section,

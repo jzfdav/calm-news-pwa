@@ -117,6 +117,21 @@ body {
   border-color: #ff4444;
 }
 
+.button-text-danger {
+  background: none;
+  border: none;
+  color: #ff4444;
+  font-size: 0.8rem;
+  cursor: pointer;
+  padding: 0.5rem;
+  transition: opacity 0.2s;
+}
+
+.button-text-danger:hover {
+  opacity: 0.7;
+  text-decoration: underline;
+}
+
 .container {
   max-width: var(--max-width);
   margin: 0 auto;
@@ -297,29 +312,6 @@ section {
   opacity: 0.8;
 }
 
-.article-done-link {
-  justify-self: end;
-  /* Right align */
-  background: none;
-  border: none;
-  color: var(--secondary-text);
-  cursor: pointer;
-  padding: 0;
-  font-size: 0.85rem;
-  border-bottom: 1px dotted var(--secondary-text);
-  /* Explicitly reset margins */
-  margin: 0;
-}
-
-.article-done-link:hover {
-  color: var(--text-color);
-  border-bottom-style: solid;
-}
-
-/* Obsolete but kept empty to override if needed */
-.article-meta-info {
-  display: none;
-}
 
 .article-author {
   max-width: 140px;
@@ -328,13 +320,6 @@ section {
   white-space: nowrap;
 }
 
-.article-done-link {
-  color: var(--accent-color);
-  font-weight: 600;
-  flex-shrink: 0;
-  text-decoration: none;
-  font-size: 0.85rem;
-}
 
 .article-action-btn {
   background: none;
@@ -625,23 +610,6 @@ section {
   opacity: 1;
 }
 
-.article-exit {
-  animation: fadeOutExit 0.6s cubic-bezier(0.4, 0, 0.2, 1) forwards;
-}
-
-@keyframes fadeOutExit {
-  from {
-    opacity: 1;
-    transform: scale(1);
-  }
-
-  to {
-    opacity: 0;
-    transform: scale(0.95);
-    margin-top: -100px;
-    visibility: hidden;
-  }
-}
 
 @keyframes fade-in {
   from {

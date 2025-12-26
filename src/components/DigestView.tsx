@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, memo } from 'react'
 import type { Section, Article } from '../engine/types'
 import { getReadingTime, decodeHTMLEntities } from '../engine/utils'
 
@@ -97,6 +97,8 @@ function DigestSection({
     );
 }
 
+const MemoizedDigestSection = memo(DigestSection);
+
 export function DigestView({ sections, loading, onSelectArticle }: DigestViewProps) {
     // State for which sections are open. Default all to true.
     const [openSections, setOpenSections] = useState<Record<string, boolean>>({});
@@ -147,7 +149,7 @@ export function DigestView({ sections, loading, onSelectArticle }: DigestViewPro
             </div>
 
             {sections.map((section) => (
-                <DigestSection
+                <MemoizedDigestSection
                     key={section.id}
                     section={section}
                     onSelectArticle={onSelectArticle}
