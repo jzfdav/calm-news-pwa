@@ -31,7 +31,7 @@ export function SettingsView({
     };
 
     return (
-        <main className="settings-container">
+        <main className="container settings-view">
             <section className="settings-section">
                 <div className="section-header">
                     <h2>My Library</h2>
