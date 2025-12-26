@@ -56,7 +56,7 @@ export function ReaderOverlay({
                     <h1 className="reader-title">{decodeHTMLEntities(article.title)}</h1>
                     <div className="reader-meta">
                         {article.author && <span>{article.author} • </span>}
-                        <span>{getReadingTime(article.content)} • </span>
+                        <span>{getReadingTime(article.content)}</span>
                         <span> • <a href={article.link} target="_blank" rel="noopener noreferrer">Source</a></span>
                     </div>
                 </header>

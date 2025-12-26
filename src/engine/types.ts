@@ -6,6 +6,7 @@ export interface Article {
     pubDate: string;
     source: string;
     author?: string;
+    thumbnail?: string;
 }
 
 export interface Section {

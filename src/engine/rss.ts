@@ -66,6 +66,16 @@ export function parseRSS(xml: string, sourceName: string): Article[] {
         const description = getTagContent(['description', 'summary', 'atom:summary']) || '';
         const contentRaw = getTagContent(['content:encoded', 'content', 'body', 'atom:content']) || description;
 
+        // Image extraction: check media:content, media:thumbnail, and enclosure
+        let thumbnail = '';
+        const mediaContent = item.querySelector('media\\:content, content');
+        const mediaThumb = item.querySelector('media\\:thumbnail, thumbnail');
+        const enclosure = item.querySelector('enclosure[type^="image"]');
+
+        if (mediaContent) thumbnail = mediaContent.getAttribute('url') || '';
+        if (!thumbnail && mediaThumb) thumbnail = mediaThumb.getAttribute('url') || '';
+        if (!thumbnail && enclosure) thumbnail = enclosure.getAttribute('url') || '';
+
         // Final fallback: if content is truly empty, show a message
         const content = contentRaw ? cleanHTML(contentRaw) : '';
 
@@ -80,6 +90,7 @@ export function parseRSS(xml: string, sourceName: string): Article[] {
             pubDate,
             source: sourceName,
             author,
+            thumbnail: thumbnail || undefined,
         };
     });
 }

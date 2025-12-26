@@ -31,13 +31,20 @@ function DigestSection({
     return (
         <section className="feed-section">
             <button
-                className="section-header-btn"
+                className={`section-header-btn ${!isOpen ? 'collapsed' : ''}`}
                 onClick={onToggle}
                 aria-expanded={isOpen}
             >
-                <div className="section-header-content">
-                    <h2 className="section-title">{section.name}</h2>
-                    <span className="section-count">{section.articles.length}</span>
+                <div className="section-title-wrapper">
+                    <div className="section-header-content">
+                        <h2 className="section-title">{section.name}</h2>
+                        <span className="section-count">{section.articles.length}</span>
+                    </div>
+                    {!isOpen && section.articles.length > 0 && (
+                        <div className="section-title-peeks">
+                            {section.articles.slice(0, 3).map(a => decodeHTMLEntities(a.title)).join(' • ')}
+                        </div>
+                    )}
                 </div>
                 <svg
                     width="20"
@@ -45,7 +52,7 @@ function DigestSection({
                     viewBox="0 0 24 24"
                     fill="none"
                     stroke="currentColor"
-                    strokeWidth="2"
+                    strokeWidth="2.5"
                     strokeLinecap="round"
                     strokeLinejoin="round"
                     className={`chevron ${isOpen ? 'open' : ''}`}

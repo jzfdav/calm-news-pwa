@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest';
-import { saveTopics, loadTopics } from './storage';
+import { saveTopics, loadTopics, saveArticles, loadArticles } from './storage';
 
 const TOPICS_KEY = 'calm_news_topics';
 const LOCATION_KEY = 'calm_news_location_tracking';
@@ -56,5 +56,38 @@ describe('Storage Engine (Topics & Migration)', () => {
 
         const loaded = loadTopics();
         expect(loaded).toContain('OldLocation');
+    });
+
+    it('should prune articles older than 7 days and limit to 100', () => {
+        const now = new Date();
+        const oldDate = new Date();
+        oldDate.setDate(now.getDate() - 10);
+        const freshDate = new Date();
+        freshDate.setDate(now.getDate() - 2);
+
+        const articles = [
+            { id: 'old', title: 'Old', pubDate: oldDate.toISOString(), link: '', content: '', source: '' },
+            { id: 'fresh', title: 'Fresh', pubDate: freshDate.toISOString(), link: '', content: '', source: '' }
+        ];
+
+        // Testing the persistence layer directly
+        saveArticles(articles);
+
+        const loaded = loadArticles();
+        expect(loaded).toHaveLength(1);
+        expect(loaded[0].id).toBe('fresh');
+
+        // Verify 100 limit
+        const manyArticles = Array.from({ length: 110 }, (_, i) => ({
+            id: `id-${i}`,
+            title: `Article ${i}`,
+            pubDate: now.toISOString(),
+            link: '',
+            content: '',
+            source: ''
+        }));
+
+        saveArticles(manyArticles);
+        expect(loadArticles()).toHaveLength(100);
     });
 });

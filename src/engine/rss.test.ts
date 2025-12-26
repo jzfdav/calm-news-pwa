@@ -64,4 +64,26 @@ describe('RSS Ingestion', () => {
     expect(articles[0].content).not.toContain('style="color:red"');
     expect(articles[0].content).toContain('<p>Hello</p>');
   });
+
+  it('should extract images/thumbnails from various tags', () => {
+    const mediaRSS = `
+<rss version="2.0" xmlns:media="http://search.yahoo.com/mrss/">
+  <channel>
+    <item>
+      <title>Media</title>
+      <link>https://example.com/media</link>
+      <media:content url="https://example.com/image.jpg" type="image/jpeg" />
+    </item>
+    <item>
+      <title>Enclosure</title>
+      <link>https://example.com/enc</link>
+      <enclosure url="https://example.com/enc.png" type="image/png" />
+    </item>
+  </channel>
+</rss>
+    `.trim();
+    const articles = parseRSS(mediaRSS, 'Media Feed');
+    expect(articles[0].thumbnail).toBe('https://example.com/image.jpg');
+    expect(articles[1].thumbnail).toBe('https://example.com/enc.png');
+  });
 });
