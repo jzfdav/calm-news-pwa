@@ -38,10 +38,10 @@ export function DigestView({ sections, loading, onSelectArticle, onToggleRead }:
     }
 
     return (
-        <main>
+        <main className="container digest-container">
             {sections.map((section) => (
                 <section key={section.id}>
-                    <h2>{section.name}</h2>
+                    <h2 className="section-title">{section.name}</h2>
                     {section.articles.map((article) => (
                         <article
                             key={article.id}
@@ -49,7 +49,7 @@ export function DigestView({ sections, loading, onSelectArticle, onToggleRead }:
                         >
                             <h3 className="article-card-title">
                                 <button
-                                    className="nav-link"
+                                    className="article-title-btn"
                                     onClick={() => onSelectArticle(article)}
                                 >
                                     {decodeHTMLEntities(article.title)}
@@ -65,7 +65,7 @@ export function DigestView({ sections, loading, onSelectArticle, onToggleRead }:
                                     </a>
                                 </div>
                                 <button
-                                    className="nav-link article-done-link"
+                                    className="article-action-btn article-done-link"
                                     onClick={() => handleDone(article.id)}
                                 >
                                     Done

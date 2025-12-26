@@ -158,7 +158,7 @@ function App() {
   }, [digest, readArticles]);
 
   return (
-    <div className={`container ${selectedArticle ? `theme-${theme}` : ''}`}>
+    <div className={`${selectedArticle ? `theme-${theme}` : ''}`}>
       <Header
         view={view}
         setView={setView}
