@@ -16,17 +16,17 @@
   --reader-light-text: #1a1a1a;
   --reader-sepia-bg: #f4ecd8;
   --reader-sepia-text: #5b4636;
-  --reader-dark-bg: #1a1a1a;
+  --reader-dark-bg: #000000;
   --reader-dark-text: #d1d1d1;
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --bg-color: #121212;
+    --bg-color: #000000;
     --text-color: #e0e0e0;
     --secondary-text: #999;
     --accent-color: #ccc;
-    --border-color: #222;
+    --border-color: #111;
   }
 }
 

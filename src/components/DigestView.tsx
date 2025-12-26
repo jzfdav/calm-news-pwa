@@ -1,6 +1,6 @@
 import { useState, useEffect, memo } from 'react'
 import type { Section, Article } from '../engine/types'
-import { getReadingTime, decodeHTMLEntities } from '../engine/utils'
+import { getReadingTime, decodeHTMLEntities, isReadable } from '../engine/utils'
 
 const getSourceName = (article: Article) => {
     try {
@@ -79,6 +79,11 @@ function DigestSection({
                             </h3>
                             <div className="article-card-meta">
                                 <span className="meta-time">{getReadingTime(article.content)}</span>
+                                {isReadable(article.content) ? (
+                                    <span className="read-badge badge-full">FULL ARTICLE</span>
+                                ) : (
+                                    <span className="read-badge badge-snippet">SNIPPET</span>
+                                )}
                                 <a
                                     href={article.link}
                                     target="_blank"
