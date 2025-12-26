@@ -1,7 +1,7 @@
 import { useState, useEffect, useMemo, useCallback } from 'react'
 import './styles/App.css'
 import type { Article } from './engine/types'
-import { clearStorage, loadCustomFeeds, saveCustomFeeds, type CustomFeed, loadPersonalization, savePersonalization } from './engine/storage'
+import { clearStorage, loadCustomFeeds, saveCustomFeeds, type CustomFeed, loadTopics, saveTopics } from './engine/storage'
 import { useNewsFeed } from './engine/hooks'
 import { useReader } from './engine/useReader'
 
@@ -28,11 +28,9 @@ function App() {
   }, [theme]);
 
   // Personalization
-  // Personalization
-  const [locations, setLocations] = useState<string[]>([]);
-  const [companies, setCompanies] = useState<string[]>([]);
+  const [topics, setTopics] = useState<string[]>([]);
 
-  const { data: digest, isLoading, error: queryError, refetch } = useNewsFeed(customFeeds, locations, companies, !isOffline);
+  const { data: digest, isLoading, error: queryError, refetch } = useNewsFeed(customFeeds, topics, !isOffline);
 
   useEffect(() => {
     const handleOnline = () => setIsOffline(false);
@@ -47,8 +45,7 @@ function App() {
     }
     setCustomFeeds(feeds);
 
-    setLocations(loadPersonalization('location'));
-    setCompanies(loadPersonalization('company'));
+    setTopics(loadTopics());
 
     return () => {
       window.removeEventListener('online', handleOnline);
@@ -74,30 +71,18 @@ function App() {
     saveCustomFeeds(updated);
   }, [customFeeds]);
 
-  const handleAddPersonalization = useCallback((type: 'location' | 'company', value: string) => {
-    if (!value.trim()) return;
-    if (type === 'location') {
-      const updated = [...locations, value.trim()];
-      setLocations(updated);
-      savePersonalization('location', updated);
-    } else {
-      const updated = [...companies, value.trim()];
-      setCompanies(updated);
-      savePersonalization('company', updated);
-    }
-  }, [locations, companies]);
+  const handleAddTopic = useCallback((topic: string) => {
+    if (!topic.trim()) return;
+    const updated = [...topics, topic.trim()];
+    setTopics(updated);
+    saveTopics(updated);
+  }, [topics]);
 
-  const handleRemovePersonalization = useCallback((type: 'location' | 'company', value: string) => {
-    if (type === 'location') {
-      const updated = locations.filter(l => l !== value);
-      setLocations(updated);
-      savePersonalization('location', updated);
-    } else {
-      const updated = companies.filter(c => c !== value);
-      setCompanies(updated);
-      savePersonalization('company', updated);
-    }
-  }, [locations, companies]);
+  const handleRemoveTopic = useCallback((topic: string) => {
+    const updated = topics.filter(t => t !== topic);
+    setTopics(updated);
+    saveTopics(updated);
+  }, [topics]);
 
   const handleReset = useCallback(() => {
     if (confirm('Clear all saved data and refresh?')) {
@@ -135,10 +120,9 @@ function App() {
       ) : (
         <SettingsView
           customFeeds={customFeeds}
-          locations={locations}
-          companies={companies}
-          onAddPersonalization={handleAddPersonalization}
-          onRemovePersonalization={handleRemovePersonalization}
+          topics={topics}
+          onAddTopic={handleAddTopic}
+          onRemoveTopic={handleRemoveTopic}
           onAddFeed={handleAddFeed}
           onRemoveFeed={handleRemoveFeed}
           onReset={handleReset}

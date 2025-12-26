@@ -7,7 +7,8 @@ import type { CustomFeed } from './storage';
 
 // Helper to reconstruct the full list of sections including personalized ones
 // Helper to reconstruct the full list of sections including personalized ones
-const buildSectionsToFetch = (feeds: CustomFeed[], locations: string[], companies: string[]): Section[] => {
+// Helper to reconstruct the full list of sections including personalized ones
+const buildSectionsToFetch = (feeds: CustomFeed[], topics: string[]): Section[] => {
     const sections: Section[] = feeds.map(f => ({
         id: f.id,
         name: f.name,
@@ -15,23 +16,12 @@ const buildSectionsToFetch = (feeds: CustomFeed[], locations: string[], companie
         articles: []
     }));
 
-    locations.forEach(loc => {
-        if (loc) {
+    topics.forEach(topic => {
+        if (topic) {
             sections.unshift({
-                id: `personal-loc-${loc}`,
-                name: `Around ${loc}`,
-                rssUrl: PROXY_URL(GOOGLE_NEWS_SEARCH(loc, 'IN')),
-                articles: []
-            });
-        }
-    });
-
-    companies.forEach(comp => {
-        if (comp) {
-            sections.unshift({
-                id: `personal-comp-${comp}`,
-                name: comp.toUpperCase(),
-                rssUrl: PROXY_URL(GOOGLE_NEWS_SEARCH(comp, 'US')),
+                id: `topic-${topic}`,
+                name: topic,
+                rssUrl: PROXY_URL(GOOGLE_NEWS_SEARCH(topic)), // Uses default 'US' for global reach
                 articles: []
             });
         }
@@ -40,11 +30,11 @@ const buildSectionsToFetch = (feeds: CustomFeed[], locations: string[], companie
     return sections;
 };
 
-export function useNewsFeed(customFeeds: CustomFeed[], locations: string[], companies: string[], isOnline: boolean) {
+export function useNewsFeed(customFeeds: CustomFeed[], topics: string[], isOnline: boolean) {
     return useQuery({
-        queryKey: ['digest', customFeeds, locations, companies],
+        queryKey: ['digest', customFeeds, topics],
         queryFn: async () => {
-            const sections = buildSectionsToFetch(customFeeds, locations, companies);
+            const sections = buildSectionsToFetch(customFeeds, topics);
             const updated = await refreshSections(sections);
             return createDailyDigest(updated);
         },

@@ -3,10 +3,9 @@ import type { CustomFeed } from '../engine/storage'
 
 interface SettingsViewProps {
     customFeeds: CustomFeed[];
-    locations: string[];
-    companies: string[];
-    onAddPersonalization: (type: 'location' | 'company', val: string) => void;
-    onRemovePersonalization: (type: 'location' | 'company', val: string) => void;
+    topics: string[];
+    onAddTopic: (val: string) => void;
+    onRemoveTopic: (val: string) => void;
     onAddFeed: (name: string, url: string) => void;
     onRemoveFeed: (id: string) => void;
     onReset: () => void;
@@ -14,17 +13,15 @@ interface SettingsViewProps {
 
 export function SettingsView({
     customFeeds,
-    locations,
-    companies,
-    onAddPersonalization,
-    onRemovePersonalization,
+    topics,
+    onAddTopic,
+    onRemoveTopic,
     onAddFeed,
     onRemoveFeed,
     onReset
 }: SettingsViewProps) {
     const [newFeed, setNewFeed] = useState({ name: '', url: '' });
-    const [locInput, setLocInput] = useState('');
-    const [compInput, setCompInput] = useState('');
+    const [topicInput, setTopicInput] = useState('');
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
@@ -34,17 +31,10 @@ export function SettingsView({
         }
     };
 
-    const handleAddLoc = () => {
-        if (locInput.trim()) {
-            onAddPersonalization('location', locInput);
-            setLocInput('');
-        }
-    };
-
-    const handleAddComp = () => {
-        if (compInput.trim()) {
-            onAddPersonalization('company', compInput);
-            setCompInput('');
+    const handleAddTopic = () => {
+        if (topicInput.trim()) {
+            onAddTopic(topicInput);
+            setTopicInput('');
         }
     };
 
@@ -108,36 +98,21 @@ export function SettingsView({
 
             <section className="settings-section">
                 <div className="section-header">
-                    <h2>Personalized Insights</h2>
-                    <p className="meta">Track specific locations or companies</p>
+                    <h2>My Topics</h2>
+                    <p className="meta">Track events, places, or companies</p>
                 </div>
 
                 <div className="feeds-grid">
-                    {locations.map(loc => (
-                        <div key={loc} className="feed-card">
+                    {topics.map(topic => (
+                        <div key={topic} className="feed-card">
                             <div className="feed-card-main">
-                                <span className="feed-name">Around {loc}</span>
-                                <span className="feed-url">Local News</span>
+                                <span className="feed-name">{topic}</span>
+                                <span className="feed-url">Topic</span>
                             </div>
                             <button
                                 className="button-icon-danger"
-                                onClick={() => onRemovePersonalization('location', loc)}
-                                aria-label={`Remove ${loc}`}
-                            >
-                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path><line x1="10" y1="11" x2="10" y2="17"></line><line x1="14" y1="11" x2="14" y2="17"></line></svg>
-                            </button>
-                        </div>
-                    ))}
-                    {companies.map(comp => (
-                        <div key={comp} className="feed-card">
-                            <div className="feed-card-main">
-                                <span className="feed-name">{comp}</span>
-                                <span className="feed-url">Company News</span>
-                            </div>
-                            <button
-                                className="button-icon-danger"
-                                onClick={() => onRemovePersonalization('company', comp)}
-                                aria-label={`Remove ${comp}`}
+                                onClick={() => onRemoveTopic(topic)}
+                                aria-label={`Remove ${topic}`}
                             >
                                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path><line x1="10" y1="11" x2="10" y2="17"></line><line x1="14" y1="11" x2="14" y2="17"></line></svg>
                             </button>
@@ -148,38 +123,21 @@ export function SettingsView({
                 <div className="add-feed-card">
                     <div className="form-grid">
                         <div className="form-group">
-                            <label htmlFor="track-location">Track Location</label>
+                            <label htmlFor="track-topic">Add Topic</label>
                             <div style={{ display: 'flex', gap: '0.5rem' }}>
                                 <input
-                                    id="track-location"
+                                    id="track-topic"
                                     type="text"
-                                    value={locInput}
-                                    onChange={e => setLocInput(e.target.value)}
-                                    placeholder="e.g. Devanahalli"
-                                    aria-label="Location to track for news"
+                                    value={topicInput}
+                                    onChange={e => setTopicInput(e.target.value)}
+                                    placeholder="e.g. Reading UK, IBM, Tennis"
+                                    aria-label="Topic to track"
                                 />
-                                <button className="button-primary" onClick={handleAddLoc} style={{ padding: '0.8rem 1.2rem' }}>
+                                <button className="button-primary" onClick={handleAddTopic} style={{ padding: '0.8rem 1.2rem' }}>
                                     Add
                                 </button>
                             </div>
-                            <p className="input-hint">Dynamically tracks news from this area.</p>
-                        </div>
-                        <div className="form-group">
-                            <label htmlFor="track-company">Track Company</label>
-                            <div style={{ display: 'flex', gap: '0.5rem' }}>
-                                <input
-                                    id="track-company"
-                                    type="text"
-                                    value={compInput}
-                                    onChange={e => setCompInput(e.target.value)}
-                                    placeholder="e.g. IBM"
-                                    aria-label="Company to track for news"
-                                />
-                                <button className="button-primary" onClick={handleAddComp} style={{ padding: '0.8rem 1.2rem' }}>
-                                    Add
-                                </button>
-                            </div>
-                            <p className="input-hint">Monitors news for this specific firm.</p>
+                            <p className="input-hint">Search for news about anything within your global context.</p>
                         </div>
                     </div>
                 </div>
