@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import type { Article } from '../engine/types'
 import { getReadingTime, decodeHTMLEntities } from '../engine/utils'
 
@@ -20,6 +21,13 @@ export function ReaderOverlay({
     onClose,
     onMarkDone
 }: ReaderOverlayProps) {
+    const [showFontMenu, setShowFontMenu] = useState(false);
+
+    const cycleTheme = () => {
+        if (theme === 'light') setTheme('sepia');
+        else if (theme === 'sepia') setTheme('dark');
+        else setTheme('light');
+    };
 
     return (
         <div className={`reader-overlay theme-${theme}`}>
@@ -54,57 +62,59 @@ export function ReaderOverlay({
                 </div>
             </div>
 
-            <div className="reader-toolbar">
-                <div className="reader-controls">
-                    <div className="control-group">
-                        <button
-                            className={`control-btn ${theme === 'light' ? 'active' : ''}`}
-                            onClick={() => setTheme('light')}
-                            aria-label="Light Theme"
-                        >
-                            L
-                        </button>
-                        <button
-                            className={`control-btn ${theme === 'sepia' ? 'active' : ''}`}
-                            onClick={() => setTheme('sepia')}
-                            aria-label="Sepia Theme"
-                        >
-                            S
-                        </button>
-                        <button
-                            className={`control-btn ${theme === 'dark' ? 'active' : ''}`}
-                            onClick={() => setTheme('dark')}
-                            aria-label="Dark Theme"
-                        >
-                            D
-                        </button>
-                    </div>
-
-                    <div className="control-group">
-                        <button
-                            className={`control-btn ${fontSize === 's' ? 'active' : ''}`}
-                            onClick={() => setFontSize('s')}
-                            aria-label="Small Font"
-                        >
-                            A-
-                        </button>
-                        <button
-                            className={`control-btn ${fontSize === 'm' ? 'active' : ''}`}
-                            onClick={() => setFontSize('m')}
-                            aria-label="Medium Font"
-                        >
-                            A
-                        </button>
-                        <button
-                            className={`control-btn ${fontSize === 'l' ? 'active' : ''}`}
-                            onClick={() => setFontSize('l')}
-                            aria-label="Large Font"
-                        >
-                            A+
-                        </button>
-                    </div>
+            {showFontMenu && (
+                <div className="font-settings-modal">
+                    <button
+                        className={`font-option ${fontSize === 's' ? 'active' : ''}`}
+                        onClick={() => setFontSize('s')}
+                    >
+                        A-
+                    </button>
+                    <button
+                        className={`font-option ${fontSize === 'm' ? 'active' : ''}`}
+                        onClick={() => setFontSize('m')}
+                    >
+                        A
+                    </button>
+                    <button
+                        className={`font-option ${fontSize === 'l' ? 'active' : ''}`}
+                        onClick={() => setFontSize('l')}
+                    >
+                        A+
+                    </button>
                 </div>
-                <button className="close-reader" onClick={onClose}>Done</button>
+            )}
+
+            <div className="reader-toolbar">
+                <button
+                    className="toolbar-btn theme-btn"
+                    onClick={cycleTheme}
+                    aria-label="Switch Theme"
+                >
+                    {theme === 'light' && <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="12" cy="12" r="4" /><path d="M12 2v2" /><path d="M12 20v2" /><path d="m4.93 4.93 1.41 1.41" /><path d="m17.66 17.66 1.41 1.41" /><path d="M2 12h2" /><path d="M20 12h2" /><path d="m6.34 17.66-1.41 1.41" /><path d="m19.07 4.93-1.41 1.41" /></svg>}
+                    {theme === 'sepia' && <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z" /></svg>}
+                    {theme === 'dark' && <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="12" cy="12" r="10" /><path d="M12 2a7 7 0 1 0 10 10" /></svg>}
+                </button>
+
+                <button
+                    className={`toolbar-btn font-btn ${showFontMenu ? 'active' : ''}`}
+                    onClick={() => setShowFontMenu(!showFontMenu)}
+                    aria-label="Font Settings"
+                >
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                        <path d="M4 19V6a4 4 0 0 1 4-4h8a4 4 0 0 1 4 4v13" /><path d="M12 9v10" />
+                    </svg>
+                </button>
+
+                <button
+                    className="toolbar-btn close-btn"
+                    onClick={onClose}
+                    aria-label="Close Article"
+                >
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                        <circle cx="12" cy="12" r="10" /><path d="m15 9-6 6" /><path d="m9 9 6 6" />
+                    </svg>
+                </button>
             </div>
         </div>
     );
