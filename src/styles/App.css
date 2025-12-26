@@ -48,6 +48,8 @@
   --secondary-text: #666;
   --accent-color: #333;
   --border-color: #eee;
+  --nav-bg: rgba(252, 252, 252, 0.85);
+  --nav-border: rgba(0, 0, 0, 0.05);
 }
 
 .theme-sepia {
@@ -56,6 +58,8 @@
   --secondary-text: #82705a;
   --accent-color: #463020;
   --border-color: #e4dcc8;
+  --nav-bg: rgba(244, 236, 216, 0.9);
+  --nav-border: rgba(91, 70, 54, 0.1);
 }
 
 .theme-dark {
@@ -64,6 +68,8 @@
   --secondary-text: #999;
   --accent-color: #ccc;
   --border-color: #1a1a1a;
+  --nav-bg: rgba(10, 10, 10, 0.85);
+  --nav-border: rgba(255, 255, 255, 0.05);
 }
 
 html,
@@ -425,10 +431,10 @@ section {
   grid-template-columns: 1fr 1fr 1fr;
   align-items: center;
   justify-items: center;
-  background: rgba(4, 4, 4, 0.8);
+  background: var(--nav-bg);
   padding: 0.75rem 0 calc(1rem + env(safe-area-inset-bottom)) 0;
   border-radius: 0;
-  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  border-top: 1px solid var(--nav-border);
   border-bottom: none;
   border-left: none;
   border-right: none;
@@ -474,10 +480,7 @@ section {
 }
 
 .theme-dark .action-pill {
-  background: rgba(0, 0, 0, 0.75);
-  backdrop-filter: blur(25px);
-  -webkit-backdrop-filter: blur(25px);
-  border-top: 1px solid rgba(255, 255, 255, 0.05);
+  /* Inherits from --nav-bg */
 }
 
 .spin {
@@ -663,9 +666,9 @@ section {
   bottom: 0;
   left: 0;
   right: 0;
-  background: rgba(10, 10, 10, 0.85);
+  background: var(--nav-bg);
   padding: 0.75rem 1.25rem calc(1rem + env(safe-area-inset-bottom)) 1.25rem;
-  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  border-top: 1px solid var(--nav-border);
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
   align-items: center;
@@ -676,8 +679,7 @@ section {
 }
 
 .theme-dark .reader-toolbar {
-  background: rgba(0, 0, 0, 0.8);
-  border-top: 1px solid rgba(255, 255, 255, 0.05);
+  /* Inherits from --nav-bg */
 }
 
 .toolbar-btn {
