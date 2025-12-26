@@ -203,30 +203,57 @@ section {
 }
 
 .article-card-meta {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  /* Left, Center, Right */
+  align-items: center;
+  margin-top: 0.5rem;
   font-size: 0.85rem;
   color: var(--secondary-text);
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
+  gap: 0.5rem;
   width: 100%;
-  gap: 1rem;
 }
 
-.article-meta-info {
-  display: flex;
-  align-items: center;
-  gap: 0.6rem;
+.meta-time {
+  text-align: left;
+}
+
+.meta-source {
+  text-align: center;
+  color: var(--secondary-text);
+  text-decoration: underline;
+  text-underline-offset: 2px;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-  flex: 1;
-  min-width: 0;
+  max-width: 15rem;
+  justify-self: center;
+  /* Ensure source link uses current text color but dimmer */
+  opacity: 0.8;
 }
 
-.article-meta-info a {
-  color: inherit;
-  text-decoration: underline;
-  opacity: 0.8;
+.article-done-link {
+  justify-self: end;
+  /* Right align */
+  background: none;
+  border: none;
+  color: var(--secondary-text);
+  cursor: pointer;
+  padding: 0;
+  font-size: 0.85rem;
+  border-bottom: 1px dotted var(--secondary-text);
+  /* Explicitly reset margins */
+  margin: 0;
+}
+
+.article-done-link:hover {
+  color: var(--text-color);
+  border-bottom-style: solid;
+}
+
+/* Obsolete but kept empty to override if needed */
+.article-meta-info {
+  display: none;
 }
 
 .article-author {
