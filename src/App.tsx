@@ -1,7 +1,7 @@
 import { useState, useEffect, useMemo, useCallback } from 'react'
 import './styles/App.css'
 import type { Article } from './engine/types'
-import { clearStorage, loadCustomFeeds, saveCustomFeeds, type CustomFeed, loadTopics, saveTopics } from './engine/storage'
+import { clearStorage, loadCustomFeeds, saveCustomFeeds, type CustomFeed, loadTopics, saveTopics, loadSettings, saveSettings } from './engine/storage'
 import { useNewsFeed } from './engine/hooks'
 import { useReader } from './engine/useReader'
 
@@ -20,6 +20,7 @@ function App() {
   const [isOffline, setIsOffline] = useState(!navigator.onLine);
   const [lastReadId, setLastReadId] = useState<string | null>(null);
   const [showUndo, setShowUndo] = useState(false);
+  const [settings, setSettings] = useState(loadSettings());
 
   // Reader State
   const { theme, setTheme, fontSize, setFontSize, readArticles, toggleRead } = useReader();
@@ -93,6 +94,12 @@ function App() {
     saveTopics(updated);
   }, [topics]);
 
+  const handleUpdateSettings = useCallback((newSettings: Partial<typeof settings>) => {
+    const updated = { ...settings, ...newSettings };
+    setSettings(updated);
+    saveSettings(updated);
+  }, [settings]);
+
   const handleReset = useCallback(() => {
     if (confirm('Clear all saved data and refresh?')) {
       clearStorage();
@@ -135,6 +142,8 @@ function App() {
           onAddFeed={handleAddFeed}
           onRemoveFeed={handleRemoveFeed}
           onReset={handleReset}
+          settings={settings}
+          onUpdateSettings={handleUpdateSettings}
         />
       )}
 

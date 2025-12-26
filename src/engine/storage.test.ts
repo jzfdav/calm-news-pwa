@@ -58,7 +58,7 @@ describe('Storage Engine (Topics & Migration)', () => {
         expect(loaded).toContain('OldLocation');
     });
 
-    it('should prune articles older than 7 days and limit to 100', () => {
+    it('should prune articles older than 7 days and respect the global limit', () => {
         const now = new Date();
         const oldDate = new Date();
         oldDate.setDate(now.getDate() - 10);
@@ -77,8 +77,8 @@ describe('Storage Engine (Topics & Migration)', () => {
         expect(loaded).toHaveLength(1);
         expect(loaded[0].id).toBe('fresh');
 
-        // Verify 100 limit
-        const manyArticles = Array.from({ length: 110 }, (_, i) => ({
+        // Verify global limit (now 500)
+        const manyArticles = Array.from({ length: 550 }, (_, i) => ({
             id: `id-${i}`,
             title: `Article ${i}`,
             pubDate: now.toISOString(),
@@ -88,6 +88,6 @@ describe('Storage Engine (Topics & Migration)', () => {
         }));
 
         saveArticles(manyArticles);
-        expect(loadArticles()).toHaveLength(100);
+        expect(loadArticles()).toHaveLength(500);
     });
 });

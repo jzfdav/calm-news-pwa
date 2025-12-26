@@ -1,23 +1,28 @@
 import { useState } from 'react'
 import type { CustomFeed } from '../engine/storage'
+import type { AppSettings } from '../engine/types'
 
 interface SettingsViewProps {
     customFeeds: CustomFeed[];
     topics: string[];
+    settings: AppSettings;
     onAddTopic: (val: string) => void;
     onRemoveTopic: (val: string) => void;
     onAddFeed: (name: string, url: string) => void;
     onRemoveFeed: (id: string) => void;
+    onUpdateSettings: (s: Partial<AppSettings>) => void;
     onReset: () => void;
 }
 
 export function SettingsView({
     customFeeds,
     topics,
+    settings,
     onAddTopic,
     onRemoveTopic,
     onAddFeed,
     onRemoveFeed,
+    onUpdateSettings,
     onReset
 }: SettingsViewProps) {
     const [newFeed, setNewFeed] = useState({ name: '', url: '' });
@@ -40,6 +45,49 @@ export function SettingsView({
 
     return (
         <main className="settings-view">
+            <section className="settings-section">
+                <div className="section-header">
+                    <h2>Content & Retention</h2>
+                    <p className="meta">Control how much and how long stories stay</p>
+                </div>
+
+                <div className="add-feed-card" style={{ marginBottom: '2rem' }}>
+                    <div className="form-group" style={{ marginBottom: '2rem' }}>
+                        <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.5rem' }}>
+                            <label>Story Retention</label>
+                            <span className="value-label">{settings.retentionDays} Days</span>
+                        </div>
+                        <input
+                            type="range"
+                            min="3"
+                            max="14"
+                            step="1"
+                            value={settings.retentionDays}
+                            onChange={(e) => onUpdateSettings({ retentionDays: parseInt(e.target.value) })}
+                            className="slider"
+                        />
+                        <p className="input-hint">Keep news history for a calm look-back experience.</p>
+                    </div>
+
+                    <div className="form-group">
+                        <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.5rem' }}>
+                            <label>Section Density</label>
+                            <span className="value-label">{settings.maxArticlesPerSection} Stories</span>
+                        </div>
+                        <input
+                            type="range"
+                            min="5"
+                            max="20"
+                            step="5"
+                            value={settings.maxArticlesPerSection}
+                            onChange={(e) => onUpdateSettings({ maxArticlesPerSection: parseInt(e.target.value) })}
+                            className="slider"
+                        />
+                        <p className="input-hint">Maximum number of stories visible per section on the landing page.</p>
+                    </div>
+                </div>
+            </section>
+
             <section className="settings-section">
                 <div className="section-header">
                     <h2>My Library</h2>

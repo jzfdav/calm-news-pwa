@@ -7,20 +7,25 @@ import type { CustomFeed } from './storage';
 
 // Helper to reconstruct the full list of sections including personalized ones
 const buildSectionsToFetch = (feeds: CustomFeed[], topics: string[]): Section[] => {
+    // Hydrate with existing articles from storage to allow merging
+    const savedSections = loadSections();
+    const sectionMap = new Map(savedSections.map(s => [s.id, s.articles]));
+
     const sections: Section[] = feeds.map(f => ({
         id: f.id,
         name: f.name,
         rssUrl: PROXY_URL(f.url),
-        articles: []
+        articles: sectionMap.get(f.id) || []
     }));
 
     topics.forEach(topic => {
         if (topic) {
+            const id = `topic-${topic}`;
             sections.unshift({
-                id: `topic-${topic}`,
+                id,
                 name: topic,
-                rssUrl: PROXY_URL(GOOGLE_NEWS_SEARCH(topic)), // Uses default 'US' for global reach
-                articles: []
+                rssUrl: PROXY_URL(GOOGLE_NEWS_SEARCH(topic)),
+                articles: sectionMap.get(id) || []
             });
         }
     });

@@ -17,6 +17,11 @@ export interface Section {
     lastUpdated?: string;
 }
 
+export interface AppSettings {
+    retentionDays: number;
+    maxArticlesPerSection: number;
+}
+
 export interface DailyDigest {
     date: string;
     sections: Section[];

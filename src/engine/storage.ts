@@ -1,4 +1,4 @@
-import type { Article, Section } from './types';
+import type { Article, Section, AppSettings } from './types';
 
 const ARTICLES_KEY = 'calm_news_articles';
 const SECTIONS_KEY = 'calm_news_sections';
@@ -9,6 +9,12 @@ const TOPICS_KEY = 'calm_news_topics';
 const READ_ARTICLES_KEY = 'calm_news_read_articles';
 const THEME_KEY = 'calm_news_theme';
 const FONT_SIZE_KEY = 'calm_news_font_size';
+const SETTINGS_KEY = 'calm_news_settings';
+
+export const DEFAULT_SETTINGS: AppSettings = {
+    retentionDays: 7,
+    maxArticlesPerSection: 10
+};
 
 // Helpers
 const lsGet = (key: string) => {
@@ -41,9 +47,9 @@ export function saveArticles(articles: Article[]): void {
     const map = new Map(existing.map(a => [a.id, a]));
     articles.forEach(a => map.set(a.id, a));
 
-    // Prune articles older than 7 days
+    const settings = loadSettings();
     const expiryDate = new Date();
-    expiryDate.setDate(expiryDate.getDate() - 7);
+    expiryDate.setDate(expiryDate.getDate() - settings.retentionDays);
 
     const freshArticles = Array.from(map.values()).filter(a => {
         try {
@@ -53,9 +59,10 @@ export function saveArticles(articles: Article[]): void {
         }
     });
 
+    // Increased global limit to 500 to support longer history
     const sorted = freshArticles.sort((a, b) =>
         new Date(b.pubDate).getTime() - new Date(a.pubDate).getTime()
-    ).slice(0, 100);
+    ).slice(0, 500);
 
     lsSet(ARTICLES_KEY, sorted);
 }
@@ -175,4 +182,12 @@ export function saveFontSize(size: string): void {
 
 export function loadFontSize(): string | null {
     return localStorage.getItem(FONT_SIZE_KEY);
+}
+
+export function saveSettings(settings: AppSettings): void {
+    lsSet(SETTINGS_KEY, settings);
+}
+
+export function loadSettings(): AppSettings {
+    return lsGet(SETTINGS_KEY) || DEFAULT_SETTINGS;
 }

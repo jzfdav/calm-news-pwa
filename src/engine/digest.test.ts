@@ -15,7 +15,7 @@ describe('Digest Engine', () => {
 
         const digest = createDailyDigest(sections);
 
-        expect(digest.sections[0].articles).toHaveLength(5);
+        expect(digest.sections[0].articles).toHaveLength(10);
         expect(digest.date).toBe(new Date().toISOString().split('T')[0]);
     });
 });
