@@ -7,6 +7,8 @@ const LOCATION_KEY = 'calm_news_location_tracking';
 const COMPANY_KEY = 'calm_news_company_tracking';
 const TOPICS_KEY = 'calm_news_topics';
 const READ_ARTICLES_KEY = 'calm_news_read_articles';
+const THEME_KEY = 'calm_news_theme';
+const FONT_SIZE_KEY = 'calm_news_font_size';
 
 export function saveReadArticles(ids: string[]): void {
     try {
@@ -115,6 +117,8 @@ export function clearStorage(): void {
     localStorage.removeItem(COMPANY_KEY);
     localStorage.removeItem(TOPICS_KEY);
     localStorage.removeItem(READ_ARTICLES_KEY);
+    localStorage.removeItem(THEME_KEY);
+    localStorage.removeItem(FONT_SIZE_KEY);
 }
 
 // Topics System (v12.0)
@@ -182,4 +186,20 @@ export function savePersonalization(_key: 'location' | 'company', _queries: stri
 }
 export function loadPersonalization(_key: 'location' | 'company'): string[] {
     return [];
+}
+
+export function saveTheme(theme: string): void {
+    localStorage.setItem(THEME_KEY, theme);
+}
+
+export function loadTheme(): string | null {
+    return localStorage.getItem(THEME_KEY);
+}
+
+export function saveFontSize(size: string): void {
+    localStorage.setItem(FONT_SIZE_KEY, size);
+}
+
+export function loadFontSize(): string | null {
+    return localStorage.getItem(FONT_SIZE_KEY);
 }
