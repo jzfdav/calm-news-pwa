@@ -444,12 +444,17 @@ section {
 }
 
 /* Settings View specific */
+.settings-view .settings-section {
+  margin-bottom: 6rem;
+}
+
 .settings-view .section-header {
   margin-bottom: 2.5rem;
 }
 
 .settings-view h2 {
-  font-size: 1.25rem;
+  font-size: 1.4rem;
+  font-weight: 700;
   margin-bottom: 0.5rem;
   border: none;
   color: var(--text-color);
@@ -482,15 +487,20 @@ section {
 .feed-url {
   font-size: 0.85rem;
   color: var(--secondary-text);
-  opacity: 0.7;
 }
 
 .add-feed-card {
   margin-top: 4rem;
-  padding: 2.5rem;
+  padding: 2rem;
   border: 1px solid var(--border-color);
   border-radius: 16px;
-  background: rgba(0, 0, 0, 0.01);
+  background: rgba(125, 125, 125, 0.03);
+}
+
+.theme-dark .add-feed-card,
+.theme-dark .danger-zone {
+  background: rgba(255, 255, 255, 0.04);
+  border-color: #222;
 }
 
 .form-group label {
@@ -500,25 +510,51 @@ section {
   color: var(--secondary-text);
   margin-bottom: 0.6rem;
   text-transform: uppercase;
-  letter-spacing: 0.05rem;
+  letter-spacing: 0.08rem;
+}
+
+.theme-dark .form-group label {
+  color: #aaa;
 }
 
 .form-group input {
   width: 100%;
-  padding: 0.8rem;
+  padding: 1rem;
   border: 1px solid var(--border-color);
-  background: var(--bg-color);
+  background: rgba(125, 125, 125, 0.05);
   color: var(--text-color);
-  border-radius: 8px;
+  border-radius: 10px;
   font-size: 1rem;
+  transition: all 0.2s;
+}
+
+.form-group input:focus {
+  outline: none;
+  border-color: var(--accent-color);
+  background: rgba(125, 125, 125, 0.08);
+}
+
+.theme-dark .form-group input {
+  background: #111;
+  border-color: #222;
 }
 
 .danger-zone {
   text-align: center;
-  padding: 3rem;
+  padding: 2.5rem;
   border: 1px dashed var(--border-color);
   border-radius: 16px;
-  background: rgba(200, 0, 0, 0.02);
+  background: rgba(200, 0, 0, 0.03);
+}
+
+.meta {
+  font-size: 0.9rem;
+  color: var(--secondary-text);
+  line-height: 1.5;
+}
+
+.theme-dark .meta {
+  color: #bbb;
 }
 
 /* Reader Mode */
