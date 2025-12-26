@@ -48,12 +48,20 @@ export function DigestView({ sections, loading, onSelectArticle, onToggleRead }:
                             className={`article-card ${exitingIds.has(article.id) ? 'article-exit' : ''}`}
                         >
                             <h3 className="article-card-title">
-                                <button
+                                <div
+                                    role="button"
+                                    tabIndex={0}
                                     className="article-title-btn"
                                     onClick={() => onSelectArticle(article)}
+                                    onKeyDown={(e) => {
+                                        if (e.key === 'Enter' || e.key === ' ') {
+                                            e.preventDefault();
+                                            onSelectArticle(article);
+                                        }
+                                    }}
                                 >
                                     {decodeHTMLEntities(article.title)}
-                                </button>
+                                </div>
                             </h3>
                             <div className="article-card-meta">
                                 <div className="article-meta-info">

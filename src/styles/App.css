@@ -107,7 +107,8 @@ body {
 .container {
   max-width: var(--max-width);
   margin: 0 auto;
-  padding: calc(1rem + env(safe-area-inset-top)) 1.25rem 2.5rem 1.25rem;
+  padding: calc(1rem + env(safe-area-inset-top)) 1.5rem 2.5rem 1.5rem;
+  /* Increased side padding slightly */
   width: 100%;
 }
 
@@ -165,9 +166,7 @@ section {
   margin: 0;
   font-family: var(--font-serif);
   font-size: 1.15rem;
-  /* Slightly tighter for sans-serif */
-  line-height: 1.5;
-  /* Increased for better multi-line readability */
+  line-height: 1.4;
   color: var(--text-color);
   font-weight: 700;
   text-align: left;
@@ -175,10 +174,19 @@ section {
   transition: opacity 0.2s;
   display: block;
   width: 100%;
-  white-space: normal !important;
-  overflow-wrap: anywhere;
+  max-width: 100%;
+  /* Ensure it never exceeds parent */
+  white-space: normal;
+  overflow-wrap: break-word;
+  /* Standard property */
+  word-wrap: break-word;
+  /* Legacy support */
   word-break: break-word;
+  /* Aggressive break */
   hyphens: auto;
+  user-select: text;
+  /* Allow text selection */
+  -webkit-tap-highlight-color: transparent;
 }
 
 .article-title-btn:hover {
