@@ -480,9 +480,6 @@ section {
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
 }
 
-.theme-dark .action-pill {
-  /* Inherits from --nav-bg */
-}
 
 .spin {
   animation: spin 1s linear infinite;
@@ -679,9 +676,6 @@ section {
   z-index: 1002;
 }
 
-.theme-dark .reader-toolbar {
-  /* Inherits from --nav-bg */
-}
 
 .toolbar-btn {
   background: none;
