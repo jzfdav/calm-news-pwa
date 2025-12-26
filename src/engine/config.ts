@@ -1,12 +1,19 @@
 import type { CustomFeed } from './storage'
 
 export const DEFAULT_FEEDS: CustomFeed[] = [
-    { id: 'guardian-world', name: 'The Guardian', url: 'https://www.theguardian.com/world/rss' },
+    { id: 'ani-india', name: 'ANI India', url: 'https://www.aninews.in/rss/feed/category/national/' },
+    { id: 'ani-world', name: 'ANI World', url: 'https://www.aninews.in/rss/feed/category/world-news/' },
+    { id: 'ani-sports', name: 'ANI Sports', url: 'https://www.aninews.in/rss/feed/category/sports/' },
+    { id: 'ani-tech', name: 'ANI Tech', url: 'https://www.aninews.in/rss/feed/category/science-technology/' },
+
+    { id: 'reuters-india', name: 'Reuters India', url: 'https://news.google.com/rss/search?q=Reuters+India&hl=en-IN&gl=IN&ceid=IN:en' },
+    { id: 'reuters-sports', name: 'Reuters Sports', url: 'https://news.google.com/rss/search?q=Reuters+Sports&hl=en-US&gl=US&ceid=US:en' },
+    { id: 'reuters-tech', name: 'Reuters Tech', url: 'https://news.google.com/rss/search?q=Reuters+Technology&hl=en-US&gl=US&ceid=US:en' },
+
+    { id: 'the-conversation', name: 'The Conversation', url: 'https://theconversation.com/global/articles.atom' },
+    { id: 'dw-news', name: 'DW News', url: 'https://rss.dw.com/xml/rss-en-all' },
+
     { id: 'ars-technica', name: 'Ars Technica', url: 'https://feeds.arstechnica.com/arstechnica/index' },
-    { id: 'npr-news', name: 'NPR News', url: 'https://feeds.npr.org/1001/rss.xml' },
-    { id: 'nyt-world', name: 'NYT World', url: 'https://rss.nytimes.com/services/xml/rss/nyt/World.xml' },
-    { id: 'hn', name: 'Hacker News', url: 'https://news.ycombinator.com/rss' },
-    { id: 'reuters-intl', name: 'Reuters World', url: 'https://feeds.reuters.com/reuters/worldNews' }
 ];
 
 export const PROXY_URL = (url: string) => `https://api.allorigins.win/raw?url=${encodeURIComponent(url)}`;

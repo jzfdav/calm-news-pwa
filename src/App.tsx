@@ -1,8 +1,8 @@
 import { useState, useEffect, useMemo, useCallback } from 'react'
 import './styles/App.css'
-import type { Section, DailyDigest, Article } from './engine/types'
-import { refreshSections, createDailyDigest } from './engine/digest'
-import { loadSections, clearStorage, loadCustomFeeds, saveCustomFeeds, type CustomFeed, loadPersonalization, savePersonalization } from './engine/storage'
+import type { Article } from './engine/types'
+import { clearStorage, loadCustomFeeds, saveCustomFeeds, type CustomFeed, loadPersonalization, savePersonalization } from './engine/storage'
+import { useNewsFeed } from './engine/hooks'
 
 // Components
 import { Header } from './components/Header'
@@ -10,13 +10,13 @@ import { DigestView } from './components/DigestView'
 import { SettingsView } from './components/SettingsView'
 import { ReaderOverlay } from './components/ReaderOverlay'
 
-import { DEFAULT_FEEDS, PROXY_URL, GOOGLE_NEWS_SEARCH } from './engine/config'
+import { DEFAULT_FEEDS } from './engine/config'
 
 function App() {
   const [view, setView] = useState<'digest' | 'settings'>('digest');
-  const [digest, setDigest] = useState<DailyDigest | null>(null);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+  // const [digest, setDigest] = useState<DailyDigest | null>(null); // Removed in favor of React Query
+  // const [loading, setLoading] = useState(false); // Removed
+  // const [error, setError] = useState<string | null>(null); // Removed
   const [customFeeds, setCustomFeeds] = useState<CustomFeed[]>([]);
   const [selectedArticle, setSelectedArticle] = useState<Article | null>(null);
   const [isOffline, setIsOffline] = useState(!navigator.onLine);
@@ -29,6 +29,8 @@ function App() {
   // Personalization
   const [locationQuery, setLocationQuery] = useState(loadPersonalization('location'));
   const [companyQuery, setCompanyQuery] = useState(loadPersonalization('company'));
+
+  const { data: digest, isLoading, error: queryError, refetch } = useNewsFeed(customFeeds, locationQuery, companyQuery, !isOffline);
 
   useEffect(() => {
     const handleOnline = () => setIsOffline(false);
@@ -43,13 +45,6 @@ function App() {
     }
     setCustomFeeds(feeds);
 
-    const savedSections = loadSections();
-    if (savedSections.length > 0 && savedSections.some(s => s.articles.length > 0)) {
-      setDigest(createDailyDigest(savedSections));
-    } else if (navigator.onLine) {
-      handleRefreshAction(feeds);
-    }
-
     const savedRead = localStorage.getItem('calm_news_read_articles');
     if (savedRead) setReadArticles(new Set(JSON.parse(savedRead)));
 
@@ -59,59 +54,10 @@ function App() {
     };
   }, []);
 
-  const handleRefreshAction = useCallback(async (feedsToUse = customFeeds) => {
-    if (!navigator.onLine || isOffline) {
-      setError('Cannot refresh while offline. Enjoy what you have.');
-      return;
-    }
-    if (feedsToUse.length === 0) {
-      setError('No feeds configured. Add some in Settings.');
-      return;
-    }
-
-    setLoading(true);
-    setError(null);
-    try {
-      const sectionsToFetch: Section[] = feedsToUse.map(f => ({
-        id: f.id,
-        name: f.name,
-        rssUrl: PROXY_URL(f.url),
-        articles: []
-      }));
-
-      // Add Personalized Virtual Sections
-      if (locationQuery) {
-        sectionsToFetch.unshift({
-          id: 'personal-location',
-          name: `Around ${locationQuery}`,
-          rssUrl: PROXY_URL(GOOGLE_NEWS_SEARCH(locationQuery, 'IN')),
-          articles: []
-        });
-      }
-
-      if (companyQuery) {
-        sectionsToFetch.unshift({
-          id: 'personal-company',
-          name: companyQuery.toUpperCase(),
-          rssUrl: PROXY_URL(GOOGLE_NEWS_SEARCH(companyQuery, 'US')),
-          articles: []
-        });
-      }
-
-      const updated = await refreshSections(sectionsToFetch);
-      setDigest(createDailyDigest(updated));
-
-      const failedCount = updated.filter(s => s.articles.length === 0).length;
-      if (failedCount > 0) {
-        setError(`Failed to fetch ${failedCount} section(s). Check your connection.`);
-      }
-    } catch (e) {
-      console.error('Refresh failed', e);
-      setError('A critical error occurred while refreshing the feed.');
-    } finally {
-      setLoading(false);
-    }
-  }, [customFeeds, isOffline, locationQuery, companyQuery]);
+  const handleRefreshAction = useCallback(() => {
+    if (isOffline) return;
+    refetch();
+  }, [isOffline, refetch]);
 
   const handleToggleRead = useCallback((id: string) => {
     setReadArticles(prev => {
@@ -163,16 +109,16 @@ function App() {
         view={view}
         setView={setView}
         isOffline={isOffline}
-        loading={loading}
-        onRefresh={() => handleRefreshAction()}
+        loading={isLoading}
+        onRefresh={handleRefreshAction}
       />
 
-      {error && <div className="meta" style={{ color: '#c33', textAlign: 'center', marginBottom: '2rem' }}>{error}</div>}
+      {queryError && <div className="meta" style={{ color: '#c33', textAlign: 'center', marginBottom: '2rem' }}>Failed to refresh feed.</div>}
 
       {view === 'digest' ? (
         <DigestView
           sections={unreadSections}
-          loading={loading}
+          loading={isLoading}
           onSelectArticle={setSelectedArticle}
         />
       ) : (
