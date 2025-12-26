@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import type { Section, Article } from '../engine/types'
 import { getReadingTime, decodeHTMLEntities } from '../engine/utils'
 
@@ -17,17 +17,28 @@ interface DigestViewProps {
     onSelectArticle: (article: Article) => void;
 }
 
-function DigestSection({ section, onSelectArticle }: { section: Section; onSelectArticle: (article: Article) => void }) {
-    const [isOpen, setIsOpen] = useState(true);
-
+function DigestSection({
+    section,
+    onSelectArticle,
+    isOpen,
+    onToggle
+}: {
+    section: Section;
+    onSelectArticle: (article: Article) => void;
+    isOpen: boolean;
+    onToggle: () => void;
+}) {
     return (
         <section className="feed-section">
             <button
                 className="section-header-btn"
-                onClick={() => setIsOpen(!isOpen)}
+                onClick={onToggle}
                 aria-expanded={isOpen}
             >
-                <h2 className="section-title">{section.name}</h2>
+                <div className="section-header-content">
+                    <h2 className="section-title">{section.name}</h2>
+                    <span className="section-count">{section.articles.length}</span>
+                </div>
                 <svg
                     width="20"
                     height="20"
@@ -87,6 +98,29 @@ function DigestSection({ section, onSelectArticle }: { section: Section; onSelec
 }
 
 export function DigestView({ sections, loading, onSelectArticle }: DigestViewProps) {
+    // State for which sections are open. Default all to true.
+    const [openSections, setOpenSections] = useState<Record<string, boolean>>({});
+
+    // Initialize state when sections load
+    useEffect(() => {
+        if (sections.length > 0 && Object.keys(openSections).length === 0) {
+            const initial: Record<string, boolean> = {};
+            sections.forEach(s => initial[s.id] = true);
+            setOpenSections(initial);
+        }
+    }, [sections]);
+
+    const toggleSection = (id: string) => {
+        setOpenSections(prev => ({ ...prev, [id]: !prev[id] }));
+    };
+
+    const toggleAll = () => {
+        const allOpen = Object.values(openSections).every(v => v);
+        const newState: Record<string, boolean> = {};
+        sections.forEach(s => newState[s.id] = !allOpen);
+        setOpenSections(newState);
+    };
+
     if (loading && sections.length === 0) {
         return <div className="loading">Gathering stories for you...</div>;
     }
@@ -100,13 +134,24 @@ export function DigestView({ sections, loading, onSelectArticle }: DigestViewPro
         );
     }
 
+    // Check if all are currently open to decide button text
+    const areAllOpen = sections.length > 0 && sections.every(s => openSections[s.id]);
+
     return (
         <main className="digest-view">
+            <div className="feed-controls">
+                <button onClick={toggleAll} className="text-btn">
+                    {areAllOpen ? 'Collapse All' : 'Expand All'}
+                </button>
+            </div>
+
             {sections.map((section) => (
                 <DigestSection
                     key={section.id}
                     section={section}
                     onSelectArticle={onSelectArticle}
+                    isOpen={!!openSections[section.id]}
+                    onToggle={() => toggleSection(section.id)}
                 />
             ))}
         </main>
