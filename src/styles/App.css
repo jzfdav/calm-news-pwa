@@ -54,12 +54,12 @@
 
 .theme-sepia {
   --bg-color: #f4ecd8;
-  --text-color: #5b4636;
-  --secondary-text: #82705a;
+  --text-color: #463020;
+  --secondary-text: #6b5443;
   --accent-color: #463020;
   --border-color: #e4dcc8;
   --nav-bg: rgba(244, 236, 216, 0.9);
-  --nav-border: rgba(91, 70, 54, 0.1);
+  --nav-border: rgba(70, 48, 32, 0.15);
 }
 
 .theme-dark {
@@ -448,7 +448,7 @@ section {
 }
 
 .action-pill .nav-link {
-  color: var(--secondary-text);
+  color: var(--text-color);
   background: none;
   border: none;
   padding: 0;
@@ -460,6 +460,7 @@ section {
   width: 48px;
   height: 48px;
   cursor: pointer;
+  opacity: 0.85;
 }
 
 .action-pill .nav-link:hover {
@@ -689,7 +690,7 @@ section {
   padding: 0.5rem;
   border-radius: 50%;
   cursor: pointer;
-  opacity: 0.7;
+  opacity: 0.85;
   transition: all 0.2s;
   display: flex;
   align-items: center;
