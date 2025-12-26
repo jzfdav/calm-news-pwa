@@ -10,12 +10,7 @@ import { DigestView } from './components/DigestView'
 import { SettingsView } from './components/SettingsView'
 import { ReaderOverlay } from './components/ReaderOverlay'
 
-const DEFAULT_FEEDS: CustomFeed[] = [
-  { id: 'hn', name: 'Tech & Ideas', url: 'https://news.ycombinator.com/rss' },
-  { id: 'bbc', name: 'World News', url: 'https://feeds.bbci.co.uk/news/world/rss.xml' }
-];
-
-const proxyUrl = (url: string) => `https://api.allorigins.win/raw?url=${encodeURIComponent(url)}`;
+import { DEFAULT_FEEDS, PROXY_URL } from './engine/config'
 
 function App() {
   const [view, setView] = useState<'digest' | 'settings'>('digest');
@@ -76,7 +71,7 @@ function App() {
       const sectionsToFetch: Section[] = feedsToUse.map(f => ({
         id: f.id,
         name: f.name,
-        rssUrl: proxyUrl(f.url),
+        rssUrl: PROXY_URL(f.url),
         articles: []
       }));
 

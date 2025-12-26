@@ -48,25 +48,26 @@ export function DigestView({ sections, loading, onSelectArticle, onToggleRead, o
                 <section key={section.id}>
                     <h2>{section.name}</h2>
                     {section.articles.map((article) => (
-                        <article key={article.id} className={exitingIds.has(article.id) ? 'article-exit' : ''}>
-                            <h3>
+                        <article
+                            key={article.id}
+                            className={`article-card ${exitingIds.has(article.id) ? 'article-exit' : ''}`}
+                        >
+                            <h3 className="article-card-title">
                                 <button
                                     className="nav-link"
-                                    style={{ fontSize: '1.3rem', textAlign: 'left', lineHeight: '1.3', fontWeight: 'bold' }}
                                     onClick={() => onSelectArticle(article)}
                                 >
                                     {article.title}
                                 </button>
                             </h3>
-                            <div className="meta">
-                                {article.author ? `${article.author} • ` : ''}
-                                {getReadingTime(article.content)} •
-                                <a href={article.link} target="_blank" rel="noopener noreferrer" style={{ color: 'inherit', textDecoration: 'none', marginLeft: '4px' }}>
+                            <div className="article-card-meta">
+                                {article.author && <span>{article.author} • </span>}
+                                <span>{getReadingTime(article.content)} min read • </span>
+                                <a href={article.link} target="_blank" rel="noopener noreferrer">
                                     Source
                                 </a>
                                 <button
-                                    className="nav-link"
-                                    style={{ marginLeft: '1rem', textDecoration: 'underline' }}
+                                    className="nav-link article-done-link"
                                     onClick={() => handleDone(article.id)}
                                 >
                                     Done
