@@ -5,6 +5,25 @@ const SECTIONS_KEY = 'calm_news_sections';
 const CUSTOM_FEEDS_KEY = 'calm_news_custom_feeds';
 const LOCATION_KEY = 'calm_news_location_tracking';
 const COMPANY_KEY = 'calm_news_company_tracking';
+const READ_ARTICLES_KEY = 'calm_news_read_articles';
+
+export function saveReadArticles(ids: string[]): void {
+    try {
+        localStorage.setItem(READ_ARTICLES_KEY, JSON.stringify(ids));
+    } catch (e) {
+        console.error('Failed to save read articles', e);
+    }
+}
+
+export function loadReadArticles(): string[] {
+    try {
+        const data = localStorage.getItem(READ_ARTICLES_KEY);
+        return data ? JSON.parse(data) : [];
+    } catch (e) {
+        console.error('Failed to load read articles', e);
+        return [];
+    }
+}
 
 export function saveArticles(articles: Article[]): void {
     try {
@@ -93,6 +112,7 @@ export function clearStorage(): void {
     localStorage.removeItem(CUSTOM_FEEDS_KEY);
     localStorage.removeItem(LOCATION_KEY);
     localStorage.removeItem(COMPANY_KEY);
+    localStorage.removeItem(READ_ARTICLES_KEY);
 }
 
 export function savePersonalization(key: 'location' | 'company', query: string): void {

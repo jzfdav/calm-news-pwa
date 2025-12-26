@@ -3,6 +3,7 @@ import './styles/App.css'
 import type { Article } from './engine/types'
 import { clearStorage, loadCustomFeeds, saveCustomFeeds, type CustomFeed, loadPersonalization, savePersonalization } from './engine/storage'
 import { useNewsFeed } from './engine/hooks'
+import { useReader } from './engine/useReader'
 
 // Components
 import { Header } from './components/Header'
@@ -21,10 +22,8 @@ function App() {
   const [selectedArticle, setSelectedArticle] = useState<Article | null>(null);
   const [isOffline, setIsOffline] = useState(!navigator.onLine);
 
-  // Reader Settings
-  const [theme, setTheme] = useState<'light' | 'sepia' | 'dark'>('light');
-  const [fontSize, setFontSize] = useState<'s' | 'm' | 'l'>('m');
-  const [readArticles, setReadArticles] = useState<Set<string>>(new Set());
+  // Reader State
+  const { theme, setTheme, fontSize, setFontSize, readArticles, toggleRead } = useReader();
 
   // Personalization
   const [locationQuery, setLocationQuery] = useState(loadPersonalization('location'));
@@ -45,9 +44,6 @@ function App() {
     }
     setCustomFeeds(feeds);
 
-    const savedRead = localStorage.getItem('calm_news_read_articles');
-    if (savedRead) setReadArticles(new Set(JSON.parse(savedRead)));
-
     return () => {
       window.removeEventListener('online', handleOnline);
       window.removeEventListener('offline', handleOffline);
@@ -59,15 +55,6 @@ function App() {
     refetch();
   }, [isOffline, refetch]);
 
-  const handleToggleRead = useCallback((id: string) => {
-    setReadArticles(prev => {
-      const updated = new Set(prev);
-      if (updated.has(id)) updated.delete(id);
-      else updated.add(id);
-      localStorage.setItem('calm_news_read_articles', JSON.stringify(Array.from(updated)));
-      return updated;
-    });
-  }, []);
 
   const handleAddFeed = useCallback((name: string, url: string) => {
     const updated = [...customFeeds, { name, url, id: Math.random().toString(36).substring(7) }];
@@ -90,7 +77,6 @@ function App() {
   const handleReset = useCallback(() => {
     if (confirm('Clear all saved data and refresh?')) {
       clearStorage();
-      localStorage.removeItem('calm_news_read_articles');
       window.location.reload();
     }
   }, []);
@@ -141,7 +127,7 @@ function App() {
           setTheme={setTheme}
           setFontSize={setFontSize}
           onClose={() => setSelectedArticle(null)}
-          onMarkDone={() => { handleToggleRead(selectedArticle.id); setSelectedArticle(null); }}
+          onMarkDone={() => { toggleRead(selectedArticle.id); setSelectedArticle(null); }}
         />
       )}
 
