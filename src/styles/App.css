@@ -203,14 +203,13 @@ section {
 }
 
 .article-card-meta {
-  display: grid;
-  grid-template-columns: 1fr auto 1fr;
-  /* Left, Center, Right */
+  display: flex;
+  justify-content: space-between;
   align-items: center;
   margin-top: 0.5rem;
   font-size: 0.85rem;
   color: var(--secondary-text);
-  gap: 0.5rem;
+  gap: 1rem;
   width: 100%;
 }
 
@@ -289,24 +288,31 @@ section {
   opacity: 0.8;
 }
 
-/* Action Pill */
+/* Bottom Navigation Bar */
 .action-pill {
   position: fixed;
-  bottom: calc(2rem + env(safe-area-inset-bottom));
-  left: 50%;
-  transform: translateX(-50%);
-  display: flex;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  transform: none;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
   align-items: center;
+  justify-items: center;
   background: var(--bg-color);
-  padding: 0.4rem;
-  border-radius: 40px;
-  border: 1px solid var(--border-color);
-  width: auto;
-  min-width: 220px;
+  padding: 0.75rem 0 calc(1rem + env(safe-area-inset-bottom)) 0;
+  border-radius: 0;
+  border-top: 1px solid var(--border-color);
+  border-bottom: none;
+  border-left: none;
+  border-right: none;
+  width: 100%;
+  min-width: 0;
   z-index: 1000;
-  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
-  gap: 0.2rem;
-  backdrop-filter: blur(15px);
+  box-shadow: none;
+  gap: 0;
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
 }
 
 .action-pill .nav-link {
@@ -341,10 +347,7 @@ section {
 }
 
 .nav-divider {
-  width: 1px;
-  height: 24px;
-  background: var(--border-color);
-  margin: 0 0.5rem;
+  display: none;
 }
 
 .spin {

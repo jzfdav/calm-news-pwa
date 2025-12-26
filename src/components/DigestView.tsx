@@ -1,4 +1,3 @@
-import { useState } from 'react'
 import type { Section, Article } from '../engine/types'
 import { getReadingTime, decodeHTMLEntities } from '../engine/utils'
 
@@ -16,24 +15,9 @@ interface DigestViewProps {
     sections: Section[];
     loading: boolean;
     onSelectArticle: (article: Article) => void;
-    onToggleRead: (id: string) => void;
 }
 
-export function DigestView({ sections, loading, onSelectArticle, onToggleRead }: DigestViewProps) {
-    const [exitingIds, setExitingIds] = useState<Set<string>>(new Set());
-
-    const handleDone = (id: string) => {
-        setExitingIds(prev => new Set(prev).add(id));
-        setTimeout(() => {
-            onToggleRead(id);
-            setExitingIds(prev => {
-                const next = new Set(prev);
-                next.delete(id);
-                return next;
-            });
-        }, 600);
-    };
-
+export function DigestView({ sections, loading, onSelectArticle }: DigestViewProps) {
     if (loading && sections.length === 0) {
         return <div className="loading">Gathering stories for you...</div>;
     }
@@ -55,7 +39,7 @@ export function DigestView({ sections, loading, onSelectArticle, onToggleRead }:
                     {section.articles.map((article) => (
                         <article
                             key={article.id}
-                            className={`article-card ${exitingIds.has(article.id) ? 'article-exit' : ''}`}
+                            className="article-card"
                         >
                             <h3 className="article-card-title">
                                 <div
@@ -83,12 +67,7 @@ export function DigestView({ sections, loading, onSelectArticle, onToggleRead }:
                                 >
                                     {getSourceName(article)}
                                 </a>
-                                <button
-                                    className="article-action-btn article-done-link"
-                                    onClick={() => handleDone(article.id)}
-                                >
-                                    Done
-                                </button>
+                                {/* Done button removed to prevent accidental clicks */}
                             </div>
                         </article>
                     ))}

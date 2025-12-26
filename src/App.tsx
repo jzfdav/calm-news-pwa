@@ -174,7 +174,6 @@ function App() {
           sections={unreadSections}
           loading={loading}
           onSelectArticle={setSelectedArticle}
-          onToggleRead={handleToggleRead}
         />
       ) : (
         <SettingsView
