@@ -373,7 +373,7 @@ article {
 .add-feed-card {
   margin-top: 3rem;
   padding: 2rem;
-  background: #fdfdfd;
+  background: var(--bg-color);
   border: 1px solid var(--border-color);
   border-radius: 12px;
 }
@@ -420,16 +420,17 @@ article {
 }
 
 .button-danger:hover {
-  background: #fffafa;
+  background: rgba(200, 0, 0, 0.05);
+  /* Subtle red tint regardless of mode */
   box-shadow: 0 2px 8px rgba(200, 0, 0, 0.05);
 }
 
 .danger-zone {
   text-align: center;
   padding: 2.5rem;
-  border: 1px dashed #fcc;
+  border: 1px dashed var(--border-color);
   border-radius: 12px;
-  background: #fffcfc;
+  background: rgba(200, 0, 0, 0.02);
 }
 
 .danger-zone p {
