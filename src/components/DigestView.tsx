@@ -56,11 +56,13 @@ export function DigestView({ sections, loading, onSelectArticle, onToggleRead }:
                                 </button>
                             </h3>
                             <div className="article-card-meta">
-                                {article.author && <span>{article.author} • </span>}
-                                <span>{getReadingTime(article.content)} • </span>
-                                <a href={article.link} target="_blank" rel="noopener noreferrer">
-                                    Source
-                                </a>
+                                <div className="article-meta-info">
+                                    {article.author && <span>{article.author} • </span>}
+                                    <span>{getReadingTime(article.content)} • </span>
+                                    <a href={article.link} target="_blank" rel="noopener noreferrer">
+                                        Source
+                                    </a>
+                                </div>
                                 <button
                                     className="nav-link article-done-link"
                                     onClick={() => handleDone(article.id)}

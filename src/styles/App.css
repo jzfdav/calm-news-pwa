@@ -133,8 +133,21 @@ h2 {
   color: var(--secondary-text);
   display: flex;
   align-items: center;
+  justify-content: space-between;
+  /* Space out left meta and right action */
+  width: 100%;
   gap: 0.6rem;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
+  /* Avoid wrapping which breaks alignment */
+}
+
+.article-meta-info {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .article-done-link {
@@ -585,5 +598,28 @@ article {
     padding-bottom: 0;
     margin-bottom: 0;
     visibility: hidden;
+  }
+}
+
+.input-hint {
+  font-size: 0.75rem;
+  color: var(--secondary-text);
+  margin-top: 0.4rem;
+  opacity: 0.7;
+}
+
+.settings-container section {
+  animation: fade-in 0.4s ease-out;
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
   }
 }
