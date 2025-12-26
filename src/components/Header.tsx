@@ -14,7 +14,13 @@ export function Header({ view, setView, isOffline, loading, onRefresh }: HeaderP
             <nav className="action-pill">
                 <button
                     className={`nav-link ${view === 'digest' ? 'active' : ''}`}
-                    onClick={() => setView('digest')}
+                    onClick={() => {
+                        if (view === 'digest') {
+                            window.scrollTo({ top: 0, behavior: 'smooth' });
+                        } else {
+                            setView('digest');
+                        }
+                    }}
                     aria-label="Daily Digest"
                 >
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">

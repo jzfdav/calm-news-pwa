@@ -3,12 +3,11 @@ import type { Section, Article } from '../engine/types'
 import { getReadingTime, decodeHTMLEntities } from '../engine/utils'
 
 const getSourceName = (article: Article) => {
-    if (article.source && article.source.trim().length > 0) return article.source;
     try {
         const url = new URL(article.link);
         return url.hostname.replace(/^www\./, '');
     } catch {
-        return 'Source';
+        return article.source || 'Source';
     }
 };
 
