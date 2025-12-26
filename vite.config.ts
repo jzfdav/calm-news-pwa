@@ -15,6 +15,8 @@ export default defineConfig({
         short_name: 'CalmNews',
         description: 'A personal, calm-first news reader.',
         theme_color: '#fcfcfc',
+        background_color: '#fcfcfc',
+        display: 'standalone',
         icons: [
           {
             src: 'icon.svg',

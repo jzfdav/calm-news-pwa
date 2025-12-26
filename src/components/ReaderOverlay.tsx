@@ -23,17 +23,18 @@ export function ReaderOverlay({
 
     return (
         <div className={`reader-overlay theme-${theme}`}>
-            <div className="reader-controls">
-                <button className="control-btn" onClick={() => setTheme('light')}>Light</button>
-                <button className="control-btn" onClick={() => setTheme('sepia')}>Sepia</button>
-                <button className="control-btn" onClick={() => setTheme('dark')}>Dark</button>
-                <span style={{ margin: '0 0.5rem', color: 'var(--secondary-text)' }}>|</span>
-                <button className="control-btn" onClick={() => setFontSize('s')}>A-</button>
-                <button className="control-btn" onClick={() => setFontSize('m')}>A</button>
-                <button className="control-btn" onClick={() => setFontSize('l')}>A+</button>
+            <div className="reader-toolbar">
+                <div className="reader-controls">
+                    <button className="control-btn" onClick={() => setTheme('light')}>Light</button>
+                    <button className="control-btn" onClick={() => setTheme('sepia')}>Sepia</button>
+                    <button className="control-btn" onClick={() => setTheme('dark')}>Dark</button>
+                    <span style={{ margin: '0 0.2rem', color: 'var(--secondary-text)', opacity: 0.5 }}>|</span>
+                    <button className="control-btn" onClick={() => setFontSize('s')}>A-</button>
+                    <button className="control-btn" onClick={() => setFontSize('m')}>A</button>
+                    <button className="control-btn" onClick={() => setFontSize('l')}>A+</button>
+                </div>
+                <button className="close-reader" onClick={onClose}>Close</button>
             </div>
-
-            <button className="close-reader" onClick={onClose}>Close</button>
 
             <div className="reader-content">
                 <div className="reader-header">
@@ -44,6 +45,7 @@ export function ReaderOverlay({
                         <a href={article.link} target="_blank" rel="noopener noreferrer">Source</a>
                     </div>
                 </div>
+
                 {article.content ? (
                     <div
                         className={`full-content font-size-${fontSize}`}
@@ -57,6 +59,7 @@ export function ReaderOverlay({
                         </a>
                     </div>
                 )}
+
                 <div style={{ textAlign: 'center', marginTop: '4rem', paddingBottom: '4rem' }}>
                     <button
                         className="button-primary"
