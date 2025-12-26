@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import type { Article } from '../engine/types'
 import { getReadingTime, decodeHTMLEntities } from '../engine/utils'
 
@@ -22,12 +22,32 @@ export function ReaderOverlay({
     onMarkDone
 }: ReaderOverlayProps) {
     const [showFontMenu, setShowFontMenu] = useState(false);
+    const [zoomImage, setZoomImage] = useState<string | null>(null);
+    const contentRef = useRef<HTMLDivElement>(null);
 
     const cycleTheme = () => {
         if (theme === 'light') setTheme('sepia');
         else if (theme === 'sepia') setTheme('dark');
         else setTheme('light');
     };
+
+    // Handle Image Clicks for Zoom
+    useEffect(() => {
+        const container = contentRef.current;
+        if (!container) return;
+
+        const handleImageClick = (e: MouseEvent) => {
+            const target = e.target as HTMLElement;
+            if (target.tagName === 'IMG') {
+                e.preventDefault();
+                const img = target as HTMLImageElement;
+                setZoomImage(img.src);
+            }
+        };
+
+        container.addEventListener('click', handleImageClick);
+        return () => container.removeEventListener('click', handleImageClick);
+    }, [article.content]);
 
     return (
         <div className={`reader-overlay theme-${theme}`}>
@@ -43,6 +63,7 @@ export function ReaderOverlay({
 
                 {article.content ? (
                     <div
+                        ref={contentRef}
                         className={`full-content font-size-${fontSize}`}
                         dangerouslySetInnerHTML={{ __html: article.content }}
                     />
@@ -61,6 +82,26 @@ export function ReaderOverlay({
                     </button>
                 </div>
             </div>
+
+            {/* Image Zoom Modal */}
+            {zoomImage && (
+                <div className="image-zoom-overlay" onClick={() => setZoomImage(null)}>
+                    <button className="zoom-close-btn" onClick={() => setZoomImage(null)}>
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                            <line x1="18" y1="6" x2="6" y2="18"></line>
+                            <line x1="6" y1="6" x2="18" y2="18"></line>
+                        </svg>
+                    </button>
+                    <div className="image-zoom-scroll-area">
+                        <img
+                            src={zoomImage}
+                            alt="Zoomed view"
+                            className="zoom-image"
+                            onClick={(e) => e.stopPropagation()} // Allow panning/clicking image without closing
+                        />
+                    </div>
+                </div>
+            )}
 
             {showFontMenu && (
                 <div className="font-settings-modal">
