@@ -21,6 +21,8 @@ export function SettingsView({
     onReset
 }: SettingsViewProps) {
     const [newFeed, setNewFeed] = useState({ name: '', url: '' });
+    const [locInput, setLocInput] = useState(locationQuery);
+    const [compInput, setCompInput] = useState(companyQuery);
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
@@ -28,6 +30,12 @@ export function SettingsView({
             onAddFeed(newFeed.name, newFeed.url);
             setNewFeed({ name: '', url: '' });
         }
+    };
+
+    const handleTrack = (key: 'location' | 'company') => {
+        if (key === 'location') onUpdatePersonalization('location', locInput);
+        else onUpdatePersonalization('company', compInput);
+        // Visual feedback could be added here, but the props update will reflect it
     };
 
     return (
@@ -97,26 +105,36 @@ export function SettingsView({
                     <div className="form-grid">
                         <div className="form-group">
                             <label htmlFor="track-location">Track Location</label>
-                            <input
-                                id="track-location"
-                                type="text"
-                                value={locationQuery}
-                                onChange={e => onUpdatePersonalization('location', e.target.value)}
-                                placeholder="e.g. Devanahalli"
-                                aria-label="Location to track for news"
-                            />
+                            <div style={{ display: 'flex', gap: '0.5rem' }}>
+                                <input
+                                    id="track-location"
+                                    type="text"
+                                    value={locInput}
+                                    onChange={e => setLocInput(e.target.value)}
+                                    placeholder="e.g. Devanahalli"
+                                    aria-label="Location to track for news"
+                                />
+                                <button className="button-primary" onClick={() => handleTrack('location')} style={{ padding: '0.8rem 1.2rem' }}>
+                                    Track
+                                </button>
+                            </div>
                             <p className="input-hint">Dynamically tracks news from this area.</p>
                         </div>
                         <div className="form-group">
                             <label htmlFor="track-company">Track Company</label>
-                            <input
-                                id="track-company"
-                                type="text"
-                                value={companyQuery}
-                                onChange={e => onUpdatePersonalization('company', e.target.value)}
-                                placeholder="e.g. IBM"
-                                aria-label="Company to track for news"
-                            />
+                            <div style={{ display: 'flex', gap: '0.5rem' }}>
+                                <input
+                                    id="track-company"
+                                    type="text"
+                                    value={compInput}
+                                    onChange={e => setCompInput(e.target.value)}
+                                    placeholder="e.g. IBM"
+                                    aria-label="Company to track for news"
+                                />
+                                <button className="button-primary" onClick={() => handleTrack('company')} style={{ padding: '0.8rem 1.2rem' }}>
+                                    Track
+                                </button>
+                            </div>
                             <p className="input-hint">Monitors news for this specific firm.</p>
                         </div>
                     </div>

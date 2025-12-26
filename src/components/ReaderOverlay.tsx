@@ -101,9 +101,7 @@ export function ReaderOverlay({
                     onClick={() => setShowFontMenu(!showFontMenu)}
                     aria-label="Font Settings"
                 >
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                        <path d="M4 19V6a4 4 0 0 1 4-4h8a4 4 0 0 1 4 4v13" /><path d="M12 9v10" />
-                    </svg>
+                    <span style={{ fontFamily: 'var(--font-serif)', fontSize: '1.2rem', fontWeight: 700 }}>Aa</span>
                 </button>
 
                 <button
