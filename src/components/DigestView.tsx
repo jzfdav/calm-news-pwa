@@ -1,6 +1,16 @@
 import { useState } from 'react'
 import type { Section, Article } from '../engine/types'
-import { getReadingTime, isReadable, decodeHTMLEntities } from '../engine/utils'
+import { getReadingTime, decodeHTMLEntities } from '../engine/utils'
+
+const getSourceName = (article: Article) => {
+    if (article.source && article.source.trim().length > 0) return article.source;
+    try {
+        const url = new URL(article.link);
+        return url.hostname.replace(/^www\./, '');
+    } catch {
+        return 'Source';
+    }
+};
 
 interface DigestViewProps {
     sections: Section[];
@@ -64,14 +74,15 @@ export function DigestView({ sections, loading, onSelectArticle, onToggleRead }:
                                 </div>
                             </h3>
                             <div className="article-card-meta">
-                                <div className="article-meta-info">
-                                    {isReadable(article.content) && <span className="readability-badge" title="Can be read in-app">Reader</span>}
-                                    {article.author && <span className="article-author">{article.author} • </span>}
-                                    <span>{getReadingTime(article.content)} • </span>
-                                    <a href={article.link} target="_blank" rel="noopener noreferrer">
-                                        Source
-                                    </a>
-                                </div>
+                                <span className="meta-time">{getReadingTime(article.content)}</span>
+                                <a
+                                    href={article.link}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="meta-source"
+                                >
+                                    {getSourceName(article)}
+                                </a>
                                 <button
                                     className="article-action-btn article-done-link"
                                     onClick={() => handleDone(article.id)}
