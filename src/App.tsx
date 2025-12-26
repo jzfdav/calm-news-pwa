@@ -18,6 +18,8 @@ function App() {
   const [customFeeds, setCustomFeeds] = useState<CustomFeed[]>([]);
   const [selectedArticle, setSelectedArticle] = useState<Article | null>(null);
   const [isOffline, setIsOffline] = useState(!navigator.onLine);
+  const [lastReadId, setLastReadId] = useState<string | null>(null);
+  const [showUndo, setShowUndo] = useState(false);
 
   // Reader State
   const { theme, setTheme, fontSize, setFontSize, readArticles, toggleRead } = useReader();
@@ -31,6 +33,13 @@ function App() {
   const [topics, setTopics] = useState<string[]>([]);
 
   const { data: digest, isLoading, error: queryError, refetch } = useNewsFeed(customFeeds, topics, !isOffline);
+
+  useEffect(() => {
+    if (showUndo) {
+      const timer = setTimeout(() => setShowUndo(false), 6000);
+      return () => clearTimeout(timer);
+    }
+  }, [showUndo]);
 
   useEffect(() => {
     const handleOnline = () => setIsOffline(false);
@@ -137,8 +146,30 @@ function App() {
           setTheme={setTheme}
           setFontSize={setFontSize}
           onClose={() => setSelectedArticle(null)}
-          onMarkDone={() => { toggleRead(selectedArticle.id); setSelectedArticle(null); }}
+          onMarkDone={() => {
+            setLastReadId(selectedArticle.id);
+            setShowUndo(true);
+            toggleRead(selectedArticle.id);
+            setSelectedArticle(null);
+          }}
         />
+      )}
+
+      {showUndo && (
+        <div className="undo-toast">
+          <span>Article marked as done</span>
+          <button
+            className="undo-btn"
+            onClick={() => {
+              if (lastReadId) {
+                toggleRead(lastReadId);
+                setShowUndo(false);
+              }
+            }}
+          >
+            Undo
+          </button>
+        </div>
       )}
 
       <footer>

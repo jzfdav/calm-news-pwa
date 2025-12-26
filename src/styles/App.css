@@ -698,9 +698,25 @@ section {
     opacity: 0;
     transform: translateY(10px);
   }
+}
 
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+to {
+  transform: translate(-50%, 0);
+  opacity: 1;
+}
+}
+
+.theme-dark .undo-toast {
+  background: rgba(20, 20, 20, 0.85);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.theme-sepia .undo-toast {
+  background: rgba(70, 48, 32, 0.95);
+  color: #f4ecd8;
+}
+
+.theme-sepia .undo-btn {
+  background: #f4ecd8;
+  color: #463020;
 }
