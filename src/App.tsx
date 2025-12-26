@@ -15,9 +15,6 @@ import { DEFAULT_FEEDS } from './engine/config'
 
 function App() {
   const [view, setView] = useState<'digest' | 'settings'>('digest');
-  // const [digest, setDigest] = useState<DailyDigest | null>(null); // Removed in favor of React Query
-  // const [loading, setLoading] = useState(false); // Removed
-  // const [error, setError] = useState<string | null>(null); // Removed
   const [customFeeds, setCustomFeeds] = useState<CustomFeed[]>([]);
   const [selectedArticle, setSelectedArticle] = useState<Article | null>(null);
   const [isOffline, setIsOffline] = useState(!navigator.onLine);

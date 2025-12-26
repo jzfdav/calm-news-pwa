@@ -141,6 +141,25 @@ body {
   text-decoration: underline;
 }
 
+.button-icon-danger {
+  background: none;
+  border: none;
+  color: #ff4444;
+  cursor: pointer;
+  padding: 0.6rem;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+  opacity: 0.6;
+}
+
+.button-icon-danger:hover {
+  opacity: 1;
+  background: rgba(255, 68, 68, 0.1);
+}
+
 .container {
   max-width: var(--max-width);
   margin: 0 auto;
