@@ -62,6 +62,7 @@
   font-weight: 600;
 }
 
+html,
 body {
   background-color: var(--bg-color);
   color: var(--text-color);
@@ -69,7 +70,11 @@ body {
   line-height: 1.6;
   margin: 0;
   padding: 0;
-  padding-bottom: 8rem;
+  overflow-x: hidden;
+  /* Prevent horizontal zoom/scroll */
+}
+
+body {
   padding-bottom: 10rem;
 }
 
