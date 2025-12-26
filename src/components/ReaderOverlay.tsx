@@ -25,13 +25,43 @@ export function ReaderOverlay({
         <div className={`reader-overlay theme-${theme}`}>
             <div className="reader-toolbar">
                 <div className="reader-controls">
-                    <button className="control-btn" onClick={() => setTheme('light')}>Light</button>
-                    <button className="control-btn" onClick={() => setTheme('sepia')}>Sepia</button>
-                    <button className="control-btn" onClick={() => setTheme('dark')}>Dark</button>
+                    <button
+                        className={`control-btn ${theme === 'light' ? 'active' : ''}`}
+                        onClick={() => setTheme('light')}
+                    >
+                        Light
+                    </button>
+                    <button
+                        className={`control-btn ${theme === 'sepia' ? 'active' : ''}`}
+                        onClick={() => setTheme('sepia')}
+                    >
+                        Sepia
+                    </button>
+                    <button
+                        className={`control-btn ${theme === 'dark' ? 'active' : ''}`}
+                        onClick={() => setTheme('dark')}
+                    >
+                        Dark
+                    </button>
                     <span style={{ margin: '0 0.2rem', color: 'var(--secondary-text)', opacity: 0.5 }}>|</span>
-                    <button className="control-btn" onClick={() => setFontSize('s')}>A-</button>
-                    <button className="control-btn" onClick={() => setFontSize('m')}>A</button>
-                    <button className="control-btn" onClick={() => setFontSize('l')}>A+</button>
+                    <button
+                        className={`control-btn ${fontSize === 's' ? 'active' : ''}`}
+                        onClick={() => setFontSize('s')}
+                    >
+                        A-
+                    </button>
+                    <button
+                        className={`control-btn ${fontSize === 'm' ? 'active' : ''}`}
+                        onClick={() => setFontSize('m')}
+                    >
+                        A
+                    </button>
+                    <button
+                        className={`control-btn ${fontSize === 'l' ? 'active' : ''}`}
+                        onClick={() => setFontSize('l')}
+                    >
+                        A+
+                    </button>
                 </div>
                 <button className="close-reader" onClick={onClose}>Close</button>
             </div>

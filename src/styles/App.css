@@ -20,27 +20,17 @@
 }
 
 :root {
+  --reader-light-bg: #ffffff;
+  --reader-light-text: #1a1a1a;
   --reader-sepia-bg: #f4ecd8;
   --reader-sepia-text: #5b4636;
   --reader-dark-bg: #1a1a1a;
   --reader-dark-text: #d1d1d1;
 }
 
-.font-size-s {
-  font-size: 1rem !important;
-}
-
-.font-size-m {
-  font-size: 1.25rem !important;
-}
-
-.font-size-l {
-  font-size: 1.5rem !important;
-}
-
 .theme-light {
-  --current-bg: var(--bg-color);
-  --current-text: var(--text-color);
+  --current-bg: var(--reader-light-bg);
+  --current-text: var(--reader-light-text);
 }
 
 .theme-sepia {
@@ -51,6 +41,13 @@
 .theme-dark {
   --current-bg: var(--reader-dark-bg);
   --current-text: var(--reader-dark-text);
+}
+
+.control-btn.active {
+  background: var(--accent-color);
+  color: var(--bg-color);
+  border-color: var(--accent-color);
+  font-weight: 600;
 }
 
 body {
