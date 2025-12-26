@@ -140,6 +140,7 @@ export function DigestView({ sections, loading, onSelectArticle }: DigestViewPro
     return (
         <main className="digest-view">
             <div className="feed-controls">
+                <span className="feed-branding">CALM NEWS</span>
                 <button onClick={toggleAll} className="text-btn">
                     {areAllOpen ? 'Collapse All' : 'Expand All'}
                 </button>
