@@ -28,7 +28,7 @@ export function ReaderOverlay({
                     <h1>{article.title}</h1>
                     <div className="reader-meta">
                         {article.author && <span>{article.author} • </span>}
-                        <span>{getReadingTime(article.content)} min read</span>
+                        <span>{getReadingTime(article.content)} • </span>
                         <span> • <a href={article.link} target="_blank" rel="noopener noreferrer">Source</a></span>
                     </div>
                 </header>
@@ -60,47 +60,51 @@ export function ReaderOverlay({
                         <button
                             className={`control-btn ${theme === 'light' ? 'active' : ''}`}
                             onClick={() => setTheme('light')}
+                            aria-label="Light Theme"
                         >
-                            Light
+                            L
                         </button>
                         <button
                             className={`control-btn ${theme === 'sepia' ? 'active' : ''}`}
                             onClick={() => setTheme('sepia')}
+                            aria-label="Sepia Theme"
                         >
-                            Sepia
+                            S
                         </button>
                         <button
                             className={`control-btn ${theme === 'dark' ? 'active' : ''}`}
                             onClick={() => setTheme('dark')}
+                            aria-label="Dark Theme"
                         >
-                            Dark
+                            D
                         </button>
                     </div>
-
-                    <span className="toolbar-divider">|</span>
 
                     <div className="control-group">
                         <button
                             className={`control-btn ${fontSize === 's' ? 'active' : ''}`}
                             onClick={() => setFontSize('s')}
+                            aria-label="Small Font"
                         >
                             A-
                         </button>
                         <button
                             className={`control-btn ${fontSize === 'm' ? 'active' : ''}`}
                             onClick={() => setFontSize('m')}
+                            aria-label="Medium Font"
                         >
                             A
                         </button>
                         <button
                             className={`control-btn ${fontSize === 'l' ? 'active' : ''}`}
                             onClick={() => setFontSize('l')}
+                            aria-label="Large Font"
                         >
                             A+
                         </button>
                     </div>
                 </div>
-                <button className="close-reader" onClick={onClose}>Close</button>
+                <button className="close-reader" onClick={onClose}>Done</button>
             </div>
         </div>
     );

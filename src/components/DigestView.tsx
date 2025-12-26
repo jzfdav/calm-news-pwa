@@ -57,7 +57,7 @@ export function DigestView({ sections, loading, onSelectArticle, onToggleRead }:
                             </h3>
                             <div className="article-card-meta">
                                 {article.author && <span>{article.author} • </span>}
-                                <span>{getReadingTime(article.content)} min read • </span>
+                                <span>{getReadingTime(article.content)} • </span>
                                 <a href={article.link} target="_blank" rel="noopener noreferrer">
                                     Source
                                 </a>
