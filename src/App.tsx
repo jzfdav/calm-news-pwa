@@ -1,7 +1,7 @@
 import { useState, useEffect, useMemo, useCallback } from 'react'
 import './styles/App.css'
 import type { Article } from './engine/types'
-import { clearStorage, loadCustomFeeds, saveCustomFeeds, type CustomFeed, loadTopics, loadSettings } from './engine/storage'
+import { clearStorage, loadCustomFeeds, saveCustomFeeds, type CustomFeed, loadTopics, saveTopics, loadSettings } from './engine/storage'
 import { useNewsFeed } from './engine/hooks'
 import { useReader } from './engine/useReader'
 import { useAppActions } from './engine/useAppActions'
@@ -12,7 +12,7 @@ import { DigestView } from './components/DigestView'
 import { SettingsView } from './components/SettingsView'
 import { ReaderOverlay } from './components/ReaderOverlay'
 
-import { DEFAULT_FEEDS } from './engine/config'
+import { DEFAULT_FEEDS, DEFAULT_TOPICS } from './engine/config'
 
 function App() {
   const [view, setView] = useState<'digest' | 'settings'>('digest');
@@ -73,7 +73,13 @@ function App() {
     }
     setCustomFeeds(feeds);
 
-    setTopics(loadTopics());
+    const savedTopics = loadTopics();
+    if (savedTopics.length === 0) {
+      saveTopics(DEFAULT_TOPICS);
+      setTopics(DEFAULT_TOPICS);
+    } else {
+      setTopics(savedTopics);
+    }
 
     return () => {
       window.removeEventListener('online', handleOnline);
