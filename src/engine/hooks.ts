@@ -49,7 +49,7 @@ export function useNewsFeed(customFeeds: CustomFeed[], topics: string[], isOnlin
             }
             return undefined;
         },
-        enabled: customFeeds.length > 0 && isOnline,
+        enabled: (customFeeds.length > 0 || topics.length > 0) && isOnline,
         staleTime: 1000 * 60 * 15, // Consider data fresh for 15 minutes
     });
 }
