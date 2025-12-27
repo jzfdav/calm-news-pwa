@@ -5,9 +5,8 @@ import { clearStorage, loadCustomFeeds, type CustomFeed, loadTopics, loadSetting
 import { useNewsFeed } from './engine/hooks'
 import { useReader } from './engine/useReader'
 import { useAppActions } from './engine/useAppActions'
-
-// Components
 import { Header } from './components/Header'
+import { ToastContainer, useToast } from './components/Toast'
 import { DigestView } from './components/DigestView'
 import { SettingsView } from './components/SettingsView'
 import { ReaderOverlay } from './components/ReaderOverlay'
@@ -22,6 +21,9 @@ function App() {
   const [lastReadId, setLastReadId] = useState<string | null>(null);
   const [showUndo, setShowUndo] = useState(false);
   const [settings, setSettings] = useState(loadSettings());
+  const [lastUpdated, setLastUpdated] = useState<Date | null>(null);
+
+  const { messages, showToast, removeToast } = useToast();
 
   // Reader State
   const { theme, setTheme, fontSize, setFontSize, readArticles, toggleRead } = useReader();
@@ -35,6 +37,12 @@ function App() {
   const [topics, setTopics] = useState<string[]>([]);
 
   const { data: digest, isLoading, isFetching, error: queryError, refetch } = useNewsFeed(customFeeds, topics, !isOffline);
+
+  useEffect(() => {
+    if (digest && !isFetching) {
+      setLastUpdated(new Date());
+    }
+  }, [digest, isFetching]);
 
   // App Actions (Refactored Logic)
   const {
@@ -106,9 +114,12 @@ function App() {
         isOffline={isOffline}
         loading={isFetching}
         onRefresh={handleRefreshAction}
+        lastUpdated={lastUpdated}
       />
 
       {queryError && <div className="meta" style={{ color: '#c33', textAlign: 'center', marginBottom: '2rem' }}>Failed to refresh feed.</div>}
+
+      <ToastContainer messages={messages} onRemove={removeToast} />
 
       {view === 'digest' ? (
         <>
@@ -116,6 +127,7 @@ function App() {
             sections={unreadSections}
             loading={isLoading}
             onSelectArticle={setSelectedArticle}
+            onGoToSettings={() => setView('settings')}
           />
           {topics.length === 0 && !isLoading && (
             <OnboardingModal
@@ -128,11 +140,11 @@ function App() {
         <SettingsView
           customFeeds={customFeeds}
           topics={topics}
-          onAddTopic={handleAddTopic}
-          onRemoveTopic={handleRemoveTopic}
-          onAddFeed={handleAddFeed}
-          onRemoveFeed={handleRemoveFeed}
-          onRestoreDefaults={handleRestoreDefaults}
+          onAddTopic={(t) => { handleAddTopic(t); showToast(`Added ${t}`); }}
+          onRemoveTopic={(t) => { handleRemoveTopic(t); showToast(`Removed ${t}`); }}
+          onAddFeed={(n, u) => { handleAddFeed(n, u); showToast(`Added ${n}`); }}
+          onRemoveFeed={(id) => { handleRemoveFeed(id); showToast('Feed removed'); }}
+          onRestoreDefaults={() => { handleRestoreDefaults(); showToast('Defaults restored'); }}
           onReset={handleReset}
           settings={settings}
           onUpdateSettings={handleUpdateSettings}

@@ -4,12 +4,16 @@ export interface HeaderProps {
     isOffline: boolean;
     loading: boolean;
     onRefresh: () => void;
+    lastUpdated?: Date | null;
 }
 
-export function Header({ view, setView, isOffline, loading, onRefresh }: HeaderProps) {
+export function Header({ view, setView, isOffline, loading, onRefresh, lastUpdated }: HeaderProps) {
     return (
         <header className="app-header">
             {isOffline && <div className="offline-badge">Library Mode</div>}
+            {!isOffline && lastUpdated && !loading && (
+                <div className="header-meta">Updated {new Date(lastUpdated).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</div>
+            )}
 
             <nav className="action-pill">
                 <button

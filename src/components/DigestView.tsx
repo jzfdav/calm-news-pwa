@@ -1,6 +1,7 @@
 import { useState, useEffect, memo } from 'react'
 import type { Section, Article } from '../engine/types'
 import { getReadingTime, decodeHTMLEntities, isReadable } from '../engine/utils'
+import { WelcomeCard } from './WelcomeCard'
 
 const getSourceName = (article: Article) => {
     try {
@@ -15,6 +16,7 @@ interface DigestViewProps {
     sections: Section[];
     loading: boolean;
     onSelectArticle: (article: Article) => void;
+    onGoToSettings: () => void;
 }
 
 const ArticleCard = memo(({
@@ -123,7 +125,7 @@ function DigestSection({
 
 const MemoizedDigestSection = memo(DigestSection);
 
-export function DigestView({ sections, loading, onSelectArticle }: DigestViewProps) {
+export function DigestView({ sections, loading, onSelectArticle, onGoToSettings }: DigestViewProps) {
     const [openSections, setOpenSections] = useState<Record<string, boolean>>({});
 
     // Sync open state when new sections are added (e.g. newly added feed)
@@ -159,8 +161,15 @@ export function DigestView({ sections, loading, onSelectArticle }: DigestViewPro
     if (sections.length === 0 && !loading) {
         return (
             <div className="empty-state">
-                <h2>You are all caught up.</h2>
-                <p>Stay calm. Your next update is just a refresh away.</p>
+                <div className="empty-state-content">
+                    <h2>You are all caught up.</h2>
+                    <p>Stay calm. Your next update is just a refresh away.</p>
+                    <div className="empty-state-actions">
+                        <button onClick={onGoToSettings} className="outline-btn">
+                            Manage Topics & Sources
+                        </button>
+                    </div>
+                </div>
             </div>
         );
     }
@@ -170,6 +179,7 @@ export function DigestView({ sections, loading, onSelectArticle }: DigestViewPro
 
     return (
         <main className="digest-view">
+            <WelcomeCard />
             <div className="feed-controls">
                 <span className="feed-branding">TODAY'S NEWS</span>
                 <button onClick={toggleAll} className="text-btn">
