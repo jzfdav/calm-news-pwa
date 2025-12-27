@@ -122,20 +122,19 @@ function App() {
       <ToastContainer messages={messages} onRemove={removeToast} />
 
       {view === 'digest' ? (
-        <>
+        topics.length === 0 && !isLoading ? (
+          <OnboardingModal
+            onAddTopic={handleAddTopic}
+            currentTopics={topics}
+          />
+        ) : (
           <DigestView
             sections={unreadSections}
             loading={isLoading}
             onSelectArticle={setSelectedArticle}
             onGoToSettings={() => setView('settings')}
           />
-          {topics.length === 0 && !isLoading && (
-            <OnboardingModal
-              onAddTopic={handleAddTopic}
-              currentTopics={topics}
-            />
-          )}
-        </>
+        )
       ) : (
         <SettingsView
           customFeeds={customFeeds}
