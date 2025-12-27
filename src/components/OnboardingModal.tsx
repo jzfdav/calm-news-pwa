@@ -11,30 +11,30 @@ export function OnboardingModal({ onAddTopic, currentTopics }: OnboardingModalPr
     if (availableSuggestions.length === 0) return null;
 
     return (
-        <div className="onboarding-overlay">
-            <div className="onboarding-container">
+        <div className="onboarding-view">
+            <div className="onboarding-content">
                 <div className="onboarding-header">
                     <h2>Welcome to Calm News</h2>
-                    <p className="meta">A quiet, focused space for the things you care about.</p>
+                    <p>A quiet space for the things you care about.</p>
                 </div>
 
                 <div className="onboarding-body">
-                    <p className="onboarding-prompt">What would you like to read about today?</p>
+                    <p className="onboarding-prompt">What's on your mind today?</p>
                     <div className="topic-suggestions">
                         {availableSuggestions.map(topic => (
                             <button
                                 key={topic}
-                                className="suggestion-chip"
+                                className="suggestion-pill"
                                 onClick={() => onAddTopic(topic)}
                             >
-                                <span className="plus">+</span> {topic}
+                                {topic}
                             </button>
                         ))}
                     </div>
                 </div>
 
                 <div className="onboarding-footer">
-                    <p className="meta center">You can always add custom sources and topics later in settings.</p>
+                    <p className="meta center">You can add custom sources and topics in settings.</p>
                 </div>
             </div>
         </div>
