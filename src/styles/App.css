@@ -444,15 +444,23 @@ section {
   cursor: pointer;
 }
 
-.readability-badge {
+.read-badge {
   font-size: 0.65rem;
   font-weight: 700;
   text-transform: uppercase;
-  color: var(--accent-color);
-  border: 1px solid var(--accent-color);
-  padding: 1px 5px;
-  border-radius: 3px;
-  opacity: 0.8;
+  padding: 2px 6px;
+  border-radius: 4px;
+  letter-spacing: 0.02em;
+}
+
+.badge-full {
+  background: var(--badge-full-bg);
+  color: var(--badge-full-text);
+}
+
+.badge-snippet {
+  background: var(--badge-snippet-bg);
+  color: var(--badge-snippet-text);
 }
 
 /* Bottom Navigation Bar */
