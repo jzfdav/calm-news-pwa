@@ -1,6 +1,7 @@
 import type { Article, Section, DailyDigest } from './types';
 import { fetchRSS, parseRSS } from './rss';
 import { saveArticles, saveSections, loadSettings } from './storage';
+import { isReadable } from './utils';
 
 export async function refreshSections(sections: Section[]): Promise<Section[]> {
     const allArticlesToSave: Article[] = [];
@@ -23,7 +24,8 @@ export async function refreshSections(sections: Section[]): Promise<Section[]> {
                 // 2. Overwrite/Add newly fetched articles
                 fetched.forEach(a => articleMap.set(a.id, a));
 
-                // 3. Convert back to array and prune by date
+                // 3. Convert back to array, prune by date, and sort
+                // Sort Priority: 1. Full Text (Readable) first, 2. Most recent first
                 const merged = Array.from(articleMap.values())
                     .filter(a => {
                         try {
@@ -32,7 +34,12 @@ export async function refreshSections(sections: Section[]): Promise<Section[]> {
                             return false;
                         }
                     })
-                    .sort((a, b) => new Date(b.pubDate).getTime() - new Date(a.pubDate).getTime());
+                    .sort((a, b) => {
+                        const scoreA = isReadable(a.content) ? 1 : 0;
+                        const scoreB = isReadable(b.content) ? 1 : 0;
+                        if (scoreA !== scoreB) return scoreB - scoreA;
+                        return new Date(b.pubDate).getTime() - new Date(a.pubDate).getTime();
+                    });
 
                 // 4. Cap per section based on settings
                 const sectionArticles = merged.slice(0, settings.maxArticlesPerSection);
@@ -59,9 +66,18 @@ export function createDailyDigest(sections: Section[]): DailyDigest {
     const settings = loadSettings();
     return {
         date: new Date().toISOString().split('T')[0],
-        sections: sections.map(s => ({
-            ...s,
-            articles: s.articles.slice(0, settings.maxArticlesPerSection)
-        }))
+        sections: sections.map(s => {
+            // Re-sort just in case sections were modified elsewhere
+            const sorted = [...s.articles].sort((a, b) => {
+                const scoreA = isReadable(a.content) ? 1 : 0;
+                const scoreB = isReadable(b.content) ? 1 : 0;
+                if (scoreA !== scoreB) return scoreB - scoreA;
+                return new Date(b.pubDate).getTime() - new Date(a.pubDate).getTime();
+            });
+            return {
+                ...s,
+                articles: sorted.slice(0, settings.maxArticlesPerSection)
+            };
+        })
     };
 }
