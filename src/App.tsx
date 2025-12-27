@@ -67,14 +67,14 @@ function App() {
     window.addEventListener('offline', handleOffline);
 
     let feeds = loadCustomFeeds();
-    if (feeds.length === 0) {
+    if (feeds === null) {
       feeds = DEFAULT_FEEDS;
       saveCustomFeeds(feeds);
     }
     setCustomFeeds(feeds);
 
     const savedTopics = loadTopics();
-    if (savedTopics.length === 0) {
+    if (savedTopics === null) {
       saveTopics(DEFAULT_TOPICS);
       setTopics(DEFAULT_TOPICS);
     } else {

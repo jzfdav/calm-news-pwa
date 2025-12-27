@@ -89,8 +89,8 @@ export function saveCustomFeeds(feeds: CustomFeed[]): void {
     lsSet(CUSTOM_FEEDS_KEY, feeds);
 }
 
-export function loadCustomFeeds(): CustomFeed[] {
-    return lsGet(CUSTOM_FEEDS_KEY) || [];
+export function loadCustomFeeds(): CustomFeed[] | null {
+    return lsGet(CUSTOM_FEEDS_KEY);
 }
 
 export function clearStorage(): void {
@@ -110,7 +110,7 @@ export function saveTopics(topics: string[]): void {
     lsSet(TOPICS_KEY, topics);
 }
 
-export function loadTopics(): string[] {
+export function loadTopics(): string[] | null {
     try {
         const stored = localStorage.getItem(TOPICS_KEY);
         if (stored) {
