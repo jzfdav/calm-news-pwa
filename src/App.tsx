@@ -1,9 +1,10 @@
 import { useState, useEffect, useMemo, useCallback } from 'react'
 import './styles/App.css'
 import type { Article } from './engine/types'
-import { clearStorage, loadCustomFeeds, type CustomFeed, loadTopics, loadSettings } from './engine/storage'
+import { clearStorage, loadCustomFeeds, type CustomFeed, loadTopics, loadSettings, pruneLegacyKeys } from './engine/storage'
 import { useNewsFeed } from './engine/hooks'
 import { useReader } from './engine/useReader'
+import { useConnectivity } from './engine/useConnectivity'
 import { useAppActions } from './engine/useAppActions'
 import { Header } from './components/Header'
 import { ToastContainer, useToast } from './components/Toast'
@@ -17,7 +18,7 @@ function App() {
   const [view, setView] = useState<'digest' | 'settings'>('digest');
   const [customFeeds, setCustomFeeds] = useState<CustomFeed[]>([]);
   const [selectedArticle, setSelectedArticle] = useState<Article | null>(null);
-  const [isOffline, setIsOffline] = useState(!navigator.onLine);
+  const { isOffline } = useConnectivity();
   const [settings, setSettings] = useState(loadSettings());
   const [lastUpdated, setLastUpdated] = useState<Date | null>(null);
 
@@ -60,21 +61,15 @@ function App() {
   });
 
   useEffect(() => {
-    const handleOnline = () => setIsOffline(false);
-    const handleOffline = () => setIsOffline(true);
-    window.addEventListener('online', handleOnline);
-    window.addEventListener('offline', handleOffline);
+    // Maintenance
+    pruneLegacyKeys();
 
+    // Data Hydration
     const feeds = loadCustomFeeds() || [];
     setCustomFeeds(feeds);
 
     const savedTopics = loadTopics() || [];
     setTopics(savedTopics);
-
-    return () => {
-      window.removeEventListener('online', handleOnline);
-      window.removeEventListener('offline', handleOffline);
-    };
   }, []);
 
   const handleRefreshAction = useCallback(() => {
