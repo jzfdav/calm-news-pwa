@@ -1,9 +1,10 @@
 import { useState, useEffect, useMemo, useCallback } from 'react'
 import './styles/App.css'
 import type { Article } from './engine/types'
-import { clearStorage, loadCustomFeeds, saveCustomFeeds, type CustomFeed, loadTopics, saveTopics, loadSettings, saveSettings } from './engine/storage'
+import { clearStorage, loadCustomFeeds, saveCustomFeeds, type CustomFeed, loadTopics, loadSettings } from './engine/storage'
 import { useNewsFeed } from './engine/hooks'
 import { useReader } from './engine/useReader'
+import { useAppActions } from './engine/useAppActions'
 
 // Components
 import { Header } from './components/Header'
@@ -34,6 +35,23 @@ function App() {
   const [topics, setTopics] = useState<string[]>([]);
 
   const { data: digest, isLoading, isFetching, error: queryError, refetch } = useNewsFeed(customFeeds, topics, !isOffline);
+
+  // App Actions (Refactored Logic)
+  const {
+    handleAddFeed,
+    handleRemoveFeed,
+    handleAddTopic,
+    handleRemoveTopic,
+    handleUpdateSettings,
+    handleRestoreDefaults
+  } = useAppActions({
+    customFeeds,
+    setCustomFeeds,
+    topics,
+    setTopics,
+    settings,
+    setSettings
+  });
 
   useEffect(() => {
     if (showUndo) {
@@ -67,50 +85,6 @@ function App() {
     if (isOffline) return;
     refetch();
   }, [isOffline, refetch]);
-
-
-  const handleAddFeed = useCallback((name: string, url: string) => {
-    const updated = [...customFeeds, { name, url, id: Math.random().toString(36).substring(7) }];
-    setCustomFeeds(updated);
-    saveCustomFeeds(updated);
-  }, [customFeeds]);
-
-  const handleRemoveFeed = useCallback((id: string) => {
-    const updated = customFeeds.filter(f => f.id !== id);
-    setCustomFeeds(updated);
-    saveCustomFeeds(updated);
-  }, [customFeeds]);
-
-  const handleAddTopic = useCallback((topic: string) => {
-    if (!topic.trim()) return;
-    const updated = [...topics, topic.trim()];
-    setTopics(updated);
-    saveTopics(updated);
-  }, [topics]);
-
-  const handleRemoveTopic = useCallback((topic: string) => {
-    const updated = topics.filter(t => t !== topic);
-    setTopics(updated);
-    saveTopics(updated);
-  }, [topics]);
-
-  const handleUpdateSettings = useCallback((newSettings: Partial<typeof settings>) => {
-    const updated = { ...settings, ...newSettings };
-    setSettings(updated);
-    saveSettings(updated);
-  }, [settings]);
-
-  const handleRestoreDefaults = useCallback(() => {
-    if (confirm('Restore curated default sources? This will append them to your current library.')) {
-      // Append defaults but avoid duplicates by URL
-      const existingUrls = new Set(customFeeds.map(f => f.url));
-      const toAdd = DEFAULT_FEEDS.filter(f => !existingUrls.has(f.url));
-
-      const updated = [...customFeeds, ...toAdd];
-      setCustomFeeds(updated);
-      saveCustomFeeds(updated);
-    }
-  }, [customFeeds]);
 
   const handleReset = useCallback(() => {
     if (confirm('Clear all saved data and refresh?')) {
