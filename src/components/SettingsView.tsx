@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { DiscoverModal } from './DiscoverModal'
 import type { CustomFeed } from '../engine/storage'
 import type { AppSettings } from '../engine/types'
 
@@ -29,6 +30,7 @@ export function SettingsView({
 }: SettingsViewProps) {
     const [newFeed, setNewFeed] = useState({ name: '', url: '' });
     const [topicInput, setTopicInput] = useState('');
+    const [showDiscover, setShowDiscover] = useState(false);
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
@@ -145,9 +147,14 @@ export function SettingsView({
                             <h2>My Library</h2>
                             <p className="meta">{customFeeds.length} source{customFeeds.length !== 1 ? 's' : ''} currently active</p>
                         </div>
-                        <button className="text-btn active" onClick={onRestoreDefaults} style={{ fontSize: '0.8rem', paddingBottom: '0.2rem' }}>
-                            Restore Defaults
-                        </button>
+                        <div style={{ display: 'flex', gap: '0.8rem' }}>
+                            <button className="text-btn active" onClick={() => setShowDiscover(true)} style={{ fontSize: '0.8rem', paddingBottom: '0.2rem' }}>
+                                Discover Sources
+                            </button>
+                            <button className="text-btn active" onClick={onRestoreDefaults} style={{ fontSize: '0.8rem', paddingBottom: '0.2rem', opacity: 0.6 }}>
+                                Restore Defaults
+                            </button>
+                        </div>
                     </div>
                 </div>
 
@@ -213,6 +220,13 @@ export function SettingsView({
                     <button className="button-danger" onClick={onReset}>Clear All Library Data</button>
                 </div>
             </section>
+
+            {showDiscover && (
+                <DiscoverModal
+                    onClose={() => setShowDiscover(false)}
+                    onAddFeed={onAddFeed}
+                />
+            )}
         </main>
     );
 }
