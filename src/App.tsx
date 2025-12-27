@@ -100,6 +100,18 @@ function App() {
     saveSettings(updated);
   }, [settings]);
 
+  const handleRestoreDefaults = useCallback(() => {
+    if (confirm('Restore curated default sources? This will append them to your current library.')) {
+      // Append defaults but avoid duplicates by URL
+      const existingUrls = new Set(customFeeds.map(f => f.url));
+      const toAdd = DEFAULT_FEEDS.filter(f => !existingUrls.has(f.url));
+
+      const updated = [...customFeeds, ...toAdd];
+      setCustomFeeds(updated);
+      saveCustomFeeds(updated);
+    }
+  }, [customFeeds]);
+
   const handleReset = useCallback(() => {
     if (confirm('Clear all saved data and refresh?')) {
       clearStorage();
@@ -141,6 +153,7 @@ function App() {
           onRemoveTopic={handleRemoveTopic}
           onAddFeed={handleAddFeed}
           onRemoveFeed={handleRemoveFeed}
+          onRestoreDefaults={handleRestoreDefaults}
           onReset={handleReset}
           settings={settings}
           onUpdateSettings={handleUpdateSettings}

@@ -11,6 +11,7 @@ interface SettingsViewProps {
     onAddFeed: (name: string, url: string) => void;
     onRemoveFeed: (id: string) => void;
     onUpdateSettings: (s: Partial<AppSettings>) => void;
+    onRestoreDefaults: () => void;
     onReset: () => void;
 }
 
@@ -23,6 +24,7 @@ export function SettingsView({
     onAddFeed,
     onRemoveFeed,
     onUpdateSettings,
+    onRestoreDefaults,
     onReset
 }: SettingsViewProps) {
     const [newFeed, setNewFeed] = useState({ name: '', url: '' });
@@ -90,8 +92,15 @@ export function SettingsView({
 
             <section className="settings-section">
                 <div className="section-header">
-                    <h2>My Library</h2>
-                    <p className="meta">{customFeeds.length} source{customFeeds.length !== 1 ? 's' : ''} currently active</p>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', width: '100%' }}>
+                        <div>
+                            <h2>My Library</h2>
+                            <p className="meta">{customFeeds.length} source{customFeeds.length !== 1 ? 's' : ''} currently active</p>
+                        </div>
+                        <button className="text-btn active" onClick={onRestoreDefaults} style={{ fontSize: '0.8rem', paddingBottom: '0.2rem' }}>
+                            Restore Defaults
+                        </button>
+                    </div>
                 </div>
 
                 <div className="feeds-grid">
