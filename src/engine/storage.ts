@@ -159,13 +159,10 @@ export function loadTopics(): string[] | null {
     }
 }
 
-// Legacy exports kept temporarily to prevent build breaks during refactor, 
-// but functionally they should not be used for new data.
-export function savePersonalization(_key: 'location' | 'company', _queries: string[]): void {
-    // No-op
-}
-export function loadPersonalization(_key: 'location' | 'company'): string[] {
-    return [];
+// Cleanup: Remove legacy tracking keys
+export function pruneLegacyKeys(): void {
+    localStorage.removeItem(LOCATION_KEY);
+    localStorage.removeItem(COMPANY_KEY);
 }
 
 export function saveTheme(theme: string): void {

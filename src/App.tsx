@@ -18,8 +18,6 @@ function App() {
   const [customFeeds, setCustomFeeds] = useState<CustomFeed[]>([]);
   const [selectedArticle, setSelectedArticle] = useState<Article | null>(null);
   const [isOffline, setIsOffline] = useState(!navigator.onLine);
-  const [lastReadId, setLastReadId] = useState<string | null>(null);
-  const [showUndo, setShowUndo] = useState(false);
   const [settings, setSettings] = useState(loadSettings());
   const [lastUpdated, setLastUpdated] = useState<Date | null>(null);
 
@@ -60,13 +58,6 @@ function App() {
     settings,
     setSettings
   });
-
-  useEffect(() => {
-    if (showUndo) {
-      const timer = setTimeout(() => setShowUndo(false), 6000);
-      return () => clearTimeout(timer);
-    }
-  }, [showUndo, lastReadId]);
 
   useEffect(() => {
     const handleOnline = () => setIsOffline(false);
@@ -159,29 +150,15 @@ function App() {
           setFontSize={setFontSize}
           onClose={() => setSelectedArticle(null)}
           onMarkDone={() => {
-            setLastReadId(selectedArticle.id);
-            setShowUndo(true);
-            toggleRead(selectedArticle.id);
+            const currentId = selectedArticle.id;
+            toggleRead(currentId);
             setSelectedArticle(null);
+            showToast('Article marked as done', 'success', {
+              label: 'Undo',
+              onClick: () => toggleRead(currentId)
+            });
           }}
         />
-      )}
-
-      {showUndo && (
-        <div className="undo-toast">
-          <span>Article marked as done</span>
-          <button
-            className="undo-btn"
-            onClick={() => {
-              if (lastReadId) {
-                toggleRead(lastReadId);
-                setShowUndo(false);
-              }
-            }}
-          >
-            Undo
-          </button>
-        </div>
       )}
 
       <footer>
