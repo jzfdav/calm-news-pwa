@@ -25,7 +25,7 @@ const MOCK_SECTIONS: Section[] = [
 
 describe('DigestView', () => {
     test('renders section headers and counts', () => {
-        render(<DigestView sections={MOCK_SECTIONS} loading={false} onSelectArticle={vi.fn()} onGoToSettings={vi.fn()} />);
+        render(<DigestView sections={MOCK_SECTIONS} loading={false} onSelectArticle={vi.fn()} onDismissArticle={vi.fn()} onGoToSettings={vi.fn()} />);
 
         expect(screen.getByText('Tech News')).toBeInTheDocument();
         expect(screen.getByText('Science')).toBeInTheDocument();
@@ -34,7 +34,7 @@ describe('DigestView', () => {
     });
 
     test('shows title peeks in collapsed state', () => {
-        render(<DigestView sections={MOCK_SECTIONS} loading={false} onSelectArticle={vi.fn()} onGoToSettings={vi.fn()} />);
+        render(<DigestView sections={MOCK_SECTIONS} loading={false} onSelectArticle={vi.fn()} onDismissArticle={vi.fn()} onGoToSettings={vi.fn()} />);
 
         const collapseBtn = screen.getByText('Collapse All');
         fireEvent.click(collapseBtn);
@@ -44,7 +44,7 @@ describe('DigestView', () => {
     });
 
     test('toggles all sections with Collapse/Expand All', () => {
-        render(<DigestView sections={MOCK_SECTIONS} loading={false} onSelectArticle={vi.fn()} onGoToSettings={vi.fn()} />);
+        render(<DigestView sections={MOCK_SECTIONS} loading={false} onSelectArticle={vi.fn()} onDismissArticle={vi.fn()} onGoToSettings={vi.fn()} />);
 
         // Starts expanded (default)
         expect(screen.getByText('Apple Silicon Update')).toBeVisible();
@@ -60,7 +60,7 @@ describe('DigestView', () => {
     });
 
     test('toggles individual section expansion', () => {
-        render(<DigestView sections={MOCK_SECTIONS} loading={false} onSelectArticle={vi.fn()} onGoToSettings={vi.fn()} />);
+        render(<DigestView sections={MOCK_SECTIONS} loading={false} onSelectArticle={vi.fn()} onDismissArticle={vi.fn()} onGoToSettings={vi.fn()} />);
 
         const techHeader = screen.getByRole('button', { name: /Tech News/ });
 

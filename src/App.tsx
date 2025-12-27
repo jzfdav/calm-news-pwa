@@ -123,6 +123,13 @@ function App() {
             sections={unreadSections}
             loading={isLoading}
             onSelectArticle={setSelectedArticle}
+            onDismissArticle={(article) => {
+              toggleRead(article.id);
+              showToast('Article marked as done', 'success', {
+                label: 'Undo',
+                onClick: () => toggleRead(article.id)
+              });
+            }}
             onGoToSettings={() => setView('settings')}
           />
         )
