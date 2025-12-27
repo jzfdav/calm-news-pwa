@@ -101,7 +101,8 @@ export function SwipeableArticle({ children, onDismiss, threshold = 0.3 }: Swipe
                 style={{
                     transform: `translateX(${currentX}px)`,
                     transition: isSwiping ? 'none' : 'transform 0.4s cubic-bezier(0.4, 0, 0.2, 1)',
-                    filter: isSwiping ? `grayscale(${Math.min(swipeRatio * 0.5, 0.5)})` : 'none'
+                    filter: isSwiping ? `grayscale(${Math.min(swipeRatio * 0.5, 0.5)})` : 'none',
+                    willChange: isSwiping || isDismissing ? 'transform, filter' : 'auto'
                 }}
             >
                 {children}
