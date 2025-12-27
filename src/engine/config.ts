@@ -19,7 +19,16 @@ export const DEFAULT_FEEDS: CustomFeed[] = [
     { id: 'ars-technica', name: 'Ars Technica', url: 'https://feeds.arstechnica.com/arstechnica/index' },
 ];
 
-export const DEFAULT_TOPICS: string[] = ['Tech & Ideas', 'World News'];
+export const SUGGESTED_TOPICS: string[] = [
+    'Technology',
+    'Artificial Intelligence',
+    'Tech & Ideas',
+    'World News',
+    'Science',
+    'Philosophy',
+    'Design',
+    'Future'
+];
 
 export const PROXY_URL = (url: string) => `https://api.allorigins.win/raw?url=${encodeURIComponent(url)}`;
 

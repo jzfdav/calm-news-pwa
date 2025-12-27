@@ -1,7 +1,7 @@
 import { useState, useEffect, useMemo, useCallback } from 'react'
 import './styles/App.css'
 import type { Article } from './engine/types'
-import { clearStorage, loadCustomFeeds, saveCustomFeeds, type CustomFeed, loadTopics, saveTopics, loadSettings } from './engine/storage'
+import { clearStorage, loadCustomFeeds, type CustomFeed, loadTopics, loadSettings } from './engine/storage'
 import { useNewsFeed } from './engine/hooks'
 import { useReader } from './engine/useReader'
 import { useAppActions } from './engine/useAppActions'
@@ -12,7 +12,7 @@ import { DigestView } from './components/DigestView'
 import { SettingsView } from './components/SettingsView'
 import { ReaderOverlay } from './components/ReaderOverlay'
 
-import { DEFAULT_FEEDS, DEFAULT_TOPICS } from './engine/config'
+import { OnboardingModal } from './components/OnboardingModal'
 
 function App() {
   const [view, setView] = useState<'digest' | 'settings'>('digest');
@@ -66,20 +66,11 @@ function App() {
     window.addEventListener('online', handleOnline);
     window.addEventListener('offline', handleOffline);
 
-    let feeds = loadCustomFeeds();
-    if (feeds === null) {
-      feeds = DEFAULT_FEEDS;
-      saveCustomFeeds(feeds);
-    }
+    const feeds = loadCustomFeeds() || [];
     setCustomFeeds(feeds);
 
-    const savedTopics = loadTopics();
-    if (savedTopics === null) {
-      saveTopics(DEFAULT_TOPICS);
-      setTopics(DEFAULT_TOPICS);
-    } else {
-      setTopics(savedTopics);
-    }
+    const savedTopics = loadTopics() || [];
+    setTopics(savedTopics);
 
     return () => {
       window.removeEventListener('online', handleOnline);
@@ -120,11 +111,19 @@ function App() {
       {queryError && <div className="meta" style={{ color: '#c33', textAlign: 'center', marginBottom: '2rem' }}>Failed to refresh feed.</div>}
 
       {view === 'digest' ? (
-        <DigestView
-          sections={unreadSections}
-          loading={isLoading}
-          onSelectArticle={setSelectedArticle}
-        />
+        <>
+          <DigestView
+            sections={unreadSections}
+            loading={isLoading}
+            onSelectArticle={setSelectedArticle}
+          />
+          {topics.length === 0 && !isLoading && (
+            <OnboardingModal
+              onAddTopic={handleAddTopic}
+              currentTopics={topics}
+            />
+          )}
+        </>
       ) : (
         <SettingsView
           customFeeds={customFeeds}
