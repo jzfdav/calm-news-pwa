@@ -199,6 +199,14 @@ body {
   opacity: 0.5;
 }
 
+.header-meta {
+  font-size: 0.75rem;
+  color: var(--secondary-text);
+  opacity: 0.4;
+  margin-top: 0.25rem;
+  letter-spacing: 0.02rem;
+}
+
 section {
   margin-bottom: 1.5rem;
   text-align: left;
