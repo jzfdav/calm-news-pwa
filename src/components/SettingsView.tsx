@@ -49,6 +49,54 @@ export function SettingsView({
         <main className="settings-view">
             <section className="settings-section">
                 <div className="section-header">
+                    <h2>My Topics</h2>
+                    <p className="meta">Track events, places, or companies</p>
+                </div>
+
+                <div className="feeds-grid">
+                    {topics.map(topic => (
+                        <div key={topic} className="feed-card">
+                            <div className="feed-card-main">
+                                <span className="feed-name">{topic}</span>
+                                <span className="feed-url">Topic</span>
+                            </div>
+                            <div className="feed-action-bar">
+                                <button
+                                    className="button-text-danger"
+                                    onClick={() => onRemoveTopic(topic)}
+                                >
+                                    Remove Topic
+                                </button>
+                            </div>
+                        </div>
+                    ))}
+                </div>
+
+                <div className="add-feed-card">
+                    <div className="form-grid">
+                        <div className="form-group">
+                            <label htmlFor="track-topic">Add Topic</label>
+                            <div style={{ display: 'flex', gap: '0.5rem' }}>
+                                <input
+                                    id="track-topic"
+                                    type="text"
+                                    value={topicInput}
+                                    onChange={e => setTopicInput(e.target.value)}
+                                    placeholder="e.g. Reading UK, IBM, Tennis"
+                                    aria-label="Topic to track"
+                                />
+                                <button className="button-primary" onClick={handleAddTopic} style={{ padding: '0.8rem 1.2rem' }}>
+                                    Add
+                                </button>
+                            </div>
+                            <p className="input-hint">Search for news about anything within your global context.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section className="settings-section">
+                <div className="section-header">
                     <h2>Content & Retention</h2>
                     <p className="meta">Control how much and how long stories stay</p>
                 </div>
@@ -154,53 +202,6 @@ export function SettingsView({
                 </form>
             </section>
 
-            <section className="settings-section">
-                <div className="section-header">
-                    <h2>My Topics</h2>
-                    <p className="meta">Track events, places, or companies</p>
-                </div>
-
-                <div className="feeds-grid">
-                    {topics.map(topic => (
-                        <div key={topic} className="feed-card">
-                            <div className="feed-card-main">
-                                <span className="feed-name">{topic}</span>
-                                <span className="feed-url">Topic</span>
-                            </div>
-                            <div className="feed-action-bar">
-                                <button
-                                    className="button-text-danger"
-                                    onClick={() => onRemoveTopic(topic)}
-                                >
-                                    Remove Topic
-                                </button>
-                            </div>
-                        </div>
-                    ))}
-                </div>
-
-                <div className="add-feed-card">
-                    <div className="form-grid">
-                        <div className="form-group">
-                            <label htmlFor="track-topic">Add Topic</label>
-                            <div style={{ display: 'flex', gap: '0.5rem' }}>
-                                <input
-                                    id="track-topic"
-                                    type="text"
-                                    value={topicInput}
-                                    onChange={e => setTopicInput(e.target.value)}
-                                    placeholder="e.g. Reading UK, IBM, Tennis"
-                                    aria-label="Topic to track"
-                                />
-                                <button className="button-primary" onClick={handleAddTopic} style={{ padding: '0.8rem 1.2rem' }}>
-                                    Add
-                                </button>
-                            </div>
-                            <p className="input-hint">Search for news about anything within your global context.</p>
-                        </div>
-                    </div>
-                </div>
-            </section>
 
             <section className="settings-section danger-section" style={{ marginTop: '6rem' }}>
                 <div className="section-header">
