@@ -50,7 +50,7 @@ export function ReaderOverlay({
     }, [article.content]);
 
     return (
-        <div className={`reader-overlay theme-${theme}`}>
+        <div className="reader-overlay">
             <div className="reader-content">
                 <header className="reader-header">
                     <h1 className="reader-title">{decodeHTMLEntities(article.title)}</h1>
