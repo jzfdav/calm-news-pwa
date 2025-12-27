@@ -33,7 +33,7 @@ function App() {
   // Personalization
   const [topics, setTopics] = useState<string[]>([]);
 
-  const { data: digest, isLoading, error: queryError, refetch } = useNewsFeed(customFeeds, topics, !isOffline);
+  const { data: digest, isLoading, isFetching, error: queryError, refetch } = useNewsFeed(customFeeds, topics, !isOffline);
 
   useEffect(() => {
     if (showUndo) {
@@ -133,7 +133,7 @@ function App() {
         view={view}
         setView={setView}
         isOffline={isOffline}
-        loading={isLoading}
+        loading={isFetching}
         onRefresh={handleRefreshAction}
       />
 
