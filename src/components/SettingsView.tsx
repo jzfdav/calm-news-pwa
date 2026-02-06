@@ -115,11 +115,12 @@ export function SettingsView({
 
                 <div className="relative inline-flex w-full rounded-full bg-muted/30 p-1 shadow-inner">
                     <div
-                        className="absolute top-1 bottom-1 left-1 right-1 transition-transform duration-200 ease-out"
+                        className="absolute top-1 bottom-1 left-1 transition-transform duration-200 ease-out"
                         style={{
-                            transform: theme === 'dark' ? 'translateX(calc(50% - 2px))' : 'translateX(0)',
+                            transform: theme === 'dark' ? 'translateX(calc(100% + 2px))' : 'translateX(0)',
                             width: 'calc(50% - 2px)'
                         }}
+
                     >
                         <div className="h-full w-full rounded-full bg-primary shadow-sm" />
                     </div>
