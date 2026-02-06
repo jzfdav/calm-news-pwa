@@ -1,4 +1,5 @@
-import { useState, useEffect, memo } from 'react'
+import { useState, memo } from 'react'
+
 import type { Section, Article } from '../engine/types'
 import { getReadingTime, decodeHTMLEntities, isReadable } from '../engine/utils'
 import { WelcomeCard } from './WelcomeCard'
@@ -137,33 +138,26 @@ function DigestSection({
 const MemoizedDigestSection = memo(DigestSection);
 
 export function DigestView({ sections, loading, onSelectArticle, onDismissArticle, onGoToSettings }: DigestViewProps) {
-    const [openSections, setOpenSections] = useState<Record<string, boolean>>({});
-
-    // Sync open state when new sections are added (e.g. newly added feed)
-    useEffect(() => {
-        setOpenSections(prev => {
-            const next = { ...prev };
-            let changed = false;
-            sections.forEach(s => {
-                if (!(s.id in next)) {
-                    next[s.id] = true; // Default new sections to open
-                    changed = true;
-                }
-            });
-            return changed ? next : prev;
-        });
-    }, [sections]);
+    const [closedSections, setClosedSections] = useState<Set<string>>(new Set());
 
     const toggleSection = (id: string) => {
-        setOpenSections(prev => ({ ...prev, [id]: !prev[id] }));
+        setClosedSections(prev => {
+            const next = new Set(prev);
+            if (next.has(id)) next.delete(id);
+            else next.add(id);
+            return next;
+        });
     };
 
     const toggleAll = () => {
-        const allOpen = Object.values(openSections).every(v => v);
-        const newState: Record<string, boolean> = {};
-        sections.forEach(s => newState[s.id] = !allOpen);
-        setOpenSections(newState);
+        const someClosed = closedSections.size > 0;
+        if (someClosed) {
+            setClosedSections(new Set()); // Open all
+        } else {
+            setClosedSections(new Set(sections.map(s => s.id))); // Close all
+        }
     };
+
 
     if (loading && sections.length === 0) {
         return <div className="loading">Gathering stories for you...</div>;
@@ -185,8 +179,9 @@ export function DigestView({ sections, loading, onSelectArticle, onDismissArticl
     );
 }
 
-    // Check if all are currently open to decide button text
-    const areAllOpen = sections.length > 0 && sections.every(s => openSections[s.id]);
+    // Check if some are closed to decide button text
+    const areSomeClosed = closedSections.size > 0;
+
 
     return (
         <main className="digest-view">
@@ -199,7 +194,8 @@ export function DigestView({ sections, loading, onSelectArticle, onDismissArticl
                     onClick={toggleAll}
                     className="text-xs uppercase tracking-widest text-muted-foreground hover:text-foreground"
                 >
-                    {areAllOpen ? 'Collapse All' : 'Expand All'}
+                    {areSomeClosed ? 'Expand All' : 'Collapse All'}
+
                 </Button>
             </div>
 
@@ -209,7 +205,8 @@ export function DigestView({ sections, loading, onSelectArticle, onDismissArticl
                     section={section}
                     onSelectArticle={onSelectArticle}
                     onDismissArticle={onDismissArticle}
-                    isOpen={!!openSections[section.id]}
+                    isOpen={!closedSections.has(section.id)}
+
                     onToggle={() => toggleSection(section.id)}
                 />
             ))}

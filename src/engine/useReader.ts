@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useCallback } from 'react';
 import {
     loadReadArticles,
     saveReadArticles,
@@ -13,27 +13,10 @@ export type FontSize = 's' | 'm' | 'l';
 
 export function useReader() {
     // Default to 'sepia' as requested by user
-    const [theme, setThemeState] = useState<Theme>('sepia');
-    const [fontSize, setFontSizeState] = useState<FontSize>('m');
-    const [readArticles, setReadArticles] = useState<Set<string>>(new Set());
+    const [theme, setThemeState] = useState<Theme>(() => (loadTheme() as Theme) || 'sepia');
+    const [fontSize, setFontSizeState] = useState<FontSize>(() => (loadFontSize() as FontSize) || 'm');
+    const [readArticles, setReadArticles] = useState<Set<string>>(() => new Set(loadReadArticles()));
 
-    // Load initial state
-    useEffect(() => {
-        const savedArticles = loadReadArticles();
-        if (savedArticles.length > 0) {
-            setReadArticles(new Set(savedArticles));
-        }
-
-        const savedTheme = loadTheme() as Theme;
-        if (savedTheme) {
-            setThemeState(savedTheme);
-        }
-
-        const savedFontSize = loadFontSize() as FontSize;
-        if (savedFontSize) {
-            setFontSizeState(savedFontSize);
-        }
-    }, []);
 
     const setTheme = useCallback((newTheme: Theme) => {
         setThemeState(newTheme);

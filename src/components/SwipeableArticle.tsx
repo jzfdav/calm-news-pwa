@@ -13,8 +13,13 @@ export function SwipeableArticle({ children, onDismiss, threshold = 0.3 }: Swipe
     const [isDismissing, setIsDismissing] = useState(false);
     const containerRef = useRef<HTMLDivElement>(null);
 
+    const [containerWidth, setContainerWidth] = useState(0);
+
     const handleTouchStart = (e: React.TouchEvent) => {
         if (isDismissing) return;
+        if (containerRef.current) {
+            setContainerWidth(containerRef.current.offsetWidth);
+        }
         setStartX(e.touches[0].clientX);
         setIsSwiping(true);
     };
@@ -51,9 +56,10 @@ export function SwipeableArticle({ children, onDismiss, threshold = 0.3 }: Swipe
         setIsSwiping(false);
     };
 
-    const swipeRatio = containerRef.current
-        ? Math.min(Math.abs(currentX) / (containerRef.current.offsetWidth * threshold), 1.2)
+    const swipeRatio = containerWidth > 0
+        ? Math.min(Math.abs(currentX) / (containerWidth * threshold), 1.2)
         : 0;
+
 
     const swipeDirection = currentX > 0 ? 'right' : 'left';
     const isPastThreshold = swipeRatio >= 1;

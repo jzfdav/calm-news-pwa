@@ -1,15 +1,10 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 
 export function WelcomeCard() {
-    const [isVisible, setIsVisible] = useState(false);
+    const [isVisible, setIsVisible] = useState(() => !localStorage.getItem('calm_news_welcome_dismissed'));
 
-    useEffect(() => {
-        const dismissed = localStorage.getItem('calm_news_welcome_dismissed');
-        if (!dismissed) {
-            setIsVisible(true);
-        }
-    }, []);
+
 
     const handleDismiss = () => {
         localStorage.setItem('calm_news_welcome_dismissed', 'true');

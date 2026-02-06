@@ -26,7 +26,8 @@ const lsGet = (key: string) => {
     }
 };
 
-const lsSet = (key: string, value: any) => {
+const lsSet = (key: string, value: unknown) => {
+
     try {
         localStorage.setItem(key, JSON.stringify(value));
     } catch (e) {
@@ -121,7 +122,8 @@ export function loadTopics(): string[] | null {
         const legacyLoc = localStorage.getItem(LOCATION_KEY);
         const legacyComp = localStorage.getItem(COMPANY_KEY);
 
-        let initialTopics: string[] = [];
+        const initialTopics: string[] = [];
+
 
         if (legacyLoc) {
             try {

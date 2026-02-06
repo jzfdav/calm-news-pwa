@@ -1,0 +1,140 @@
+
+> calm-news-pwa@0.0.0 lint /Users/sreenath/ibm/2026/vibe-coding/antigravity/calm-news-pwa
+> eslint .
+
+
+/Users/sreenath/ibm/2026/vibe-coding/antigravity/calm-news-pwa/src/App.tsx
+  42:7  error  Error: Calling setState synchronously within an effect can trigger cascading renders
+
+Effects are intended to synchronize state between React and external systems such as manually updating the DOM, state management libraries, or other platform APIs. In general, the body of an effect should do one or both of the following:
+* Update external systems with the latest state from React.
+* Subscribe for updates from some external system, calling setState in a callback function when external state changes.
+
+Calling setState synchronously within an effect body causes cascading renders that can hurt performance, and is not recommended. (https://react.dev/learn/you-might-not-need-an-effect).
+
+/Users/sreenath/ibm/2026/vibe-coding/antigravity/calm-news-pwa/src/App.tsx:42:7
+  40 |   useEffect(() => {
+  41 |     if (digest && !isFetching) {
+> 42 |       setLastUpdated(new Date());
+     |       ^^^^^^^^^^^^^^ Avoid calling setState() directly within an effect
+  43 |     }
+  44 |   }, [digest, isFetching]);
+  45 |                                           react-hooks/set-state-in-effect
+  69:5  error  Error: Calling setState synchronously within an effect can trigger cascading renders
+
+Effects are intended to synchronize state between React and external systems such as manually updating the DOM, state management libraries, or other platform APIs. In general, the body of an effect should do one or both of the following:
+* Update external systems with the latest state from React.
+* Subscribe for updates from some external system, calling setState in a callback function when external state changes.
+
+Calling setState synchronously within an effect body causes cascading renders that can hurt performance, and is not recommended. (https://react.dev/learn/you-might-not-need-an-effect).
+
+/Users/sreenath/ibm/2026/vibe-coding/antigravity/calm-news-pwa/src/App.tsx:69:5
+  67 |     // Data Hydration
+  68 |     const feeds = loadCustomFeeds() || [];
+> 69 |     setCustomFeeds(feeds);
+     |     ^^^^^^^^^^^^^^ Avoid calling setState() directly within an effect
+  70 |
+  71 |     const savedTopics = loadTopics() || [];
+  72 |     setTopics(savedTopics);  react-hooks/set-state-in-effect
+
+/Users/sreenath/ibm/2026/vibe-coding/antigravity/calm-news-pwa/src/components/DigestView.tsx
+  144:9  error  Error: Calling setState synchronously within an effect can trigger cascading renders
+
+Effects are intended to synchronize state between React and external systems such as manually updating the DOM, state management libraries, or other platform APIs. In general, the body of an effect should do one or both of the following:
+* Update external systems with the latest state from React.
+* Subscribe for updates from some external system, calling setState in a callback function when external state changes.
+
+Calling setState synchronously within an effect body causes cascading renders that can hurt performance, and is not recommended. (https://react.dev/learn/you-might-not-need-an-effect).
+
+/Users/sreenath/ibm/2026/vibe-coding/antigravity/calm-news-pwa/src/components/DigestView.tsx:144:9
+  142 |     // Sync open state when new sections are added (e.g. newly added feed)
+  143 |     useEffect(() => {
+> 144 |         setOpenSections(prev => {
+      |         ^^^^^^^^^^^^^^^ Avoid calling setState() directly within an effect
+  145 |             const next = { ...prev };
+  146 |             let changed = false;
+  147 |             sections.forEach(s => {  react-hooks/set-state-in-effect
+
+/Users/sreenath/ibm/2026/vibe-coding/antigravity/calm-news-pwa/src/components/SwipeableArticle.tsx
+  54:24  error  Error: Cannot access refs during render
+
+React refs are values that are not needed for rendering. Refs should only be accessed outside of render, such as in event handlers or effects. Accessing a ref value (the `current` property) during render can cause your component not to update as expected (https://react.dev/reference/react/useRef).
+
+/Users/sreenath/ibm/2026/vibe-coding/antigravity/calm-news-pwa/src/components/SwipeableArticle.tsx:54:24
+  52 |     };
+  53 |
+> 54 |     const swipeRatio = containerRef.current
+     |                        ^^^^^^^^^^^^^^^^^^^^ Cannot access ref value during render
+  55 |         ? Math.min(Math.abs(currentX) / (containerRef.current.offsetWidth * threshold), 1.2)
+  56 |         : 0;
+  57 |                                                                                     react-hooks/refs
+  55:42  error  Error: Cannot access refs during render
+
+React refs are values that are not needed for rendering. Refs should only be accessed outside of render, such as in event handlers or effects. Accessing a ref value (the `current` property) during render can cause your component not to update as expected (https://react.dev/reference/react/useRef).
+
+/Users/sreenath/ibm/2026/vibe-coding/antigravity/calm-news-pwa/src/components/SwipeableArticle.tsx:55:42
+  53 |
+  54 |     const swipeRatio = containerRef.current
+> 55 |         ? Math.min(Math.abs(currentX) / (containerRef.current.offsetWidth * threshold), 1.2)
+     |                                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Cannot access ref value during render
+  56 |         : 0;
+  57 |
+  58 |     const swipeDirection = currentX > 0 ? 'right' : 'left';  react-hooks/refs
+
+/Users/sreenath/ibm/2026/vibe-coding/antigravity/calm-news-pwa/src/components/Toast.tsx
+  36:17  error  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+
+/Users/sreenath/ibm/2026/vibe-coding/antigravity/calm-news-pwa/src/components/WelcomeCard.tsx
+  10:13  error  Error: Calling setState synchronously within an effect can trigger cascading renders
+
+Effects are intended to synchronize state between React and external systems such as manually updating the DOM, state management libraries, or other platform APIs. In general, the body of an effect should do one or both of the following:
+* Update external systems with the latest state from React.
+* Subscribe for updates from some external system, calling setState in a callback function when external state changes.
+
+Calling setState synchronously within an effect body causes cascading renders that can hurt performance, and is not recommended. (https://react.dev/learn/you-might-not-need-an-effect).
+
+/Users/sreenath/ibm/2026/vibe-coding/antigravity/calm-news-pwa/src/components/WelcomeCard.tsx:10:13
+   8 |         const dismissed = localStorage.getItem('calm_news_welcome_dismissed');
+   9 |         if (!dismissed) {
+> 10 |             setIsVisible(true);
+     |             ^^^^^^^^^^^^ Avoid calling setState() directly within an effect
+  11 |         }
+  12 |     }, []);
+  13 |  react-hooks/set-state-in-effect
+
+/Users/sreenath/ibm/2026/vibe-coding/antigravity/calm-news-pwa/src/components/ui/badge.tsx
+  48:17  error  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+
+/Users/sreenath/ibm/2026/vibe-coding/antigravity/calm-news-pwa/src/components/ui/button.tsx
+  64:18  error  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+
+/Users/sreenath/ibm/2026/vibe-coding/antigravity/calm-news-pwa/src/engine/storage.ts
+   29:36  error  Unexpected any. Specify a different type                  @typescript-eslint/no-explicit-any
+  124:13  error  'initialTopics' is never reassigned. Use 'const' instead  prefer-const
+
+/Users/sreenath/ibm/2026/vibe-coding/antigravity/calm-news-pwa/src/engine/useAppActions.ts
+  10:15  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  11:29  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+/Users/sreenath/ibm/2026/vibe-coding/antigravity/calm-news-pwa/src/engine/useReader.ts
+  24:13  error  Error: Calling setState synchronously within an effect can trigger cascading renders
+
+Effects are intended to synchronize state between React and external systems such as manually updating the DOM, state management libraries, or other platform APIs. In general, the body of an effect should do one or both of the following:
+* Update external systems with the latest state from React.
+* Subscribe for updates from some external system, calling setState in a callback function when external state changes.
+
+Calling setState synchronously within an effect body causes cascading renders that can hurt performance, and is not recommended. (https://react.dev/learn/you-might-not-need-an-effect).
+
+/Users/sreenath/ibm/2026/vibe-coding/antigravity/calm-news-pwa/src/engine/useReader.ts:24:13
+  22 |         const savedArticles = loadReadArticles();
+  23 |         if (savedArticles.length > 0) {
+> 24 |             setReadArticles(new Set(savedArticles));
+     |             ^^^^^^^^^^^^^^^ Avoid calling setState() directly within an effect
+  25 |         }
+  26 |
+  27 |         const savedTheme = loadTheme() as Theme;  react-hooks/set-state-in-effect
+
+✖ 14 problems (14 errors, 0 warnings)
+  1 error and 0 warnings potentially fixable with the `--fix` option.
+
+ ELIFECYCLE  Command failed with exit code 1.

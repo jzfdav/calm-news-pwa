@@ -1,5 +1,7 @@
 import { useCallback } from 'react';
 import { saveCustomFeeds, saveTopics, saveSettings, type CustomFeed } from './storage';
+import type { AppSettings } from './types';
+
 import { DEFAULT_FEEDS } from './config';
 
 interface AppActionsProps {
@@ -7,8 +9,9 @@ interface AppActionsProps {
     setCustomFeeds: (feeds: CustomFeed[]) => void;
     topics: string[];
     setTopics: (topics: string[]) => void;
-    settings: any;
-    setSettings: (settings: any) => void;
+    settings: AppSettings;
+    setSettings: (settings: AppSettings) => void;
+
 }
 
 export function useAppActions({

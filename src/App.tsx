@@ -7,8 +7,10 @@ import { useReader } from './engine/useReader'
 import { useConnectivity } from './engine/useConnectivity'
 import { useAppActions } from './engine/useAppActions'
 import { Header } from './components/Header'
-import { ToastContainer, useToast } from './components/Toast'
+import { ToastContainer } from './components/Toast'
+import { useToast } from './components/useToast'
 import { DigestView } from './components/DigestView'
+
 import { SettingsView } from './components/SettingsView'
 import { ReaderOverlay } from './components/ReaderOverlay'
 
@@ -16,11 +18,13 @@ import { OnboardingModal } from './components/OnboardingModal'
 
 function App() {
   const [view, setView] = useState<'digest' | 'settings'>('digest');
-  const [customFeeds, setCustomFeeds] = useState<CustomFeed[]>([]);
+  const [customFeeds, setCustomFeeds] = useState<CustomFeed[]>(() => loadCustomFeeds() || []);
   const [selectedArticle, setSelectedArticle] = useState<Article | null>(null);
   const { isOffline } = useConnectivity();
-  const [settings, setSettings] = useState(loadSettings());
-  const [lastUpdated, setLastUpdated] = useState<Date | null>(null);
+  const [settings, setSettings] = useState(() => loadSettings());
+
+
+
 
   const { messages, showToast, removeToast } = useToast();
 
@@ -33,17 +37,16 @@ function App() {
   }, [theme]);
 
   // Personalization
-  const [topics, setTopics] = useState<string[]>([]);
+  const [topics, setTopics] = useState<string[]>(() => loadTopics() || []);
 
-  const { data: digest, isLoading, isFetching, error: queryError, refetch } = useNewsFeed(customFeeds, topics, !isOffline);
 
-  useEffect(() => {
-    if (digest && !isFetching) {
-      setLastUpdated(new Date());
-    }
-  }, [digest, isFetching]);
+  const { data: digest, isLoading, isFetching, error: queryError, refetch, dataUpdatedAt } = useNewsFeed(customFeeds, topics, !isOffline);
 
-  // App Actions (Refactored Logic)
+  const lastUpdated = useMemo(() => dataUpdatedAt ? new Date(dataUpdatedAt) : null, [dataUpdatedAt]);
+
+
+
+
   const {
     handleAddFeed,
     handleRemoveFeed,
@@ -63,14 +66,8 @@ function App() {
   useEffect(() => {
     // Maintenance
     pruneLegacyKeys();
-
-    // Data Hydration
-    const feeds = loadCustomFeeds() || [];
-    setCustomFeeds(feeds);
-
-    const savedTopics = loadTopics() || [];
-    setTopics(savedTopics);
   }, []);
+
 
   const handleRefreshAction = useCallback(() => {
     if (isOffline) return;
