@@ -3,6 +3,10 @@ import type { Section, Article } from '../engine/types'
 import { getReadingTime, decodeHTMLEntities, isReadable } from '../engine/utils'
 import { WelcomeCard } from './WelcomeCard'
 import { SwipeableArticle } from './SwipeableArticle'
+import { Badge } from '@/components/ui/badge'
+import { Button } from '@/components/ui/button'
+import { Card, CardContent } from '@/components/ui/card'
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion'
 
 const getSourceName = (article: Article) => {
     try {
@@ -31,42 +35,44 @@ const ArticleCard = memo(({
     onDismissArticle: (article: Article) => void;
 }) => (
     <SwipeableArticle onDismiss={() => onDismissArticle(article)}>
-        <article className="article-card">
-            <h3 className="article-card-title">
-                <div
-                    role="button"
-                    tabIndex={0}
-                    className="article-title-btn"
-                    onClick={() => onSelectArticle(article)}
-                    onKeyDown={(e) => {
-                        if (e.key === 'Enter' || e.key === ' ') {
-                            e.preventDefault();
-                            onSelectArticle(article);
-                        }
-                    }}
-                >
-                    {decodeHTMLEntities(article.title)}
+        <Card className="mb-5 border-border/60 bg-transparent shadow-none">
+            <CardContent className="px-0">
+                <h3 className="mb-2">
+                    <Button
+                        variant="ghost"
+                        size="sm"
+                        className="h-auto w-full justify-start px-0 py-0 text-left text-base font-bold leading-snug text-foreground hover:opacity-70 sm:text-lg font-[var(--font-serif)]"
+                        onClick={() => onSelectArticle(article)}
+                        onKeyDown={(e) => {
+                            if (e.key === 'Enter' || e.key === ' ') {
+                                e.preventDefault();
+                                onSelectArticle(article);
+                            }
+                        }}
+                    >
+                        {decodeHTMLEntities(article.title)}
+                    </Button>
+                </h3>
+                <div className="flex items-center justify-between gap-4 text-xs text-muted-foreground sm:text-sm">
+                    <div className="flex items-center gap-3">
+                        <span>{getReadingTime(article.content)}</span>
+                        {isReadable(article.content) ? (
+                            <Badge variant="secondary" className="text-[0.65rem] font-bold uppercase tracking-wide">FULL ARTICLE</Badge>
+                        ) : (
+                            <Badge variant="outline" className="text-[0.65rem] font-bold uppercase tracking-wide">SNIPPET</Badge>
+                        )}
+                    </div>
+                    <a
+                        href={article.link}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="max-w-[15rem] truncate text-muted-foreground/80 underline decoration-1 underline-offset-2"
+                    >
+                        {getSourceName(article)}
+                    </a>
                 </div>
-            </h3>
-            <div className="article-card-meta">
-                <div className="meta-info-left">
-                    <span className="meta-time">{getReadingTime(article.content)}</span>
-                    {isReadable(article.content) ? (
-                        <span className="read-badge badge-full">FULL ARTICLE</span>
-                    ) : (
-                        <span className="read-badge badge-snippet">SNIPPET</span>
-                    )}
-                </div>
-                <a
-                    href={article.link}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="meta-source"
-                >
-                    {getSourceName(article)}
-                </a>
-            </div>
-        </article>
+            </CardContent>
+        </Card>
     </SwipeableArticle>
 ));
 
@@ -85,49 +91,35 @@ function DigestSection({
 }) {
     return (
         <section className="feed-section">
-            <button
-                className={`section-header-btn ${!isOpen ? 'collapsed' : ''}`}
-                onClick={onToggle}
-                aria-expanded={isOpen}
-            >
-                <div className="section-title-wrapper">
-                    <div className="section-header-content">
-                        <h2 className="section-title">{section.name}</h2>
-                        <span className="section-count">{section.articles.length}</span>
-                    </div>
-                    {!isOpen && section.articles.length > 0 && (
-                        <div className="section-title-peeks">
-                            {section.articles.slice(0, 3).map(a => decodeHTMLEntities(a.title)).join(' • ')}
+            <Accordion type="single" collapsible value={isOpen ? section.id : ''} onValueChange={() => onToggle()}>
+                <AccordionItem value={section.id} className="border-0">
+                    <AccordionTrigger
+                        className="w-full rounded-none border-b border-border/60 px-0 py-2 text-left hover:no-underline data-[state=closed]:rounded-xl data-[state=closed]:border-transparent data-[state=closed]:bg-muted/20 data-[state=closed]:px-4 data-[state=closed]:py-3"
+                    >
+                        <div className="flex flex-1 flex-col items-start gap-1">
+                            <div className="flex items-baseline gap-2">
+                                <h2 className="text-xs font-bold uppercase tracking-[0.12rem] text-muted-foreground/80 font-[var(--font-serif)]">{section.name}</h2>
+                                <span className="text-xs text-muted-foreground/60">{section.articles.length}</span>
+                            </div>
+                            {!isOpen && section.articles.length > 0 && (
+                                <div className="max-w-[90%] truncate text-xs text-muted-foreground/60">
+                                    {section.articles.slice(0, 3).map(a => decodeHTMLEntities(a.title)).join(' • ')}
+                                </div>
+                            )}
                         </div>
-                    )}
-                </div>
-                <svg
-                    width="20"
-                    height="20"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="2.5"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    className={`chevron ${isOpen ? 'open' : ''}`}
-                >
-                    <polyline points="6 9 12 15 18 9" />
-                </svg>
-            </button>
-
-            {isOpen && (
-                <div className="section-content">
-                    {section.articles.map((article) => (
-                        <ArticleCard
-                            key={article.id}
-                            article={article}
-                            onSelectArticle={onSelectArticle}
-                            onDismissArticle={onDismissArticle}
-                        />
-                    ))}
-                </div>
-            )}
+                    </AccordionTrigger>
+                    <AccordionContent className="pt-4">
+                        {section.articles.map((article) => (
+                            <ArticleCard
+                                key={article.id}
+                                article={article}
+                                onSelectArticle={onSelectArticle}
+                                onDismissArticle={onDismissArticle}
+                            />
+                        ))}
+                    </AccordionContent>
+                </AccordionItem>
+            </Accordion>
         </section>
     );
 }
@@ -173,15 +165,15 @@ export function DigestView({ sections, loading, onSelectArticle, onDismissArticl
                 <div className="empty-state-content">
                     <h2>You are all caught up.</h2>
                     <p>Stay calm. Your next update is just a refresh away.</p>
-                    <div className="empty-state-actions">
-                        <button onClick={onGoToSettings} className="outline-btn">
-                            Manage Topics & Sources
-                        </button>
-                    </div>
+                <div className="empty-state-actions">
+                    <Button variant="outline" onClick={onGoToSettings}>
+                        Manage Topics & Sources
+                    </Button>
                 </div>
             </div>
-        );
-    }
+        </div>
+    );
+}
 
     // Check if all are currently open to decide button text
     const areAllOpen = sections.length > 0 && sections.every(s => openSections[s.id]);
@@ -189,11 +181,16 @@ export function DigestView({ sections, loading, onSelectArticle, onDismissArticl
     return (
         <main className="digest-view">
             <WelcomeCard />
-            <div className="feed-controls">
-                <span className="feed-branding">TODAY'S NEWS</span>
-                <button onClick={toggleAll} className="text-btn">
+            <div className="flex items-center justify-between pb-4">
+                <span className="pl-2 text-xs font-bold uppercase tracking-[0.1rem] text-muted-foreground/70">TODAY'S NEWS</span>
+                <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={toggleAll}
+                    className="text-xs uppercase tracking-widest text-muted-foreground hover:text-foreground"
+                >
                     {areAllOpen ? 'Collapse All' : 'Expand All'}
-                </button>
+                </Button>
             </div>
 
             {sections.map((section) => (

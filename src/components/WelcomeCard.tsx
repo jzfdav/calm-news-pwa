@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { Button } from '@/components/ui/button';
 
 export function WelcomeCard() {
     const [isVisible, setIsVisible] = useState(false);
@@ -37,9 +38,14 @@ export function WelcomeCard() {
                 </div>
 
                 <div className="welcome-footer">
-                    <button className="dismiss-text-btn" onClick={handleDismiss}>
+                    <Button
+                        variant="ghost"
+                        size="sm"
+                        className="uppercase tracking-widest text-xs text-muted-foreground hover:text-foreground"
+                        onClick={handleDismiss}
+                    >
                         Got it
-                    </button>
+                    </Button>
                 </div>
             </div>
         </div>

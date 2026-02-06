@@ -1,6 +1,10 @@
 import { useState, useEffect, useRef } from 'react';
 import { useDiscovery } from '../engine/useDiscovery';
 import { decodeHTMLEntities } from '../engine/utils';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
+import { Input } from '@/components/ui/input';
 
 interface DiscoverModalProps {
     onClose: () => void;
@@ -34,32 +38,26 @@ export function DiscoverModal({ onClose, onAddFeed }: DiscoverModalProps) {
     };
 
     return (
-        <div className="modal-overlay" onClick={onClose}>
-            <div className="modal-container discover-modal" onClick={e => e.stopPropagation()}>
-                <div className="modal-header">
-                    <h2>Discover Sources</h2>
-                    <button className="icon-btn" onClick={onClose} aria-label="Close">
-                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                            <line x1="18" y1="6" x2="6" y2="18"></line>
-                            <line x1="6" y1="6" x2="18" y2="18"></line>
-                        </svg>
-                    </button>
-                </div>
+        <Dialog open onOpenChange={(open) => { if (!open) onClose(); }}>
+            <DialogContent className="sm:max-w-2xl">
+                <DialogHeader>
+                    <DialogTitle>Discover Sources</DialogTitle>
+                </DialogHeader>
 
-                <div className="modal-body">
-                    <div className="search-box">
-                        <input
+                <div className="space-y-6">
+                    <div className="flex items-center gap-2">
+                        <Input
                             ref={inputRef}
                             type="text"
                             value={query}
                             onChange={e => setQuery(e.target.value)}
                             placeholder="Search by publication name (e.g. Wired)"
-                            className="search-input"
+                            aria-label="Search by publication name"
                         />
                         {isLoading && <div className="spinner-small" />}
                     </div>
 
-                    <div className="discovery-results">
+                    <div className="space-y-4">
                         {isLoading && <p className="meta center">Looking for feeds...</p>}
 
                         {isError && (
@@ -69,18 +67,15 @@ export function DiscoverModal({ onClose, onAddFeed }: DiscoverModalProps) {
                         )}
 
                         {result && !isLoading && (
-                            <div className="discovery-card">
-                                <div className="discovery-header">
+                            <Card className="border-border/60">
+                                <CardHeader className="flex-row items-start justify-between gap-4">
                                     <div>
-                                        <h3>{result.name}</h3>
+                                        <CardTitle>{result.name}</CardTitle>
                                         <p className="meta truncate">{result.url}</p>
                                     </div>
-                                    <button className="button-primary" onClick={handleAdd}>
-                                        Add to Library
-                                    </button>
-                                </div>
-
-                                <div className="discovery-preview">
+                                    <Button onClick={handleAdd}>Add to Library</Button>
+                                </CardHeader>
+                                <CardContent className="space-y-3">
                                     <p className="preview-label">LATEST HEADLINES</p>
                                     <ul className="preview-list">
                                         {result.preview.map(article => (
@@ -89,8 +84,8 @@ export function DiscoverModal({ onClose, onAddFeed }: DiscoverModalProps) {
                                             </li>
                                         ))}
                                     </ul>
-                                </div>
-                            </div>
+                                </CardContent>
+                            </Card>
                         )}
 
                         {!query && !isLoading && (
@@ -100,7 +95,7 @@ export function DiscoverModal({ onClose, onAddFeed }: DiscoverModalProps) {
                         )}
                     </div>
                 </div>
-            </div>
-        </div>
+            </DialogContent>
+        </Dialog>
     );
 }

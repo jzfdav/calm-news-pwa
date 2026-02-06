@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from 'react'
 import type { Article } from '../engine/types'
 import { getReadingTime, decodeHTMLEntities } from '../engine/utils'
+import { Button } from '@/components/ui/button'
 
 interface ReaderOverlayProps {
     article: Article;
@@ -70,28 +71,30 @@ export function ReaderOverlay({
                 ) : (
                     <div className="empty-content-fallback">
                         <p>We couldn't load the full content for this article.</p>
-                        <a href={article.link} target="_blank" rel="noopener noreferrer" className="button-primary">
-                            Read at Source
-                        </a>
+                        <Button asChild className="rounded-full">
+                            <a href={article.link} target="_blank" rel="noopener noreferrer">
+                                Read at Source
+                            </a>
+                        </Button>
                     </div>
                 )}
 
                 <div style={{ marginTop: '4rem', textAlign: 'center', paddingBottom: '2rem' }}>
-                    <button className="button-primary" onClick={onMarkDone}>
+                    <Button className="rounded-full" size="lg" onClick={onMarkDone}>
                         Mark as Done & Close
-                    </button>
+                    </Button>
                 </div>
             </div>
 
             {/* Image Zoom Modal */}
             {zoomImage && (
                 <div className="image-zoom-overlay" onClick={() => setZoomImage(null)}>
-                    <button className="zoom-close-btn" onClick={() => setZoomImage(null)}>
+                    <Button variant="ghost" size="icon" className="zoom-close-btn" onClick={() => setZoomImage(null)}>
                         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                             <line x1="18" y1="6" x2="6" y2="18"></line>
                             <line x1="6" y1="6" x2="18" y2="18"></line>
                         </svg>
-                    </button>
+                    </Button>
                     <div className="image-zoom-scroll-area">
                         <img
                             src={zoomImage}
@@ -105,29 +108,37 @@ export function ReaderOverlay({
 
             {showFontMenu && (
                 <div className="font-settings-modal">
-                    <button
+                    <Button
+                        variant="ghost"
+                        size="sm"
                         className={`font-option ${fontSize === 's' ? 'active' : ''}`}
                         onClick={() => setFontSize('s')}
                     >
                         A-
-                    </button>
-                    <button
+                    </Button>
+                    <Button
+                        variant="ghost"
+                        size="sm"
                         className={`font-option ${fontSize === 'm' ? 'active' : ''}`}
                         onClick={() => setFontSize('m')}
                     >
                         A
-                    </button>
-                    <button
+                    </Button>
+                    <Button
+                        variant="ghost"
+                        size="sm"
                         className={`font-option ${fontSize === 'l' ? 'active' : ''}`}
                         onClick={() => setFontSize('l')}
                     >
                         A+
-                    </button>
+                    </Button>
                 </div>
             )}
 
             <div className="reader-toolbar">
-                <button
+                <Button
+                    variant="ghost"
+                    size="icon"
                     className="toolbar-btn theme-btn"
                     onClick={cycleTheme}
                     aria-label="Switch Theme"
@@ -135,17 +146,21 @@ export function ReaderOverlay({
                     {theme === 'light' && <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="12" cy="12" r="4" /><path d="M12 2v2" /><path d="M12 20v2" /><path d="m4.93 4.93 1.41 1.41" /><path d="m17.66 17.66 1.41 1.41" /><path d="M2 12h2" /><path d="M20 12h2" /><path d="m6.34 17.66-1.41 1.41" /><path d="m19.07 4.93-1.41 1.41" /></svg>}
                     {theme === 'sepia' && <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z" /></svg>}
                     {theme === 'dark' && <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="12" cy="12" r="10" /><path d="M12 2a7 7 0 1 0 10 10" /></svg>}
-                </button>
+                </Button>
 
-                <button
+                <Button
+                    variant="ghost"
+                    size="icon"
                     className={`toolbar-btn font-btn ${showFontMenu ? 'active' : ''}`}
                     onClick={() => setShowFontMenu(!showFontMenu)}
                     aria-label="Font Settings"
                 >
                     <span style={{ fontFamily: 'var(--font-serif)', fontSize: '1.2rem', fontWeight: 700 }}>Aa</span>
-                </button>
+                </Button>
 
-                <button
+                <Button
+                    variant="ghost"
+                    size="icon"
                     className="toolbar-btn close-btn"
                     onClick={onClose}
                     aria-label="Close Article"
@@ -153,7 +168,7 @@ export function ReaderOverlay({
                     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                         <circle cx="12" cy="12" r="10" /><path d="m15 9-6 6" /><path d="m9 9 6 6" />
                     </svg>
-                </button>
+                </Button>
             </div>
         </div>
     );

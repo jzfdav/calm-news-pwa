@@ -1,4 +1,5 @@
 import { SUGGESTED_TOPICS } from '../engine/config';
+import { Button } from '@/components/ui/button';
 
 interface OnboardingModalProps {
     onAddTopic: (topic: string) => void;
@@ -22,13 +23,15 @@ export function OnboardingModal({ onAddTopic, currentTopics }: OnboardingModalPr
                     <p className="onboarding-prompt">What's on your mind today?</p>
                     <div className="topic-suggestions">
                         {availableSuggestions.map(topic => (
-                            <button
+                            <Button
+                                variant="outline"
+                                size="sm"
                                 key={topic}
-                                className="suggestion-pill"
+                                className="rounded-full px-5 py-2 text-sm font-normal transition hover:-translate-y-0.5 hover:border-primary hover:text-primary"
                                 onClick={() => onAddTopic(topic)}
                             >
                                 {topic}
-                            </button>
+                            </Button>
                         ))}
                     </div>
                 </div>

@@ -1,4 +1,5 @@
 import { useState, useCallback } from 'react';
+import { Button } from '@/components/ui/button';
 
 export interface ToastMessage {
     id: string;
@@ -17,12 +18,14 @@ export function ToastContainer({ messages, onRemove }: { messages: ToastMessage[
                 <div key={msg.id} className={`toast toast-${msg.type}`}>
                     <span className="toast-text" onClick={() => onRemove(msg.id)}>{msg.text}</span>
                     {msg.action && (
-                        <button
-                            className="toast-action-btn"
+                        <Button
+                            variant="secondary"
+                            size="sm"
+                            className="uppercase tracking-widest text-xs font-bold"
                             onClick={() => { msg.action?.onClick(); onRemove(msg.id); }}
                         >
                             {msg.action.label}
-                        </button>
+                        </Button>
                     )}
                 </div>
             ))}

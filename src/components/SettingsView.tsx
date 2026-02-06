@@ -2,6 +2,10 @@ import { useState } from 'react'
 import { DiscoverModal } from './DiscoverModal'
 import type { CustomFeed } from '../engine/storage'
 import type { AppSettings } from '../engine/types'
+import { Button } from '@/components/ui/button'
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
+import { Input } from '@/components/ui/input'
+import { Slider } from '@/components/ui/slider'
 
 interface SettingsViewProps {
     customFeeds: CustomFeed[];
@@ -57,29 +61,31 @@ export function SettingsView({
 
                 <div className="feeds-grid">
                     {topics.map(topic => (
-                        <div key={topic} className="feed-card">
-                            <div className="feed-card-main">
+                        <Card key={topic} className="feed-card border-border/60 bg-transparent shadow-none">
+                            <CardContent className="feed-card-main px-0">
                                 <span className="feed-name">{topic}</span>
                                 <span className="feed-url">Topic</span>
-                            </div>
+                            </CardContent>
                             <div className="feed-action-bar">
-                                <button
-                                    className="button-text-danger"
+                                <Button
+                                    variant="ghost"
+                                    size="sm"
+                                    className="uppercase tracking-widest text-xs text-destructive hover:text-destructive"
                                     onClick={() => onRemoveTopic(topic)}
                                 >
                                     Remove Topic
-                                </button>
+                                </Button>
                             </div>
-                        </div>
+                        </Card>
                     ))}
                 </div>
 
-                <div className="add-feed-card">
-                    <div className="form-grid">
+                <Card className="add-feed-card border-border/60">
+                    <CardContent className="form-grid px-0">
                         <div className="form-group">
                             <label htmlFor="track-topic">Add Topic</label>
                             <div style={{ display: 'flex', gap: '0.5rem' }}>
-                                <input
+                                <Input
                                     id="track-topic"
                                     type="text"
                                     value={topicInput}
@@ -87,14 +93,14 @@ export function SettingsView({
                                     placeholder="e.g. Reading UK, IBM, Tennis"
                                     aria-label="Topic to track"
                                 />
-                                <button className="button-primary" onClick={handleAddTopic} style={{ padding: '0.8rem 1.2rem' }}>
+                                <Button className="rounded-full" size="lg" onClick={handleAddTopic}>
                                     Add
-                                </button>
+                                </Button>
                             </div>
                             <p className="input-hint">Search for news about anything within your global context.</p>
                         </div>
-                    </div>
-                </div>
+                    </CardContent>
+                </Card>
             </section>
 
             <section className="settings-section">
@@ -103,19 +109,19 @@ export function SettingsView({
                     <p className="meta">Control how much and how long stories stay</p>
                 </div>
 
-                <div className="add-feed-card" style={{ marginBottom: '2rem' }}>
+                <Card className="add-feed-card border-border/60" style={{ marginBottom: '2rem' }}>
+                    <CardContent className="px-0">
                     <div className="form-group" style={{ marginBottom: '2rem' }}>
                         <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.5rem' }}>
                             <label>Story Retention</label>
                             <span className="value-label">{settings.retentionDays} Days</span>
                         </div>
-                        <input
-                            type="range"
-                            min="3"
-                            max="14"
-                            step="1"
-                            value={settings.retentionDays}
-                            onChange={(e) => onUpdateSettings({ retentionDays: parseInt(e.target.value) })}
+                        <Slider
+                            min={3}
+                            max={14}
+                            step={1}
+                            value={[settings.retentionDays]}
+                            onValueChange={(value) => onUpdateSettings({ retentionDays: value[0] ?? settings.retentionDays })}
                             className="slider"
                         />
                         <p className="input-hint">Keep news history for a calm look-back experience.</p>
@@ -126,18 +132,18 @@ export function SettingsView({
                             <label>Section Density</label>
                             <span className="value-label">{settings.maxArticlesPerSection} Stories</span>
                         </div>
-                        <input
-                            type="range"
-                            min="5"
-                            max="20"
-                            step="5"
-                            value={settings.maxArticlesPerSection}
-                            onChange={(e) => onUpdateSettings({ maxArticlesPerSection: parseInt(e.target.value) })}
+                        <Slider
+                            min={5}
+                            max={20}
+                            step={5}
+                            value={[settings.maxArticlesPerSection]}
+                            onValueChange={(value) => onUpdateSettings({ maxArticlesPerSection: value[0] ?? settings.maxArticlesPerSection })}
                             className="slider"
                         />
                         <p className="input-hint">Maximum number of stories visible per section on the landing page.</p>
                     </div>
-                </div>
+                    </CardContent>
+                </Card>
             </section>
 
             <section className="settings-section">
@@ -148,65 +154,82 @@ export function SettingsView({
                             <p className="meta">{customFeeds.length} source{customFeeds.length !== 1 ? 's' : ''} currently active</p>
                         </div>
                         <div style={{ display: 'flex', gap: '0.8rem' }}>
-                            <button className="text-btn active" onClick={() => setShowDiscover(true)} style={{ fontSize: '0.8rem', paddingBottom: '0.2rem' }}>
+                            <Button
+                                variant="ghost"
+                                size="sm"
+                                className="uppercase tracking-widest text-xs text-muted-foreground hover:text-foreground"
+                                onClick={() => setShowDiscover(true)}
+                            >
                                 Discover Sources
-                            </button>
-                            <button className="text-btn active" onClick={onRestoreDefaults} style={{ fontSize: '0.8rem', paddingBottom: '0.2rem', opacity: 0.6 }}>
+                            </Button>
+                            <Button
+                                variant="ghost"
+                                size="sm"
+                                className="uppercase tracking-widest text-xs text-muted-foreground hover:text-foreground opacity-60"
+                                onClick={onRestoreDefaults}
+                            >
                                 Restore Defaults
-                            </button>
+                            </Button>
                         </div>
                     </div>
                 </div>
 
                 <div className="feeds-grid">
                     {customFeeds.map(feed => (
-                        <div key={feed.id} className="feed-card">
-                            <div className="feed-card-main">
+                        <Card key={feed.id} className="feed-card border-border/60 bg-transparent shadow-none">
+                            <CardContent className="feed-card-main px-0">
                                 <span className="feed-name">{feed.name}</span>
                                 <span className="feed-url">{feed.url}</span>
-                            </div>
+                            </CardContent>
                             <div className="feed-action-bar">
-                                <button
-                                    className="button-text-danger"
+                                <Button
+                                    variant="ghost"
+                                    size="sm"
+                                    className="uppercase tracking-widest text-xs text-destructive hover:text-destructive"
                                     onClick={() => onRemoveFeed(feed.id)}
                                 >
                                     Remove Source
-                                </button>
+                                </Button>
                             </div>
-                        </div>
+                        </Card>
                     ))}
                 </div>
 
-                <form className="add-feed-card" onSubmit={handleSubmit}>
-                    <h3>Add a new source</h3>
-                    <div className="form-grid">
-                        <div className="form-group">
-                            <label htmlFor="feed-name">Name</label>
-                            <input
-                                id="feed-name"
-                                type="text"
-                                value={newFeed.name}
-                                onChange={e => setNewFeed({ ...newFeed, name: e.target.value })}
-                                placeholder="e.g. Science Daily"
-                                required
-                            />
-                        </div>
-                        <div className="form-group">
-                            <label htmlFor="feed-url">RSS URL</label>
-                            <input
-                                id="feed-url"
-                                type="url"
-                                value={newFeed.url}
-                                onChange={e => setNewFeed({ ...newFeed, url: e.target.value })}
-                                placeholder="https://example.com/rss"
-                                required
-                            />
-                        </div>
-                    </div>
-                    <div style={{ marginTop: '1.5rem', textAlign: 'right' }}>
-                        <button type="submit" className="button-primary">Add to Library</button>
-                    </div>
-                </form>
+                <Card className="add-feed-card border-border/60">
+                    <CardHeader className="px-0 pb-4">
+                        <CardTitle>Add a new source</CardTitle>
+                        <CardDescription>Provide a name and RSS URL to add it to your library.</CardDescription>
+                    </CardHeader>
+                    <CardContent className="px-0">
+                        <form className="form-grid" onSubmit={handleSubmit}>
+                            <div className="form-group">
+                                <label htmlFor="feed-name">Name</label>
+                                <Input
+                                    id="feed-name"
+                                    type="text"
+                                    value={newFeed.name}
+                                    onChange={e => setNewFeed({ ...newFeed, name: e.target.value })}
+                                    placeholder="e.g. Science Daily"
+                                    required
+                                />
+                            </div>
+                            <div className="form-group">
+                                <label htmlFor="feed-url">RSS URL</label>
+                                <Input
+                                    id="feed-url"
+                                    type="url"
+                                    value={newFeed.url}
+                                    onChange={e => setNewFeed({ ...newFeed, url: e.target.value })}
+                                    placeholder="https://example.com/rss"
+                                    required
+                                />
+                            </div>
+                            <div style={{ marginTop: '1.5rem', textAlign: 'right' }}>
+                                <Button type="submit" className="rounded-full" size="lg">Add to Library</Button>
+                            </div>
+                        </form>
+                    </CardContent>
+                </Card>
             </section>
 
 
@@ -215,10 +238,12 @@ export function SettingsView({
                     <h2>Advanced</h2>
                     <p className="meta">Manage your local storage and cache</p>
                 </div>
-                <div className="danger-zone">
+                <Card className="danger-zone border-border/60">
+                    <CardContent className="space-y-4 px-0">
                     <p>Resetting will clear all your custom feeds and cached articles.</p>
-                    <button className="button-danger" onClick={onReset}>Clear All Library Data</button>
-                </div>
+                    <Button variant="destructive" className="rounded-full" onClick={onReset}>Clear All Library Data</Button>
+                    </CardContent>
+                </Card>
             </section>
 
             {showDiscover && (
