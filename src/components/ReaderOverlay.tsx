@@ -56,7 +56,8 @@ export function ReaderOverlay({
             <div>
                 <header className="mx-auto mb-12 max-w-[700px] text-center">
                     <h1 className="font-[var(--font-serif)] text-3xl font-bold leading-tight text-foreground">{decodeHTMLEntities(article.title)}</h1>
-                    <div className="mt-4 text-sm text-muted-foreground/80">
+                    <div className="mt-4 text-sm text-muted-foreground font-medium">
+
                         {article.author && <span>{article.author} • </span>}
                         <span>{getReadingTime(article.content)}</span>
                         <span> • <a href={article.link} target="_blank" rel="noopener noreferrer">Source</a></span>

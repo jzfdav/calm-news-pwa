@@ -57,12 +57,14 @@ export function SettingsView({
             <section className="mb-12">
                 <div className="mb-6">
                     <h2 className="text-xl font-bold text-foreground">My Topics</h2>
-                    <p className="text-sm text-muted-foreground/60 tracking-tight">Track events, places, or companies</p>
+                    <p className="text-sm text-muted-foreground tracking-tight">Track events, places, or companies</p>
                 </div>
+
 
                 <div className="flex flex-wrap gap-2 mb-6">
                     {topics.map(topic => (
-                        <div key={topic} className="flex items-center gap-2 rounded-full border border-border/60 bg-muted/30 px-3 py-1.5 transition-colors hover:bg-muted/50">
+                        <div key={topic} className="flex items-center gap-2 rounded-full border border-border/60 bg-muted/40 px-3 py-1.5 transition-colors hover:bg-muted/60">
+
                             <span className="text-sm font-medium">{topic}</span>
                             <button
                                 onClick={() => onRemoveTopic(topic)}
@@ -101,10 +103,12 @@ export function SettingsView({
             <section className="mb-12">
                 <div className="mb-6">
                     <h2 className="text-xl font-bold text-foreground">Content & Retention</h2>
-                    <p className="text-sm text-muted-foreground/60 tracking-tight">Control how long stories stay and how many you see</p>
+                    <p className="text-sm text-muted-foreground tracking-tight">Control how long stories stay and how many you see</p>
                 </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 rounded-2xl border border-border/60 bg-muted/10 p-6">
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 rounded-2xl border border-border/60 bg-muted/30 p-6 shadow-sm">
+
                     <div className="space-y-3">
                         <div className="flex items-center justify-between">
                             <label className="text-xs font-bold uppercase tracking-widest text-muted-foreground">Retention</label>
@@ -118,8 +122,9 @@ export function SettingsView({
                             onValueChange={(value) => onUpdateSettings({ retentionDays: value[0] ?? settings.retentionDays })}
                             className="py-1"
                         />
-                        <p className="text-[0.7rem] text-muted-foreground/60 leading-tight">Keep news history for a calm look-back experience.</p>
-                    </div>
+                        <p className="text-[0.7rem] text-muted-foreground font-medium leading-tight">Keep news history for a calm look-back experience.</p>
+</div>
+
 
                     <div className="space-y-3">
                         <div className="flex items-center justify-between">
@@ -134,10 +139,11 @@ export function SettingsView({
                             onValueChange={(value) => onUpdateSettings({ maxArticlesPerSection: value[0] ?? settings.maxArticlesPerSection })}
                             className="py-1"
                         />
-                        <p className="text-[0.7rem] text-muted-foreground/60 leading-tight">Max stories visible per section on the landing page.</p>
+                        <p className="text-[0.7rem] text-muted-foreground font-medium leading-tight">Max stories visible per section on the landing page.</p>
                     </div>
                 </div>
             </section>
+
 
 
             <section className="mb-12">
@@ -145,8 +151,9 @@ export function SettingsView({
                     <div className="flex items-center justify-between gap-4">
                         <div>
                             <h2 className="text-xl font-bold text-foreground">My Library</h2>
-                            <p className="text-sm text-muted-foreground/60 tracking-tight">{customFeeds.length} source{customFeeds.length !== 1 ? 's' : ''} active</p>
+                            <p className="text-sm text-muted-foreground tracking-tight">{customFeeds.length} source{customFeeds.length !== 1 ? 's' : ''} active</p>
                         </div>
+
                         <div className="flex gap-2">
                             <Button
                                 variant="outline"
@@ -195,7 +202,8 @@ export function SettingsView({
                 </div>
 
 
-                <Card className="rounded-2xl border-border/60 bg-muted/10">
+                <Card className="rounded-2xl border-border/60 bg-muted/30 shadow-sm border shadow-border/10">
+
                     <CardHeader className="pt-6 pb-4">
                         <CardTitle className="text-base font-bold">Add Source</CardTitle>
                     </CardHeader>
@@ -238,10 +246,12 @@ export function SettingsView({
             <section className="mt-12 border-t border-border/60 pt-12">
                 <div className="mb-6">
                     <h2 className="text-xl font-bold text-foreground">Advanced</h2>
-                    <p className="text-sm text-muted-foreground/60 tracking-tight">Manage your local storage and cache</p>
+                    <p className="text-sm text-muted-foreground tracking-tight">Manage your local storage and cache</p>
                 </div>
-                <div className="rounded-2xl border border-destructive/20 bg-destructive/5 p-6 text-center">
-                    <p className="text-sm text-muted-foreground/80 mb-4 italic">Resetting will clear all your custom feeds and cached articles.</p>
+                <div className="rounded-2xl border border-destructive/20 bg-destructive/[0.03] p-6 text-center shadow-sm">
+
+                    <p className="text-sm text-muted-foreground font-medium mb-4 italic">Resetting will clear all your custom feeds and cached articles.</p>
+
                     <Button variant="destructive" size="sm" className="rounded-full shadow-sm shadow-destructive/20" onClick={onReset}>Clear All Library Data</Button>
                 </div>
             </section>
