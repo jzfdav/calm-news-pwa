@@ -57,9 +57,19 @@ const ArticleCard = memo(({
                     <div className="flex items-center gap-3">
                         <span>{getReadingTime(article.content)}</span>
                         {isReadable(article.content) ? (
-                            <Badge variant="secondary" className="text-[0.65rem] font-bold uppercase tracking-wide">FULL ARTICLE</Badge>
+                            <Badge
+                                variant="outline"
+                                className="border-0 bg-[var(--badge-full-bg)] text-[var(--badge-full-text)] text-[0.65rem] font-bold uppercase tracking-wide"
+                            >
+                                FULL ARTICLE
+                            </Badge>
                         ) : (
-                            <Badge variant="outline" className="text-[0.65rem] font-bold uppercase tracking-wide">SNIPPET</Badge>
+                            <Badge
+                                variant="outline"
+                                className="border-0 bg-[var(--badge-snippet-bg)] text-[var(--badge-snippet-text)] text-[0.65rem] font-bold uppercase tracking-wide"
+                            >
+                                SNIPPET
+                            </Badge>
                         )}
                     </div>
                     <a

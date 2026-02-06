@@ -52,21 +52,21 @@ export function SettingsView({
     };
 
     return (
-        <main className="settings-view">
-            <section className="settings-section">
-                <div className="section-header">
-                    <h2>My Topics</h2>
+        <main className="mx-auto w-full max-w-2xl px-4 pb-24 pt-6">
+            <section className="mb-24">
+                <div className="mb-10">
+                    <h2 className="text-2xl font-bold text-foreground">My Topics</h2>
                     <p className="meta">Track events, places, or companies</p>
                 </div>
 
-                <div className="feeds-grid">
+                <div className="flex flex-col gap-2 mb-16">
                     {topics.map(topic => (
-                        <Card key={topic} className="feed-card border-border/60 bg-transparent shadow-none">
-                            <CardContent className="feed-card-main px-0">
-                                <span className="feed-name">{topic}</span>
-                                <span className="feed-url">Topic</span>
+                        <Card key={topic} className="border-0 border-b border-border/60 bg-transparent shadow-none rounded-none py-6">
+                            <CardContent className="px-0">
+                                <span className="block text-lg font-semibold mb-1">{topic}</span>
+                                <span className="block text-sm text-muted-foreground/80">Topic</span>
                             </CardContent>
-                            <div className="feed-action-bar">
+                            <div className="flex justify-start">
                                 <Button
                                     variant="ghost"
                                     size="sm"
@@ -80,11 +80,11 @@ export function SettingsView({
                     ))}
                 </div>
 
-                <Card className="add-feed-card border-border/60">
-                    <CardContent className="form-grid px-0">
-                        <div className="form-group">
-                            <label htmlFor="track-topic">Add Topic</label>
-                            <div style={{ display: 'flex', gap: '0.5rem' }}>
+                <Card className="mt-12 rounded-2xl border-border/60 bg-muted/20 shadow-inner">
+                    <CardContent className="px-0">
+                        <div>
+                            <label htmlFor="track-topic" className="mb-2 block text-xs font-bold uppercase tracking-widest text-muted-foreground">Add Topic</label>
+                            <div className="flex gap-2">
                                 <Input
                                     id="track-topic"
                                     type="text"
@@ -92,6 +92,7 @@ export function SettingsView({
                                     onChange={e => setTopicInput(e.target.value)}
                                     placeholder="e.g. Reading UK, IBM, Tennis"
                                     aria-label="Topic to track"
+                                    className="bg-muted/20 border-border/60"
                                 />
                                 <Button className="rounded-full" size="lg" onClick={handleAddTopic}>
                                     Add
@@ -103,18 +104,18 @@ export function SettingsView({
                 </Card>
             </section>
 
-            <section className="settings-section">
-                <div className="section-header">
-                    <h2>Content & Retention</h2>
+            <section className="mb-24">
+                <div className="mb-10">
+                    <h2 className="text-2xl font-bold text-foreground">Content & Retention</h2>
                     <p className="meta">Control how much and how long stories stay</p>
                 </div>
 
-                <Card className="add-feed-card border-border/60" style={{ marginBottom: '2rem' }}>
+                <Card className="rounded-2xl border-border/60 bg-muted/20 shadow-inner">
                     <CardContent className="px-0">
-                    <div className="form-group" style={{ marginBottom: '2rem' }}>
-                        <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.5rem' }}>
-                            <label>Story Retention</label>
-                            <span className="value-label">{settings.retentionDays} Days</span>
+                    <div className="mb-8">
+                        <div className="mb-2 flex items-center justify-between">
+                            <label className="text-xs font-bold uppercase tracking-widest text-muted-foreground">Story Retention</label>
+                            <span className="text-sm font-bold text-primary">{settings.retentionDays} Days</span>
                         </div>
                         <Slider
                             min={3}
@@ -122,15 +123,15 @@ export function SettingsView({
                             step={1}
                             value={[settings.retentionDays]}
                             onValueChange={(value) => onUpdateSettings({ retentionDays: value[0] ?? settings.retentionDays })}
-                            className="slider"
+                            className="py-2"
                         />
                         <p className="input-hint">Keep news history for a calm look-back experience.</p>
                     </div>
 
-                    <div className="form-group">
-                        <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.5rem' }}>
-                            <label>Section Density</label>
-                            <span className="value-label">{settings.maxArticlesPerSection} Stories</span>
+                    <div>
+                        <div className="mb-2 flex items-center justify-between">
+                            <label className="text-xs font-bold uppercase tracking-widest text-muted-foreground">Section Density</label>
+                            <span className="text-sm font-bold text-primary">{settings.maxArticlesPerSection} Stories</span>
                         </div>
                         <Slider
                             min={5}
@@ -138,7 +139,7 @@ export function SettingsView({
                             step={5}
                             value={[settings.maxArticlesPerSection]}
                             onValueChange={(value) => onUpdateSettings({ maxArticlesPerSection: value[0] ?? settings.maxArticlesPerSection })}
-                            className="slider"
+                            className="py-2"
                         />
                         <p className="input-hint">Maximum number of stories visible per section on the landing page.</p>
                     </div>
@@ -146,14 +147,14 @@ export function SettingsView({
                 </Card>
             </section>
 
-            <section className="settings-section">
-                <div className="section-header">
-                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', width: '100%' }}>
+            <section className="mb-24">
+                <div className="mb-10">
+                    <div className="flex items-end justify-between gap-4">
                         <div>
-                            <h2>My Library</h2>
+                            <h2 className="text-2xl font-bold text-foreground">My Library</h2>
                             <p className="meta">{customFeeds.length} source{customFeeds.length !== 1 ? 's' : ''} currently active</p>
                         </div>
-                        <div style={{ display: 'flex', gap: '0.8rem' }}>
+                        <div className="flex gap-3">
                             <Button
                                 variant="ghost"
                                 size="sm"
@@ -174,14 +175,14 @@ export function SettingsView({
                     </div>
                 </div>
 
-                <div className="feeds-grid">
+                <div className="flex flex-col gap-2 mb-16">
                     {customFeeds.map(feed => (
-                        <Card key={feed.id} className="feed-card border-border/60 bg-transparent shadow-none">
-                            <CardContent className="feed-card-main px-0">
-                                <span className="feed-name">{feed.name}</span>
-                                <span className="feed-url">{feed.url}</span>
+                        <Card key={feed.id} className="border-0 border-b border-border/60 bg-transparent shadow-none rounded-none py-6">
+                            <CardContent className="px-0">
+                                <span className="block text-lg font-semibold mb-1">{feed.name}</span>
+                                <span className="block text-sm text-muted-foreground/80 break-words">{feed.url}</span>
                             </CardContent>
-                            <div className="feed-action-bar">
+                            <div className="flex justify-start">
                                 <Button
                                     variant="ghost"
                                     size="sm"
@@ -195,15 +196,15 @@ export function SettingsView({
                     ))}
                 </div>
 
-                <Card className="add-feed-card border-border/60">
+                <Card className="mt-12 rounded-2xl border-border/60 bg-muted/20 shadow-inner">
                     <CardHeader className="px-0 pb-4">
-                        <CardTitle>Add a new source</CardTitle>
+                        <CardTitle className="text-lg">Add a new source</CardTitle>
                         <CardDescription>Provide a name and RSS URL to add it to your library.</CardDescription>
                     </CardHeader>
                     <CardContent className="px-0">
-                        <form className="form-grid" onSubmit={handleSubmit}>
-                            <div className="form-group">
-                                <label htmlFor="feed-name">Name</label>
+                        <form className="space-y-6" onSubmit={handleSubmit}>
+                            <div>
+                                <label htmlFor="feed-name" className="mb-2 block text-xs font-bold uppercase tracking-widest text-muted-foreground">Name</label>
                                 <Input
                                     id="feed-name"
                                     type="text"
@@ -211,10 +212,11 @@ export function SettingsView({
                                     onChange={e => setNewFeed({ ...newFeed, name: e.target.value })}
                                     placeholder="e.g. Science Daily"
                                     required
+                                    className="bg-muted/20 border-border/60"
                                 />
                             </div>
-                            <div className="form-group">
-                                <label htmlFor="feed-url">RSS URL</label>
+                            <div>
+                                <label htmlFor="feed-url" className="mb-2 block text-xs font-bold uppercase tracking-widest text-muted-foreground">RSS URL</label>
                                 <Input
                                     id="feed-url"
                                     type="url"
@@ -222,9 +224,10 @@ export function SettingsView({
                                     onChange={e => setNewFeed({ ...newFeed, url: e.target.value })}
                                     placeholder="https://example.com/rss"
                                     required
+                                    className="bg-muted/20 border-border/60"
                                 />
                             </div>
-                            <div style={{ marginTop: '1.5rem', textAlign: 'right' }}>
+                            <div className="text-right">
                                 <Button type="submit" className="rounded-full" size="lg">Add to Library</Button>
                             </div>
                         </form>
@@ -233,12 +236,12 @@ export function SettingsView({
             </section>
 
 
-            <section className="settings-section danger-section" style={{ marginTop: '6rem' }}>
-                <div className="section-header">
-                    <h2>Advanced</h2>
+            <section className="mt-24">
+                <div className="mb-10">
+                    <h2 className="text-2xl font-bold text-foreground">Advanced</h2>
                     <p className="meta">Manage your local storage and cache</p>
                 </div>
-                <Card className="danger-zone border-border/60">
+                <Card className="border-dashed border-border/60 bg-destructive/5 text-center">
                     <CardContent className="space-y-4 px-0">
                     <p>Resetting will clear all your custom feeds and cached articles.</p>
                     <Button variant="destructive" className="rounded-full" onClick={onReset}>Clear All Library Data</Button>
