@@ -8,12 +8,16 @@ import {
     loadFontSize
 } from './storage';
 
-export type Theme = 'light' | 'sepia' | 'dark';
+export type Theme = 'light' | 'dark';
 export type FontSize = 's' | 'm' | 'l';
 
 export function useReader() {
-    // Default to 'sepia' as requested by user
-    const [theme, setThemeState] = useState<Theme>(() => (loadTheme() as Theme) || 'sepia');
+    // Default to 'light'
+    const [theme, setThemeState] = useState<Theme>(() => {
+        const saved = loadTheme() as Theme;
+        return (saved === 'light' || saved === 'dark') ? saved : 'light';
+    });
+
     const [fontSize, setFontSizeState] = useState<FontSize>(() => (loadFontSize() as FontSize) || 'm');
     const [readArticles, setReadArticles] = useState<Set<string>>(() => new Set(loadReadArticles()));
 

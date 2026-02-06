@@ -15,10 +15,9 @@
 
   --reader-light-bg: #ffffff;
   --reader-light-text: #1a1a1a;
-  --reader-sepia-bg: #f4ecd8;
-  --reader-sepia-text: #5b4636;
   --reader-dark-bg: #000000;
   --reader-dark-text: #d1d1d1;
+
 
   /* shadcn token bridge */
   --background: var(--bg-color);
@@ -80,22 +79,7 @@
   --badge-snippet-text: #616161;
 }
 
-.theme-sepia {
-  --bg-color: #f4ecd8;
-  --text-color: #463020;
-  --secondary-text: #6b5443;
-  --accent-color: #463020;
-  --border-color: #e4dcc8;
-  --nav-bg: rgba(244, 236, 216, 0.9);
-  --nav-border: rgba(70, 48, 32, 0.15);
-  --swipe-success-bg: linear-gradient(90deg, #8b7d6b, #7a6c5a);
-  --swipe-success-active: linear-gradient(90deg, #6d5f4f, #5d4f3f);
-  --swipe-success-text: #f4ecd8;
-  --badge-full-bg: #e8dfc9;
-  --badge-full-text: #5b4636;
-  --badge-snippet-bg: #ede6d3;
-  --badge-snippet-text: #8c7b6d;
-}
+
 
 .theme-dark {
   --bg-color: #000000;
@@ -302,10 +286,7 @@ section {
 }
 
 
-.theme-sepia .toast {
-  background: rgba(70, 48, 32, 0.95);
-  color: #f4ecd8;
-}
+
 
 
 @keyframes slide-up {
@@ -427,9 +408,7 @@ section {
 }
 
 
-.theme-sepia .welcome-card {
-  background: rgba(100, 80, 60, 0.05);
-}
+
 
 .theme-light .welcome-card {
   background: rgba(0, 0, 0, 0.02);
