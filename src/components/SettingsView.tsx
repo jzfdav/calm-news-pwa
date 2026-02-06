@@ -2,7 +2,9 @@ import { useState } from 'react'
 import { DiscoverModal } from './DiscoverModal'
 import type { CustomFeed } from '../engine/storage'
 import type { AppSettings } from '../engine/types'
+import type { Theme } from '../engine/useReader'
 import { Button } from '@/components/ui/button'
+
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 
 import { Input } from '@/components/ui/input'
@@ -16,9 +18,11 @@ interface SettingsViewProps {
     onRemoveTopic: (val: string) => void;
     onAddFeed: (name: string, url: string) => void;
     onRemoveFeed: (id: string) => void;
-    onUpdateSettings: (s: Partial<AppSettings>) => void;
+    onUpdateSettings: (updates: Partial<AppSettings>) => void;
     onRestoreDefaults: () => void;
     onReset: () => void;
+    theme: Theme;
+    onThemeChange: (theme: Theme) => void;
 }
 
 export function SettingsView({
@@ -31,7 +35,9 @@ export function SettingsView({
     onRemoveFeed,
     onUpdateSettings,
     onRestoreDefaults,
-    onReset
+    onReset,
+    theme,
+    onThemeChange
 }: SettingsViewProps) {
     const [newFeed, setNewFeed] = useState({ name: '', url: '' });
     const [topicInput, setTopicInput] = useState('');
@@ -96,6 +102,40 @@ export function SettingsView({
                     />
                     <Button className="rounded-full shadow-sm shadow-primary/20" size="sm" onClick={handleAddTopic}>
                         Add
+                    </Button>
+                </div>
+            </section>
+
+
+            <section className="mb-12">
+                <div className="mb-6">
+                    <h2 className="text-xl font-bold text-foreground">Appearance</h2>
+                    <p className="text-sm text-muted-foreground tracking-tight">Choose your preferred theme</p>
+                </div>
+
+                <div className="flex gap-3">
+                    <Button
+                        variant={theme === 'light' ? 'default' : 'outline'}
+                        size="sm"
+                        onClick={() => onThemeChange('light')}
+                        className="flex-1 rounded-full"
+                    >
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="mr-2">
+                            <circle cx="12" cy="12" r="4"/>
+                            <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/>
+                        </svg>
+                        Light
+                    </Button>
+                    <Button
+                        variant={theme === 'dark' ? 'default' : 'outline'}
+                        size="sm"
+                        onClick={() => onThemeChange('dark')}
+                        className="flex-1 rounded-full"
+                    >
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="mr-2">
+                            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+                        </svg>
+                        Dark
                     </Button>
                 </div>
             </section>

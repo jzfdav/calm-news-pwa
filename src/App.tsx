@@ -137,7 +137,10 @@ function App() {
           onReset={handleReset}
           settings={settings}
           onUpdateSettings={handleUpdateSettings}
+          theme={theme}
+          onThemeChange={setTheme}
         />
+
       )}
 
       {selectedArticle && (

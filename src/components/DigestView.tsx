@@ -36,7 +36,7 @@ const ArticleCard = memo(({
     onDismissArticle: (article: Article) => void;
 }) => (
     <SwipeableArticle onDismiss={() => onDismissArticle(article)}>
-        <Card className="mb-5 border-border/60 bg-transparent shadow-none">
+        <Card className="mb-3 border-border/60 bg-transparent shadow-none">
             <CardContent className="px-0">
                 <h3 className="mb-2">
                     <Button
@@ -119,7 +119,7 @@ function DigestSection({
                             )}
                         </div>
                     </AccordionTrigger>
-                    <AccordionContent className="pt-4">
+                    <AccordionContent className="pt-3">
                         {section.articles.map((article) => (
                             <ArticleCard
                                 key={article.id}
@@ -186,7 +186,7 @@ export function DigestView({ sections, loading, onSelectArticle, onDismissArticl
     return (
         <main className="digest-view">
             <WelcomeCard />
-            <div className="flex items-center justify-between pb-4">
+            <div className="flex items-center justify-between pb-3">
                 <span className="pl-2 text-xs font-bold uppercase tracking-[0.1rem] text-muted-foreground/70">TODAY'S NEWS</span>
                 <Button
                     variant="ghost"
