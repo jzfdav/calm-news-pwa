@@ -4,10 +4,9 @@ import type { Section, Article } from '../engine/types'
 import { getReadingTime, decodeHTMLEntities, isReadable } from '../engine/utils'
 import { WelcomeCard } from './WelcomeCard'
 import { SwipeableArticle } from './SwipeableArticle'
-import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
-import { Card, CardContent } from '@/components/ui/card'
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion'
+
 
 const getSourceName = (article: Article) => {
     try {
@@ -36,55 +35,46 @@ const ArticleCard = memo(({
     onDismissArticle: (article: Article) => void;
 }) => (
     <SwipeableArticle onDismiss={() => onDismissArticle(article)}>
-        <Card className="mb-3 border-border/60 bg-transparent shadow-none">
-            <CardContent className="px-0">
-                <h3 className="mb-2">
-                    <Button
-                        variant="ghost"
-                        size="sm"
-                        className="h-auto w-full justify-start px-0 py-0 text-left text-base font-bold leading-snug text-foreground hover:opacity-70 sm:text-lg font-[var(--font-serif)]"
-                        onClick={() => onSelectArticle(article)}
-                        onKeyDown={(e) => {
-                            if (e.key === 'Enter' || e.key === ' ') {
-                                e.preventDefault();
-                                onSelectArticle(article);
-                            }
-                        }}
-                    >
-                        {decodeHTMLEntities(article.title)}
-                    </Button>
-                </h3>
-                <div className="flex items-center justify-between gap-4 text-xs text-muted-foreground sm:text-sm">
-                    <div className="flex items-center gap-3">
-                        <span>{getReadingTime(article.content)}</span>
-                        {isReadable(article.content) ? (
-                            <Badge
-                                variant="outline"
-                                className="border-0 bg-[var(--badge-full-bg)] text-[var(--badge-full-text)] text-[0.65rem] font-bold uppercase tracking-wide"
-                            >
-                                FULL ARTICLE
-                            </Badge>
-                        ) : (
-                            <Badge
-                                variant="outline"
-                                className="border-0 bg-[var(--badge-snippet-bg)] text-[var(--badge-snippet-text)] text-[0.65rem] font-bold uppercase tracking-wide"
-                            >
-                                SNIPPET
-                            </Badge>
-                        )}
-                    </div>
-                    <a
-                        href={article.link}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="max-w-[15rem] truncate text-muted-foreground/80 underline decoration-1 underline-offset-2"
-                    >
-                        {getSourceName(article)}
-                    </a>
+        <article className="group mb-3 border-b border-border/40 pb-4 last:border-0">
+            <h3 className="mb-2.5">
+                <button
+                    className="w-full text-left text-base font-bold leading-snug text-foreground transition-colors hover:text-primary sm:text-lg font-[var(--font-serif)] cursor-pointer bg-transparent border-0 p-0"
+                    onClick={() => onSelectArticle(article)}
+                    onKeyDown={(e) => {
+                        if (e.key === 'Enter' || e.key === ' ') {
+                            e.preventDefault();
+                            onSelectArticle(article);
+                        }
+                    }}
+                >
+                    {decodeHTMLEntities(article.title)}
+                </button>
+            </h3>
+            <div className="flex items-center justify-between gap-4 text-xs text-muted-foreground/90 sm:text-sm">
+                <div className="flex items-center gap-3">
+                    <span className="font-medium">{getReadingTime(article.content)}</span>
+                    {isReadable(article.content) ? (
+                        <span className="inline-flex items-center rounded-md bg-[var(--badge-full-bg)] px-2 py-0.5 text-[0.65rem] font-bold uppercase tracking-wide text-[var(--badge-full-text)]">
+                            Full Article
+                        </span>
+                    ) : (
+                        <span className="inline-flex items-center rounded-md bg-[var(--badge-snippet-bg)] px-2 py-0.5 text-[0.65rem] font-bold uppercase tracking-wide text-[var(--badge-snippet-text)]">
+                            Snippet
+                        </span>
+                    )}
                 </div>
-            </CardContent>
-        </Card>
+                <a
+                    href={article.link}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="max-w-[15rem] truncate text-muted-foreground/70 underline decoration-1 underline-offset-2 transition-colors hover:text-foreground"
+                >
+                    {getSourceName(article)}
+                </a>
+            </div>
+        </article>
     </SwipeableArticle>
+
 ));
 
 function DigestSection({

@@ -113,32 +113,47 @@ export function SettingsView({
                     <p className="text-sm text-muted-foreground tracking-tight">Choose your preferred theme</p>
                 </div>
 
-                <div className="flex gap-3">
-                    <Button
-                        variant={theme === 'light' ? 'default' : 'outline'}
-                        size="sm"
+                <div className="relative inline-flex w-full rounded-full bg-muted/30 p-1 shadow-inner">
+                    <div
+                        className="absolute top-1 bottom-1 left-1 right-1 transition-transform duration-200 ease-out"
+                        style={{
+                            transform: theme === 'dark' ? 'translateX(calc(50% - 2px))' : 'translateX(0)',
+                            width: 'calc(50% - 2px)'
+                        }}
+                    >
+                        <div className="h-full w-full rounded-full bg-primary shadow-sm" />
+                    </div>
+                    <button
                         onClick={() => onThemeChange('light')}
-                        className="flex-1 rounded-full"
+                        className={`relative z-10 flex-1 rounded-full px-4 py-2 text-sm font-semibold transition-colors ${
+                            theme === 'light' ? 'text-primary-foreground' : 'text-muted-foreground hover:text-foreground'
+                        }`}
                     >
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="mr-2">
-                            <circle cx="12" cy="12" r="4"/>
-                            <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/>
-                        </svg>
-                        Light
-                    </Button>
-                    <Button
-                        variant={theme === 'dark' ? 'default' : 'outline'}
-                        size="sm"
+                        <span className="flex items-center justify-center gap-2">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                <circle cx="12" cy="12" r="4"/>
+                                <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/>
+                            </svg>
+                            Light
+                        </span>
+                    </button>
+                    <button
                         onClick={() => onThemeChange('dark')}
-                        className="flex-1 rounded-full"
+                        className={`relative z-10 flex-1 rounded-full px-4 py-2 text-sm font-semibold transition-colors ${
+                            theme === 'dark' ? 'text-primary-foreground' : 'text-muted-foreground hover:text-foreground'
+                        }`}
                     >
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="mr-2">
-                            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
-                        </svg>
-                        Dark
-                    </Button>
+                        <span className="flex items-center justify-center gap-2">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+                            </svg>
+                            Dark
+                        </span>
+                    </button>
                 </div>
             </section>
+
+
 
 
             <section className="mb-12">
