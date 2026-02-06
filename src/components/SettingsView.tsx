@@ -53,7 +53,8 @@ export function SettingsView({
     };
 
     return (
-        <main className="mx-auto w-full max-w-2xl px-4 pb-24 pt-6">
+        <main className="mx-auto w-full max-w-2xl px-4 pb-16 pt-6">
+
             <section className="mb-12">
                 <div className="mb-6">
                     <h2 className="text-xl font-bold text-foreground">My Topics</h2>
@@ -203,11 +204,11 @@ export function SettingsView({
 
 
                 <Card className="rounded-2xl border-border/60 bg-muted/30 shadow-sm border shadow-border/10">
-
-                    <CardHeader className="pt-6 pb-4">
+                    <CardHeader className="pt-4 pb-3">
                         <CardTitle className="text-base font-bold">Add Source</CardTitle>
                     </CardHeader>
-                    <CardContent className="pb-6">
+                    <CardContent className="pb-4">
+
                         <form className="grid grid-cols-1 sm:grid-cols-2 gap-4 items-end" onSubmit={handleSubmit}>
                             <div className="space-y-1.5">
                                 <label htmlFor="feed-name" className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground">Name</label>
@@ -243,14 +244,15 @@ export function SettingsView({
 
 
 
-            <section className="mt-12 border-t border-border/60 pt-12">
+            <section className="mt-8 border-t border-border/60 pt-8">
+
                 <div className="mb-6">
                     <h2 className="text-xl font-bold text-foreground">Advanced</h2>
                     <p className="text-sm text-muted-foreground tracking-tight">Manage your local storage and cache</p>
                 </div>
-                <div className="rounded-2xl border border-destructive/20 bg-destructive/[0.03] p-6 text-center shadow-sm">
+                <div className="rounded-2xl border border-destructive/20 bg-destructive/[0.03] p-4 text-center shadow-sm">
+                    <p className="text-xs text-muted-foreground font-medium mb-3 italic">Resetting will clear all your custom feeds and cached articles.</p>
 
-                    <p className="text-sm text-muted-foreground font-medium mb-4 italic">Resetting will clear all your custom feeds and cached articles.</p>
 
                     <Button variant="destructive" size="sm" className="rounded-full shadow-sm shadow-destructive/20" onClick={onReset}>Clear All Library Data</Button>
                 </div>
