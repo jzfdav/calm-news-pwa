@@ -18,9 +18,10 @@
   --reader-light-text: #1a1a1a;
   --reader-dark-bg: #000000;
   --reader-dark-text: #d1d1d1;
+}
 
-
-  /* shadcn token bridge */
+/* shadcn token bridge - applies to root and any theme class */
+:root, .theme-light, .theme-dark {
   --background: var(--bg-color);
   --foreground: var(--text-color);
   --card: var(--bg-color);
@@ -40,6 +41,7 @@
   --input: var(--border-color);
   --ring: var(--accent-color);
 }
+
 
 @media (prefers-color-scheme: dark) {
   :root {
