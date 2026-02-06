@@ -16,9 +16,10 @@ describe('useAppActions', () => {
         setCustomFeeds: mockSetCustomFeeds,
         topics: [],
         setTopics: mockSetTopics,
-        settings: { retentionDays: 7 },
+        settings: { retentionDays: 7, maxArticlesPerSection: 10 },
         setSettings: mockSetSettings
     };
+
 
     it('should add a unique topic', () => {
         const { result } = renderHook(() => useAppActions(initialProps));
