@@ -33,12 +33,14 @@ describe('useAppActions', () => {
     it('should not add a duplicate topic', () => {
         const props = { ...initialProps, topics: ['Tech'] };
         const { result } = renderHook(() => useAppActions(props));
+        const warnSpy = vi.spyOn(console, 'warn').mockImplementation(() => {});
 
         act(() => {
             result.current.handleAddTopic('Tech');
         });
 
         expect(mockSetTopics).not.toHaveBeenCalled();
+        warnSpy.mockRestore();
     });
 
     it('should validate empty feed addition', () => {
