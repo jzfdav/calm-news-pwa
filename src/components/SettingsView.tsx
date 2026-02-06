@@ -117,8 +117,8 @@ export function SettingsView({
                     <div
                         className="absolute top-1 bottom-1 left-1 transition-transform duration-200 ease-out"
                         style={{
-                            transform: theme === 'dark' ? 'translateX(calc(100% + 2px))' : 'translateX(0)',
-                            width: 'calc(50% - 2px)'
+                            transform: theme === 'dark' ? 'translateX(100%)' : 'translateX(0)',
+                            width: 'calc(50% - 4px)'
                         }}
 
                     >
